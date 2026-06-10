@@ -1,6 +1,7 @@
 import os
 import runpy
 import threading
+import time
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
 
@@ -32,6 +33,11 @@ def start_render_port_server():
 
 if __name__ == "__main__":
     start_render_port_server()
+
+    start_delay = int(os.getenv("RENDER_BOT_START_DELAY", "30"))
+    if start_delay > 0:
+        print(f"Waiting {start_delay}s before Telegram startup for Render rolling deploy.", flush=True)
+        time.sleep(start_delay)
 
     # The wrapper owns Render's web port. Disable the bot's aiohttp server so
     # startup cannot fail by trying to bind the same port twice.
