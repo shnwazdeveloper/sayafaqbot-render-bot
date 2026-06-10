@@ -9,24 +9,14 @@ from urllib.parse import urlparse
 from pyrogram import enums, filters
 from pyrogram.enums import ButtonStyle
 from pyrogram.types import CallbackQuery, InlineKeyboardButton, InlineKeyboardMarkup, Message
+from pytgcalls import exceptions, types
 from yt_dlp import YoutubeDL
 
-from AloneX import pbot as bot
+from AloneX import pbot as bot, pytgcalls, user as assistant_client
 import config
 
 
 __module__ = "Music"
-
-__help__ = """
-Music commands
-
-Commands:
-`/mplay <song name or YouTube URL>` - search and show a playable music card.
-`/mmusicplay <song name or YouTube URL>` - same as /mplay.
-`/msong <song name or YouTube URL>` - download and send the first audio result.
-`/msearch <song name>` - show the top YouTube results with buttons.
-`/mhelp` - show this help message.
-"""
 
 
 DOWNLOAD_DIR = Path("downloads/music")
@@ -35,11 +25,45 @@ DOWNLOAD_DIR.mkdir(parents=True, exist_ok=True)
 MAX_DURATION = int(os.getenv("MUSIC_MAX_DURATION", "1800"))
 RESULT_TTL = 1800
 RESULTS = {}
+ACTIVE_STREAMS = {}
+
+
+def _bot_tag() -> str:
+    username = (config.BOT_USERNAME or "Sayafaqbot").lstrip("@")
+    return f"@{username}"
+
+
+def _assistant_tag() -> str:
+    username = getattr(config, "ASSISTANT_USERNAME", "Lyricsdev").lstrip("@")
+    return f"@{username}"
+
+
+__help__ = f"""
+Music commands
+
+Commands:
+`/mplay <song name or YouTube URL>` - play music in the group voice chat.
+`/mmusicplay <song name or YouTube URL>` - same as /mplay.
+`/mmusic <song name or YouTube URL>` - same as /mplay.
+`/mstop` - stop voice chat music.
+`/mpause` - pause voice chat music.
+`/mresume` - resume voice chat music.
+`/msong <song name or YouTube URL>` - download and send the first audio result.
+`/msearch <song name>` - show the top YouTube results with buttons.
+`/mhelp` - show this help message.
+
+Assistant: {_assistant_tag()}
+Start the group voice chat and add {_assistant_tag()} to the group before using /mplay.
+"""
 
 
 def _is_url(value: str) -> bool:
     parsed = urlparse(value)
     return parsed.scheme in {"http", "https"} and bool(parsed.netloc)
+
+
+def _is_group(message: Message) -> bool:
+    return message.chat.type in {enums.ChatType.GROUP, enums.ChatType.SUPERGROUP}
 
 
 def _clean_old_results() -> None:
@@ -177,6 +201,21 @@ def _result_buttons(key: str, url: str, user_id: int) -> InlineKeyboardMarkup:
     )
 
 
+def _player_buttons(chat_id: int, user_id: int, url: str) -> InlineKeyboardMarkup:
+    return InlineKeyboardMarkup(
+        [
+            [
+                InlineKeyboardButton("Pause", callback_data=f"mpause:{chat_id}:{user_id}", style=ButtonStyle.PRIMARY),
+                InlineKeyboardButton("Resume", callback_data=f"mresume:{chat_id}:{user_id}", style=ButtonStyle.SUCCESS),
+            ],
+            [
+                InlineKeyboardButton("Stop", callback_data=f"mstop:{chat_id}:{user_id}", style=ButtonStyle.DANGER),
+                InlineKeyboardButton("Open YouTube", url=url, style=ButtonStyle.SUCCESS),
+            ],
+        ]
+    )
+
+
 def _caption(meta: dict) -> str:
     title = html.escape(meta.get("title") or "Unknown title")
     uploader = html.escape(meta.get("uploader") or "Unknown artist")
@@ -186,9 +225,107 @@ def _caption(meta: dict) -> str:
         f"<b>{title}</b>\n\n"
         f"<b>Artist:</b> {uploader}\n"
         f"<b>Duration:</b> {duration}\n"
-        f"<b>Source:</b> <a href=\"{url}\">YouTube</a>\n\n"
-        f"<b>By {config.BOT_USERNAME}</b>"
+        f"<b>Source:</b> <a href=\"{url}\">YouTube</a>\n"
+        f"<b>By:</b> {_bot_tag()}\n"
+        f"<b>Assistant:</b> {_assistant_tag()}"
     )
+
+
+def _playing_caption(meta: dict) -> str:
+    return "<b>Playing in voice chat</b>\n\n" + _caption(meta)
+
+
+async def _assistant_has_chat_access(chat_id: int) -> bool:
+    try:
+        await assistant_client.get_chat(chat_id)
+        return True
+    except Exception:
+        return False
+
+
+async def _cleanup_stream(chat_id: int) -> None:
+    state = ACTIVE_STREAMS.pop(chat_id, None)
+    if not state:
+        return
+
+    file_path = state.get("file_path")
+    if file_path:
+        try:
+            Path(file_path).unlink(missing_ok=True)
+        except Exception:
+            pass
+
+
+def _voice_stream(file_path: str):
+    return types.MediaStream(
+        media_path=file_path,
+        audio_parameters=types.AudioQuality.HIGH,
+        video_parameters=types.VideoQuality.HD_720p,
+        audio_flags=types.MediaStream.Flags.REQUIRED,
+        video_flags=types.MediaStream.Flags.IGNORE,
+    )
+
+
+async def _play_in_voice_chat(message: Message, query: str, status: Message) -> None:
+    if not await _assistant_has_chat_access(message.chat.id):
+        return await status.edit_text(
+            f"Assistant {_assistant_tag()} is not in this group. Add {_assistant_tag()} to the group, start the voice chat, then use /mplay again."
+        )
+
+    file_path = None
+    try:
+        await status.edit_text("Downloading audio for voice chat...")
+        file_path, meta = await _download(query)
+        await _cleanup_stream(message.chat.id)
+        await status.edit_text("Joining voice chat...")
+        await pytgcalls.play(
+            chat_id=message.chat.id,
+            stream=_voice_stream(file_path),
+            config=types.GroupCallConfig(auto_start=False),
+        )
+        ACTIVE_STREAMS[message.chat.id] = {"file_path": file_path, "meta": meta}
+        await status.edit_text(
+            _playing_caption(meta),
+            parse_mode=enums.ParseMode.HTML,
+            disable_web_page_preview=True,
+            reply_markup=_player_buttons(message.chat.id, message.from_user.id, meta.get("url")),
+        )
+    except exceptions.NoActiveGroupCall:
+        if file_path and os.path.exists(file_path):
+            os.remove(file_path)
+        await status.edit_text("No active voice chat found. Start the group voice chat first, then use /mplay again.")
+    except exceptions.NoAudioSourceFound:
+        if file_path and os.path.exists(file_path):
+            os.remove(file_path)
+        await status.edit_text("Could not read audio from this track. Try another song or YouTube link.")
+    except Exception as exc:
+        if file_path and os.path.exists(file_path):
+            os.remove(file_path)
+        await status.edit_text(
+            f"Voice chat play failed: {html.escape(str(exc))}\n\n"
+            f"Make sure {_assistant_tag()} is in this group and the voice chat is already started."
+        )
+
+
+async def _stop_voice_chat(chat_id: int) -> None:
+    try:
+        await pytgcalls.leave_call(chat_id, close=False)
+    except Exception:
+        pass
+    await _cleanup_stream(chat_id)
+
+
+async def _guard_owner(query: CallbackQuery, user_id: int) -> bool:
+    if query.from_user.id == user_id:
+        return True
+    await query.answer("This music button is not for you.", show_alert=True)
+    return False
+
+
+@pytgcalls.on_update()
+async def _music_call_updates(_, update: types.Update) -> None:
+    if isinstance(update, types.StreamEnded):
+        await _cleanup_stream(update.chat_id)
 
 
 @bot.on_message(filters.command(["mhelp", "musichelp"]) & ~filters.forwarded)
@@ -238,6 +375,9 @@ async def music_play(_, message: Message):
     query = message.text.split(maxsplit=1)[1].strip()
     status = await message.reply_text("Searching music...")
 
+    if _is_group(message):
+        return await _play_in_voice_chat(message, query, status)
+
     try:
         results = await _search(query, limit=1)
     except Exception as exc:
@@ -254,6 +394,30 @@ async def music_play(_, message: Message):
         disable_web_page_preview=True,
         reply_markup=_result_buttons(key, result["url"], message.from_user.id),
     )
+
+
+@bot.on_message(filters.command(["mstop", "musicstop"]) & filters.group & ~filters.forwarded)
+async def music_stop(_, message: Message):
+    await _stop_voice_chat(message.chat.id)
+    await message.reply_text("Stopped voice chat music.")
+
+
+@bot.on_message(filters.command(["mpause", "musicpause"]) & filters.group & ~filters.forwarded)
+async def music_pause(_, message: Message):
+    try:
+        await pytgcalls.pause(message.chat.id)
+        await message.reply_text("Paused voice chat music.")
+    except Exception as exc:
+        await message.reply_text(f"Pause failed: {html.escape(str(exc))}")
+
+
+@bot.on_message(filters.command(["mresume", "musicresume"]) & filters.group & ~filters.forwarded)
+async def music_resume(_, message: Message):
+    try:
+        await pytgcalls.resume(message.chat.id)
+        await message.reply_text("Resumed voice chat music.")
+    except Exception as exc:
+        await message.reply_text(f"Resume failed: {html.escape(str(exc))}")
 
 
 @bot.on_message(filters.command(["msong", "song"]) & ~filters.forwarded)
@@ -316,6 +480,34 @@ async def music_download_callback(_, query: CallbackQuery):
     finally:
         if file_path and os.path.exists(file_path):
             os.remove(file_path)
+
+
+@bot.on_callback_query(filters.regex(r"^mpause:"))
+async def music_pause_callback(_, query: CallbackQuery):
+    _, chat_id, user_id = query.data.split(":", 2)
+    if not await _guard_owner(query, int(user_id)):
+        return
+    await pytgcalls.pause(int(chat_id))
+    await query.answer("Paused voice chat music.")
+
+
+@bot.on_callback_query(filters.regex(r"^mresume:"))
+async def music_resume_callback(_, query: CallbackQuery):
+    _, chat_id, user_id = query.data.split(":", 2)
+    if not await _guard_owner(query, int(user_id)):
+        return
+    await pytgcalls.resume(int(chat_id))
+    await query.answer("Resumed voice chat music.")
+
+
+@bot.on_callback_query(filters.regex(r"^mstop:"))
+async def music_stop_callback(_, query: CallbackQuery):
+    _, chat_id, user_id = query.data.split(":", 2)
+    if not await _guard_owner(query, int(user_id)):
+        return
+    await _stop_voice_chat(int(chat_id))
+    await query.answer("Stopped voice chat music.")
+    await query.message.edit_text("Stopped voice chat music.")
 
 
 @bot.on_callback_query(filters.regex(r"^mclose:"))

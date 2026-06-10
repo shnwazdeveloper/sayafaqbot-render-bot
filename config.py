@@ -66,6 +66,7 @@ else:
 LOGGER_ID = int(getenv('LOGGER_ID', '0'))
 BOT_USERNAME = getenv('BOT_USERNAME', '@Nixie_robot')
 BOT_NAME = getenv('BOT_NAME', 'Nixie')
+ASSISTANT_USERNAME = getenv('ASSISTANT_USERNAME', 'Lyricsdev').lstrip('@')
 IS_WEB_SUP = getenv('IS_WEB_SUP', 'True').lower() == 'true'
 
 SUDO_USERS = [int(x) for x in getenv("SUDO_USERS", "8842115436").split() if x.isdigit()]

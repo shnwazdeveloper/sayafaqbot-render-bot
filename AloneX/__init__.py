@@ -1,6 +1,7 @@
 import pyrogram 
 from pyrogram import Client, idle
-#from pytgcalls import PyTgCalls
+from pytgcalls import PyTgCalls
+from pytgcalls.pytgcalls_session import PyTgCallsSession
 from telegram.ext import Defaults, ApplicationBuilder, Application, PicklePersistence
 from motor.motor_asyncio import AsyncIOMotorClient
 from telegram import constants
@@ -18,6 +19,11 @@ import importlib
 import os
 import re
 
+try:
+    import static_ffmpeg
+except Exception:
+    static_ffmpeg = None
+
 LOGGER = logging.getLogger(__name__)
 START_TIME = time.time()
 FORMAT = f"[Bot] %(message)s"
@@ -25,6 +31,13 @@ logging.basicConfig(level=logging.INFO, handlers=[logging.FileHandler('logs.txt'
 logging.getLogger('httpx').setLevel(logging.WARNING)
 logging.getLogger('telethon').setLevel(logging.ERROR)
 logging.getLogger('pyrogram').setLevel(logging.ERROR)
+logging.getLogger("pytgcalls").setLevel(logging.ERROR)
+
+if static_ffmpeg:
+    try:
+        static_ffmpeg.add_paths()
+    except Exception as e:
+        LOGGER.warning(f"static-ffmpeg path setup failed: {e}")
 
 
 telegraph = Telegraph(access_token=getenv('TELEGRAPH_TOKEN'), domain="graph.org")
@@ -85,6 +98,7 @@ pbot = Client("AloneX_pyro_bot", api_id=API_ID, api_hash=API_HASH, bot_token=TOK
 
 # Pyrogram User Client
 user = Client("AloneX_pyro_user", api_id=API_ID, api_hash=API_HASH, session_string=USER_STRING, max_concurrent_transmissions=5)
+pytgcalls = PyTgCalls(user, cache_duration=100)
 
 # Telethon Bot Client
 tbot = TelegramClient("AloneX_telethon_bot", API_ID, API_HASH)
@@ -129,11 +143,21 @@ async def _start_required_client(client, label):
 async def start_all_clients():
     await _start_required_client(pbot, "Pyrogram Bot")
     
+    user_started = False
     try:
         await user.start()
+        user_started = True
         LOGGER.info("Pyrogram User Started!")
     except Exception as e:
         LOGGER.warning(f"Pyrogram User not started: {e}")
+
+    if user_started:
+        try:
+            PyTgCallsSession.notice_displayed = True
+            await pytgcalls.start()
+            LOGGER.info("PyTgCalls Started!")
+        except Exception as e:
+            LOGGER.warning(f"PyTgCalls not started: {e}")
     
     try:
         await tbot.start(bot_token=TOKEN)
@@ -141,15 +165,13 @@ async def start_all_clients():
     except Exception as e:
         LOGGER.warning(f"Telethon Bot not started: {e}")
     
-    #try:
-    #    await pytgcalls.start()
-    #    LOGGER.info("PyTgCalls Started!")
-    #except Exception as e:
-    #    LOGGER.error(f' ERROR when starting PyTgCalls: {e}')
-    
     LOGGER.info("All Clients Started!")
 
 async def stop_all_clients():
+    try:
+        await pytgcalls.stop()
+    except Exception:
+        pass
     await pbot.stop()
     await user.stop()
     await tbot.disconnect()
