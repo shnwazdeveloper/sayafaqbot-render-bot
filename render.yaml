@@ -1,0 +1,47 @@
+services:
+  - type: web
+    name: sayafaqbot
+    runtime: python
+    plan: free
+    branch: main
+    autoDeploy: true
+    buildCommand: pip install --upgrade pip setuptools wheel && pip install -r requirements.txt
+    startCommand: python -m AloneX
+    healthCheckPath: /
+    envVars:
+      - key: IS_WEB_SUP
+        value: "True"
+      - key: WEB_SERVER_BIND_ADDRESS
+        value: "0.0.0.0"
+      - key: TOKEN
+        sync: false
+      - key: API_ID
+        sync: false
+      - key: API_HASH
+        sync: false
+      - key: DB_URL
+        sync: false
+      - key: DB_URL2
+        sync: false
+      - key: USER_STRING
+        sync: false
+      - key: OWNER_ID
+        sync: false
+      - key: ALONE_OWNER_ID
+        sync: false
+      - key: SUDO_USERS
+        sync: false
+      - key: SUPPORT_USERS
+        sync: false
+      - key: WHITELIST_USERS
+        sync: false
+      - key: DEV_LIST
+        sync: false
+      - key: BOT_USERNAME
+        sync: false
+      - key: BOT_NAME
+        value: Nixie
+      - key: LOGS_CHANNEL
+        sync: false
+      - key: WEB_URL
+        sync: false
