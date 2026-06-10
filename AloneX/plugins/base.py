@@ -86,7 +86,7 @@ def _gsb(uid):
     su = SUPPORT_CHAT if SUPPORT_CHAT.startswith("http") else f"https://t.me/{SUPPORT_CHAT.lstrip('@')}"
     uu = UPDATE_CHANNEL if UPDATE_CHANNEL.startswith("http") else f"https://t.me/{UPDATE_CHANNEL.lstrip('@')}"
     au = f"https://t.me/{BOT_UN}?startgroup=true&admin=manage_chat+change_info+post_messages+edit_messages+delete_messages+invite_user"
-    return InlineKeyboardMarkup([[InlineKeyboardButton(font(" Music"),  callback_data="settings_back_helper", style=ButtonStyle.SUCCESS), InlineKeyboardButton(font(" Help "), callback_data=f"help_{uid}", style=ButtonStyle.PRIMARY), InlineKeyboardButton(font("Update "), url=uu, style=ButtonStyle.SUCCESS)],[InlineKeyboardButton(font(" Switch Too Inline "), switch_inline_query_current_chat="", style=ButtonStyle.DANGER)],[InlineKeyboardButton(font(" Add Me Else Your Group "), url=au, style=ButtonStyle.SUCCESS)]])
+    return InlineKeyboardMarkup([[InlineKeyboardButton(font(" Help "), callback_data=f"help_{uid}", style=ButtonStyle.PRIMARY), InlineKeyboardButton(font("Update "), url=uu, style=ButtonStyle.SUCCESS)],[InlineKeyboardButton(font(" Switch Too Inline "), switch_inline_query_current_chat="", style=ButtonStyle.DANGER)],[InlineKeyboardButton(font(" Add Me Else Your Group "), url=au, style=ButtonStyle.SUCCESS)]])
     
 async def _sp(cid, p, c=None, rm=None, eid=None, rt=None):
     try:
