@@ -22,6 +22,7 @@ Music commands
 
 Commands:
 `/mplay <song name or YouTube URL>` - search and show a playable music card.
+`/mmusicplay <song name or YouTube URL>` - same as /mplay.
 `/msong <song name or YouTube URL>` - download and send the first audio result.
 `/msearch <song name>` - show the top YouTube results with buttons.
 `/mhelp` - show this help message.
@@ -229,7 +230,7 @@ async def music_search(_, message: Message):
     )
 
 
-@bot.on_message(filters.command(["mplay", "musicplay"]) & ~filters.forwarded)
+@bot.on_message(filters.command(["mplay", "musicplay", "mmusicplay", "mmusic"]) & ~filters.forwarded)
 async def music_play(_, message: Message):
     if len(message.command) < 2:
         return await message.reply_text("Usage: /mplay song name or YouTube URL")
