@@ -61,18 +61,19 @@ async def start_services():
 
 
 if __name__ == '__main__':
+    loop = asyncio.get_event_loop()
+
+    if IS_WEB_SUP:
+        loop.run_until_complete(start_services())
+
     import_plugins(plugins)
-    
+
     async_funcs = [
         start_all_clients(),
         initialize_database()
     ]
-    
-    if IS_WEB_SUP:
-        async_funcs.append(start_services())
-        
-    loop = asyncio.get_event_loop()
+
     loop.run_until_complete(asyncio.gather(*async_funcs))
-    
+
     logging.info("Starting PTB Application...")
     app.run_polling(drop_pending_updates=True, allowed_updates=Update.ALL_TYPES)
