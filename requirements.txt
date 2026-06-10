@@ -20,8 +20,6 @@ img2pdf
 speedtest-cli
 TgCrypto
 yt-dlp
-torch
-transformers
 opencv-python-headless
 lottie
 phlogo
