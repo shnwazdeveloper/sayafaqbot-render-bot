@@ -9,9 +9,9 @@ from AloneX.db.antiflood import get_flood_config, set_flood_limit, set_flood_tim
 from AloneX.db.approval_db import is_user_approved
 from AloneX.helpers.utils import async_cache
 
-__module__ = "𝐀ɴᴛɪ-𝐅ʟᴏᴏᴅ🌊"
+__module__ = "𝐀ɴᴛɪ-𝐅ʟᴏᴏᴅ"
 __help__ = """
-*Anti-Flood🌊*
+*Anti-Flood*
 *Description:*  
 Protect your group from message flooding with automatic actions and punishments.
 *Commands:*  
@@ -77,12 +77,12 @@ async def set_flood(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if val in ["off", "no", "0"]:
         await set_flood_limit(chat_id, 0)
         get_flood_config_cached.clear_cache()
-        return await update.message.reply_text(font("✅ Flood detection disabled."))
+        return await update.message.reply_text(font(" Flood detection disabled."))
     if not val.isdigit():
-        return await update.message.reply_text("❌ Invalid number or 'off'")
+        return await update.message.reply_text(" Invalid number or 'off'")
     await set_flood_limit(chat_id, int(val))
     get_flood_config_cached.clear_cache()
-    await update.message.reply_text(f"✅ Flood trigger set to {val} messages.")
+    await update.message.reply_text(f" Flood trigger set to {val} messages.")
 
 @Command("setfloodtimer")
 @disableable("setfloodtimer")
@@ -94,17 +94,17 @@ async def set_flood_timer_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE
         if args and args[0].lower() in ["off", "no"]:
             await disable_flood_timer(chat_id)
             get_flood_config_cached.clear_cache()
-            return await update.message.reply_text(font("✅ Timed flood disabled."))
+            return await update.message.reply_text(font(" Timed flood disabled."))
         return await update.message.reply_text(font("Usage: /setfloodtimer <count> <duration>"))
     count, duration = args[0], args[1]
     if not count.isdigit():
-        return await update.message.reply_text(font("❌ Invalid number for count."))
+        return await update.message.reply_text(font(" Invalid number for count."))
     seconds = parse_time(duration)
     if not seconds:
-        return await update.message.reply_text(font("❌ Invalid duration. Use 10s, 5m, 2h, 1d etc."))
+        return await update.message.reply_text(font(" Invalid duration. Use 10s, 5m, 2h, 1d etc."))
     await set_flood_timer(chat_id, int(count), seconds)
     get_flood_config_cached.clear_cache()
-    await update.message.reply_text(f"✅ Timed flood set: {count} messages in {duration}")
+    await update.message.reply_text(f" Timed flood set: {count} messages in {duration}")
 
 @Command("floodmode")
 @disableable("floodmode")
@@ -117,10 +117,10 @@ async def flood_mode(update: Update, context: ContextTypes.DEFAULT_TYPE):
     mode = args[0].lower()
     time_value = args[1] if len(args) > 1 else None
     if mode not in ["ban", "mute", "kick", "tban", "tmute"]:
-        return await update.message.reply_text(font("❌ Invalid mode. Choose from ban, mute, kick, tban, tmute"))
+        return await update.message.reply_text(font(" Invalid mode. Choose from ban, mute, kick, tban, tmute"))
     await set_flood_action(chat_id, mode, time_value)
     get_flood_config_cached.clear_cache()
-    await update.message.reply_text(f"✅ Flood action set to {mode}{' for ' + time_value if time_value else ''}")
+    await update.message.reply_text(f" Flood action set to {mode}{' for ' + time_value if time_value else ''}")
 
 @Command("clearflood")
 @disableable("clearflood")
@@ -134,7 +134,7 @@ async def clear_flood(update: Update, context: ContextTypes.DEFAULT_TYPE):
         msg_cache[chat_id].clear()
     get_flood_config_cached.clear_cache()
     is_user_admin_cached.clear_cache()
-    await update.message.reply_text(font("✅ Flood settings and cache cleared."))
+    await update.message.reply_text(font(" Flood settings and cache cleared."))
 
 @Command("flood")
 @disableable("flood")
@@ -146,8 +146,8 @@ async def flood_status(update: Update, context: ContextTypes.DEFAULT_TYPE):
     action = config.get("action", {})
     timer = config.get("timer", {})
     if limit == 0:
-        return await update.message.reply_text(font("🚫 Flood detection is disabled."))
-    text = f"📊 **Flood Settings:**\n\n"
+        return await update.message.reply_text(font(" Flood detection is disabled."))
+    text = f" **Flood Settings:**\n\n"
     text += f"• **Limit:** {limit} messages\n"
     text += f"• **Action:** {action.get('type', 'mute')}"
     if action.get('duration'):
@@ -246,9 +246,9 @@ async def apply_flood_action(update: Update, context: ContextTypes.DEFAULT_TYPE,
         else:
             return
         
-        del_text = f"\n📝 **Messages deleted:** {deleted_count}" if deleted_count > 0 else "\n⚠️ Some messages couldn't be deleted (too old)"
+        del_text = f"\n **Messages deleted:** {deleted_count}" if deleted_count > 0 else "\n Some messages couldn't be deleted (too old)"
         notification = await update.message.reply_text(
-            f"🚫 User [{user.first_name}](tg://user?id={user.id}) was {action_type}{'ped' if action_type in ['ban', 'mute'] else 'ed'} for flooding.\n"
+            f" User [{user.first_name}](tg://user?id={user.id}) was {action_type}{'ped' if action_type in ['ban', 'mute'] else 'ed'} for flooding.\n"
             f"**Reason:** Exceeded flood limit\n"
             f"**Duration:** {action.get('duration', 'Permanent')}"
             f"{del_text}",
@@ -264,4 +264,4 @@ async def apply_flood_action(update: Update, context: ContextTypes.DEFAULT_TYPE,
         except:
             pass
     except Exception as e:
-        await update.message.reply_text(f"⚠️ Failed to apply flood action: {e}")
+        await update.message.reply_text(f" Failed to apply flood action: {e}")

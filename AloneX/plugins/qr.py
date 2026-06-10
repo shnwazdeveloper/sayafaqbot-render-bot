@@ -7,7 +7,7 @@ import aiohttp
 import os
 
 
-__module__ = "𝐐ʀ📱"
+__module__ = "𝐐ʀ"
 
 __help__ = """
 *Commands*:

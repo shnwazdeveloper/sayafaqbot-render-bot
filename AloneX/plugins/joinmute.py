@@ -11,10 +11,10 @@ from AloneX.helpers.decorator import protected_ids, only_groups
 
 LOGGER = logging.getLogger(__name__)
 
-__module__ = "𝐉ᴏɪɴ-𝐌ᴜᴛᴇ🤐"
+__module__ = "𝐉ᴏɪɴ-𝐌ᴜᴛᴇ"
 
 __help__ = """
-*Join-Mute Module* 🤐
+*Join-Mute Module* 
 
 Automatically mutes new members who join the group for a specific duration. This helps prevent "join-and-spam" attacks.
 
@@ -47,10 +47,10 @@ def format_time(seconds: int) -> str:
 async def get_joinmute_keyboard(chat_id: int):
     duration = await get_joinmute_duration(chat_id)
     if duration > 0:
-        text = "🟢 Join-Mute: ON"
+        text = " Join-Mute: ON"
         style = ButtonStyle.SUCCESS
     else:
-        text = "🔴 Join-Mute: OFF"
+        text = " Join-Mute: OFF"
         style = ButtonStyle.DANGER
 
     return IKM([[IKB(font(text), callback_data="joinmute_toggle", style=style)]])
@@ -70,30 +70,30 @@ async def joinmute_cmd(_, message: Message):
         return
 
     if not await is_user_admin(message.chat.id, message.from_user.id):
-        return await message.reply_text(font("❌ You must be an admin to use this command."))
+        return await message.reply_text(font(" You must be an admin to use this command."))
 
     if len(message.command) < 2:
         duration = await get_joinmute_duration(message.chat.id)
         status = f"Enabled ({format_time(duration)})" if duration > 0 else "Disabled"
         return await message.reply_text(
-            font(f"🤐 <b>Join-Mute Status:</b> {status}\n\nUsage: `/joinmute <time|off>` (e.g., 10m, 1h)"),
+            font(f" <b>Join-Mute Status:</b> {status}\n\nUsage: `/joinmute <time|off>` (e.g., 10m, 1h)"),
             reply_markup=await get_joinmute_keyboard(message.chat.id)
         )
 
     arg = message.command[1].lower()
     if arg == "off":
         await set_joinmute_duration(message.chat.id, 0)
-        return await message.reply_text(font("✅ Join-Mute has been disabled."))
+        return await message.reply_text(font(" Join-Mute has been disabled."))
 
     duration = parse_time(arg)
     if duration <= 0:
-        return await message.reply_text(font("❌ Invalid time format. Use e.g., 10m, 1h, 1d."))
+        return await message.reply_text(font(" Invalid time format. Use e.g., 10m, 1h, 1d."))
 
     if duration < 30:
-        return await message.reply_text(font("❌ Minimum duration is 30 seconds."))
+        return await message.reply_text(font(" Minimum duration is 30 seconds."))
 
     await set_joinmute_duration(message.chat.id, duration)
-    await message.reply_text(font(f"✅ New members will be muted for <b>{format_time(duration)}</b> upon joining."))
+    await message.reply_text(font(f" New members will be muted for <b>{format_time(duration)}</b> upon joining."))
 
 @pbot.on_message(filters.new_chat_members, group=-1003)
 async def joinmute_handler(client, message: Message):
@@ -125,7 +125,7 @@ async def joinmute_handler(client, message: Message):
             )
             # Notify
             await message.reply_text(
-                font(f"🔇 {user.mention} has been automatically muted for <b>{format_time(duration)}</b>. This is a security measure for new members."),
+                font(f" {user.mention} has been automatically muted for <b>{format_time(duration)}</b>. This is a security measure for new members."),
                 parse_mode=enums.ParseMode.HTML
             )
         except Exception as e:
@@ -137,7 +137,7 @@ async def joinmute_toggle_callback(_, query: CallbackQuery):
     chat_id = query.message.chat.id
 
     if not await is_user_admin(chat_id, user_id):
-        return await query.answer(font("❌ This button is for admins only!"), show_alert=True)
+        return await query.answer(font(" This button is for admins only!"), show_alert=True)
 
     duration = await get_joinmute_duration(chat_id)
     if duration > 0:
@@ -149,7 +149,7 @@ async def joinmute_toggle_callback(_, query: CallbackQuery):
 
     status = f"Enabled ({format_time(new_duration)})" if new_duration > 0 else "Disabled"
     await query.message.edit_text(
-          (f"🤐 <b>𝐉ᴏɪɴ-𝐌ᴜᴛᴇ 𝐒ᴛᴀᴛᴜꜱ:</b> {status}\n\n𝐔ꜱᴀɢᴇ: `/joinmute <time|off>` (e.g., 10m, 1h)"),
+          (f" <b>𝐉ᴏɪɴ-𝐌ᴜᴛᴇ 𝐒ᴛᴀᴛᴜꜱ:</b> {status}\n\n𝐔ꜱᴀɢᴇ: `/joinmute <time|off>` (e.g., 10m, 1h)"),
         reply_markup=await get_joinmute_keyboard(chat_id)
     )
     await query.answer(font(f"Join-Mute {'Enabled' if new_duration > 0 else 'Disabled'}"))

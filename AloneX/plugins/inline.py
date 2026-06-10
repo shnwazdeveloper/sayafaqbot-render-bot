@@ -149,13 +149,13 @@ class MultiPlatformAPI:
 
     def get_platform_emoji(self, platform: str) -> str:
         emojis = {
-            "instagram": "📸", "tiktok": "🎵", "pinterest": "📌",
-            "bilibili": "📺", "twitter": "🐦", "youtube": "🎥",
-            "spotify": "🎧", "applemusic": "🍎", "soundcloud": "☁️",
-            "facebook": "📘", "reddit": "🔴", "twitch": "🎮", 
-            "threads": "🧵"
+            "instagram": "", "tiktok": "", "pinterest": "",
+            "bilibili": "", "twitter": "", "youtube": "",
+            "spotify": "", "applemusic": "", "soundcloud": "",
+            "facebook": "", "reddit": "", "twitch": "", 
+            "threads": ""
         }
-        return emojis.get(platform, "📥")
+        return emojis.get(platform, "")
 
     async def download_file(self, url: str, is_video: bool = False, is_audio: bool = False) -> Optional[str]:
         if not url or not isinstance(url, str):
@@ -437,7 +437,7 @@ async def inline_handler(c: Client, q: InlineQuery):
             return await q.answer([
                 InlineQueryResultArticle(
                     id="gpt_usage",
-                    title="💡 GPT Usage",
+                    title=" GPT Usage",
                     description="Ask ChatGPT",
                     input_message_content=InputTextMessageContent(
                         f"Usage: `@{bot} #gpt question`"
@@ -451,13 +451,13 @@ async def inline_handler(c: Client, q: InlineQuery):
         return await q.answer([
             InlineQueryResultArticle(
                 id=shortuuid.uuid(),
-                title="🤖 Generate GPT Answer",
+                title=" Generate GPT Answer",
                 description=f"Prompt: {prompt[:40]}...",
                 input_message_content=InputTextMessageContent(
-                    f"✨ **Prompt:** {prompt}\n\n👉 Tap below to generate"
+                    f" **Prompt:** {prompt}\n\n Tap below to generate"
                 ),
                 reply_markup=InlineKeyboardMarkup([[
-                    InlineKeyboardButton(font("⚡ Generate"), callback_data=f"gpt:{sid}", style=ButtonStyle.SUCCESS)
+                    InlineKeyboardButton(font(" Generate"), callback_data=f"gpt:{sid}", style=ButtonStyle.SUCCESS)
                 ]])
             )
         ], cache_time=0)
@@ -468,10 +468,10 @@ async def inline_handler(c: Client, q: InlineQuery):
             return await q.answer([
                 InlineQueryResultArticle(
                     id="yt_usage",
-                    title="🎥 YouTube",
+                    title=" YouTube",
                     description="!yt song name",
                     input_message_content=InputTextMessageContent(
-                        f"🎥 **YouTube**: `@{bot} !yt song name`"
+                        f" **YouTube**: `@{bot} !yt song name`"
                     )
                 )
             ], cache_time=0)
@@ -481,10 +481,10 @@ async def inline_handler(c: Client, q: InlineQuery):
             return await q.answer([
                 InlineQueryResultArticle(
                     id="no_results",
-                    title="❌ No Results",
+                    title=" No Results",
                     description="No songs found",
                     input_message_content=InputTextMessageContent(
-                        f"❌ No results found for: {search_query}"
+                        f" No results found for: {search_query}"
                     )
                 )
             ], cache_time=0)
@@ -502,14 +502,14 @@ async def inline_handler(c: Client, q: InlineQuery):
             answers.append(
                 InlineQueryResultArticle(
                     id=shortuuid.uuid(),
-                    title=f"🎥 {track['title']}",
-                    description=f"👤 {track['artist']} | ⏱ {track['duration']}",
+                    title=f" {track['title']}",
+                    description=f" {track['artist']} |  {track['duration']}",
                     thumb_url=track['thumbnail'] or "https://files.catbox.moe/dv0wud.jpg",
                     input_message_content=InputTextMessageContent(
-                        f"🎥 **{track['title']}**\n👤 {track['artist']}\n\n⏳ Preparing..."
+                        f" **{track['title']}**\n {track['artist']}\n\n Preparing..."
                     ),
                     reply_markup=InlineKeyboardMarkup([[
-                        InlineKeyboardButton(font("⬇️ Download Audio"), callback_data=callback_data, style=ButtonStyle.PRIMARY)
+                        InlineKeyboardButton(font(" Download Audio"), callback_data=callback_data, style=ButtonStyle.PRIMARY)
                     ]])
                 )
             )
@@ -522,10 +522,10 @@ async def inline_handler(c: Client, q: InlineQuery):
             return await q.answer([
                 InlineQueryResultArticle(
                     id="sp_usage",
-                    title="🎧 Spotify",
+                    title=" Spotify",
                     description="!spotify song name",
                     input_message_content=InputTextMessageContent(
-                        f"🎧 **Spotify**: `@{bot} !spotify song name`"
+                        f" **Spotify**: `@{bot} !spotify song name`"
                     )
                 )
             ], cache_time=0)
@@ -535,10 +535,10 @@ async def inline_handler(c: Client, q: InlineQuery):
             return await q.answer([
                 InlineQueryResultArticle(
                     id="no_results",
-                    title="❌ No Results",
+                    title=" No Results",
                     description="No songs found",
                     input_message_content=InputTextMessageContent(
-                        f"❌ No results found for: {search_query}"
+                        f" No results found for: {search_query}"
                     )
                 )
             ], cache_time=0)
@@ -556,14 +556,14 @@ async def inline_handler(c: Client, q: InlineQuery):
             answers.append(
                 InlineQueryResultArticle(
                     id=shortuuid.uuid(),
-                    title=f"🎧 {track['title']}",
-                    description=f"👤 {track['artist']} | ⏱ {track['duration']}",
+                    title=f" {track['title']}",
+                    description=f" {track['artist']} |  {track['duration']}",
                     thumb_url=track['thumbnail'] or "https://files.catbox.moe/dv0wud.jpg",
                     input_message_content=InputTextMessageContent(
-                        f"🎧 **{track['title']}**\n👤 {track['artist']}\n\n⏳ Preparing..."
+                        f" **{track['title']}**\n {track['artist']}\n\n Preparing..."
                     ),
                     reply_markup=InlineKeyboardMarkup([[
-                        InlineKeyboardButton(font("⬇️ Download"), callback_data=callback_data, style=ButtonStyle.PRIMARY)
+                        InlineKeyboardButton(font(" Download"), callback_data=callback_data, style=ButtonStyle.PRIMARY)
                     ]])
                 )
             )
@@ -576,10 +576,10 @@ async def inline_handler(c: Client, q: InlineQuery):
             return await q.answer([
                 InlineQueryResultArticle(
                     id="am_usage",
-                    title="🍎 Apple Music",
+                    title=" Apple Music",
                     description="!apple song name",
                     input_message_content=InputTextMessageContent(
-                        f"🍎 **Apple Music**: `@{bot} !apple song name`"
+                        f" **Apple Music**: `@{bot} !apple song name`"
                     )
                 )
             ], cache_time=0)
@@ -589,10 +589,10 @@ async def inline_handler(c: Client, q: InlineQuery):
             return await q.answer([
                 InlineQueryResultArticle(
                     id="no_results",
-                    title="❌ No Results",
+                    title=" No Results",
                     description="No songs found",
                     input_message_content=InputTextMessageContent(
-                        f"❌ No results found for: {search_query}"
+                        f" No results found for: {search_query}"
                     )
                 )
             ], cache_time=0)
@@ -610,14 +610,14 @@ async def inline_handler(c: Client, q: InlineQuery):
             answers.append(
                 InlineQueryResultArticle(
                     id=shortuuid.uuid(),
-                    title=f"🍎 {track['title']}",
-                    description=f"👤 {track['artist']} | ⏱ {track['duration']}",
+                    title=f" {track['title']}",
+                    description=f" {track['artist']} |  {track['duration']}",
                     thumb_url=track['thumbnail'] or "https://files.catbox.moe/dv0wud.jpg",
                     input_message_content=InputTextMessageContent(
-                        f"🍎 **{track['title']}**\n👤 {track['artist']}\n\n⏳ Preparing..."
+                        f" **{track['title']}**\n {track['artist']}\n\n Preparing..."
                     ),
                     reply_markup=InlineKeyboardMarkup([[
-                        InlineKeyboardButton(font("⬇️ Download"), callback_data=callback_data, style=ButtonStyle.PRIMARY)
+                        InlineKeyboardButton(font(" Download"), callback_data=callback_data, style=ButtonStyle.PRIMARY)
                     ]])
                 )
             )
@@ -632,11 +632,11 @@ async def inline_handler(c: Client, q: InlineQuery):
             return await q.answer([
                 InlineQueryResultArticle(
                     id="dl_bad",
-                    title="❌ Unsupported Platform",
+                    title=" Unsupported Platform",
                     description="Check supported platforms",
                     input_message_content=InputTextMessageContent(
-                        f"❌ Unsupported URL\n\n"
-                        f"✅ **Social:** Instagram, TikTok, Pinterest, Twitter, "
+                        f" Unsupported URL\n\n"
+                        f" **Social:** Instagram, TikTok, Pinterest, Twitter, "
                         f"Facebook, Reddit, Twitch, Threads, Bilibili"
                     )
                 )
@@ -657,9 +657,9 @@ async def inline_handler(c: Client, q: InlineQuery):
                 title=f"{emoji} Download {media_type}",
                 description=f"From {platform.title()}",
                 photo_url="https://files.catbox.moe/dv0wud.jpg",
-                caption=f"{emoji} **Download {media_type}**\n📱 {platform.title()}\n🔗 [View]({url})",
+                caption=f"{emoji} **Download {media_type}**\n {platform.title()}\n [View]({url})",
                 reply_markup=InlineKeyboardMarkup([[
-                    InlineKeyboardButton(font("⬇️ Download"), callback_data=callback_data, style=ButtonStyle.PRIMARY)
+                    InlineKeyboardButton(font(" Download"), callback_data=callback_data, style=ButtonStyle.PRIMARY)
                 ]])
             )
         ], cache_time=0)
@@ -673,7 +673,7 @@ async def inline_handler(c: Client, q: InlineQuery):
             return await q.answer([
                 InlineQueryResultArticle(
                     id="w_help",
-                    title="📝 𝐖ʜɪsᴘᴇʀ",
+                    title=" 𝐖ʜɪsᴘᴇʀ",
                     description="𝐒ᴇᴄʀᴇᴛ 𝐌ᴀssᴀɢᴇ",
                     input_message_content=InputTextMessageContent(
                         f"Usage: `@{bot} @username message`"
@@ -690,10 +690,10 @@ async def inline_handler(c: Client, q: InlineQuery):
             return await q.answer([
                 InlineQueryResultArticle(
                     id="self_whisper",
-                    title="❌ Cannot Send to Self",
+                    title=" Cannot Send to Self",
                     description="Invalid",
                     input_message_content=InputTextMessageContent(
-                        "❌ You cannot whisper to yourself"
+                        " You cannot whisper to yourself"
                     )
                 )
             ], cache_time=0)
@@ -715,7 +715,7 @@ async def inline_handler(c: Client, q: InlineQuery):
         asyncio.create_task(save_whisper(wid, pending[f"whisper_data:{wid}"]))
         
         sender_mention = f"<a href='tg://user?id={q.from_user.id}'>{q.from_user.first_name or 'Someone'}</a>"
-        whisper_text = f"<blockquote><b>🔐𝐖ʜɪsᴘᴇʀ 𝐅ʀᴏᴍ {sender_mention} 𝐅ᴏʀ @{username}</b></blockquote>"
+        whisper_text = f"<blockquote><b>𝐖ʜɪsᴘᴇʀ 𝐅ʀᴏᴍ {sender_mention} 𝐅ᴏʀ @{username}</b></blockquote>"
         
         return await q.answer([
             InlineQueryResultArticle(
@@ -727,7 +727,7 @@ async def inline_handler(c: Client, q: InlineQuery):
                     parse_mode=enums.ParseMode.HTML
                 ),
                 reply_markup=InlineKeyboardMarkup([[
-                    InlineKeyboardButton(font("📨 𝐑ᴇᴀᴅ 📨"), callback_data=f"w:{sid}", style=ButtonStyle.SUCCESS)
+                    InlineKeyboardButton(font(" 𝐑ᴇᴀᴅ "), callback_data=f"w:{sid}", style=ButtonStyle.SUCCESS)
                 ]])
             )
         ], cache_time=0)
@@ -735,18 +735,18 @@ async def inline_handler(c: Client, q: InlineQuery):
     return await q.answer([
         InlineQueryResultArticle(
             id="help_w",
-            title="📝 𝐖ʜɪsᴘᴇʀ",
+            title=" 𝐖ʜɪsᴘᴇʀ",
             description="@username message",
             input_message_content=InputTextMessageContent(
-                f"📝 **Whisper**: `@{bot} @user message`"
+                f" **Whisper**: `@{bot} @user message`"
             )
         ),
         InlineQueryResultArticle(
             id="help_g",
-            title="💡 GPT",
+            title=" GPT",
             description="#gpt question",
             input_message_content=InputTextMessageContent(
-                f"💡 **GPT**: `@{bot} #gpt question`"
+                f" **GPT**: `@{bot} #gpt question`"
             )
         )
     ], cache_time=0)
@@ -757,7 +757,7 @@ async def gpt_cb(c: Client, cb: CallbackQuery):
     data = pending.get(f"gpt:{sid}")
     
     if not data or data.get("type") != "gpt":
-        return await cb.answer(font("❌ Expired"), show_alert=True)
+        return await cb.answer(font(" Expired"), show_alert=True)
     
     prompt = data.get("prompt")
     
@@ -765,7 +765,7 @@ async def gpt_cb(c: Client, cb: CallbackQuery):
         bot = await get_bot_username()
         
         if cb.inline_message_id:
-            await safe_edit(c, cb.inline_message_id, "⏳ Processing...")
+            await safe_edit(c, cb.inline_message_id, " Processing...")
         
         ans = await GPTGeneration().create(prompt)
         
@@ -774,10 +774,10 @@ async def gpt_cb(c: Client, cb: CallbackQuery):
         
         if cb.inline_message_id:
             response_text = (
-                f"✨ <b>GPT</b>\n\n"
+                f" <b>GPT</b>\n\n"
                 f"<b>Q:</b> <code>{prompt}</code>\n\n"
                 f"<b>A:</b> {ans}\n\n"
-                f"💡 <code>@{bot} #gpt question</code>"
+                f" <code>@{bot} #gpt question</code>"
             )
             await safe_edit(c, cb.inline_message_id, response_text)
         
@@ -786,7 +786,7 @@ async def gpt_cb(c: Client, cb: CallbackQuery):
     except Exception as e:
         logging.error(f"GPT error: {e}")
         if cb.inline_message_id:
-            await safe_edit(c, cb.inline_message_id, "❌ Error generating response")
+            await safe_edit(c, cb.inline_message_id, " Error generating response")
 
 @app.on_callback_query(filters.regex(r"^w:"))
 async def whisper_cb(c: Client, cb: CallbackQuery):
@@ -797,7 +797,7 @@ async def whisper_cb(c: Client, cb: CallbackQuery):
     if not data:
         data = pending.get(f"whisper_data:{wid}")
         if not data:
-            return await cb.answer(font("❌ Not found"), show_alert=True)
+            return await cb.answer(font(" Not found"), show_alert=True)
     
     user_id = cb.from_user.id
     username = cb.from_user.username or ""
@@ -821,26 +821,26 @@ async def whisper_cb(c: Client, cb: CallbackQuery):
             is_authorized = True
     
     if not (is_sender or is_authorized):
-        return await cb.answer(font("🚫 Not for you"), show_alert=True)
+        return await cb.answer(font(" Not for you"), show_alert=True)
     
     if data.get("read") and is_authorized and not is_sender:
         if cb.inline_message_id:
             reader_mention = f"<a href='tg://user?id={cb.from_user.id}'>{data.get('reader','Someone')}</a>"
-            await safe_edit(c, cb.inline_message_id, f"✅ {reader_mention} already read this whisper")
-        return await cb.answer(font("⏳ Already read!"), show_alert=True)
+            await safe_edit(c, cb.inline_message_id, f" {reader_mention} already read this whisper")
+        return await cb.answer(font(" Already read!"), show_alert=True)
     
     reader_name = cb.from_user.first_name or "Someone"
     
     if is_sender:
-        await cb.answer(f"📝𝐘ᴏᴜʀ 𝐌ᴀssᴀɢᴇ ➛ {data['message']}", show_alert=True)
+        await cb.answer(f"𝐘ᴏᴜʀ 𝐌ᴀssᴀɢᴇ ➛ {data['message']}", show_alert=True)
     else:
         await mark_read(wid, reader_name)
         
         if cb.inline_message_id:
             reader_mention = f"<a href='tg://user?id={user_id}'>{reader_name}</a>"
-            await safe_edit(c, cb.inline_message_id, f"✅ {reader_mention} 𝐑ᴇᴀᴅ 𝐓ʜᴇ 𝐖ʜɪsᴘᴇʀ.")
+            await safe_edit(c, cb.inline_message_id, f" {reader_mention} 𝐑ᴇᴀᴅ 𝐓ʜᴇ 𝐖ʜɪsᴘᴇʀ.")
         
-        await cb.answer(f"🔐 {data['message']}", show_alert=True)
+        await cb.answer(f" {data['message']}", show_alert=True)
         
         pending.pop(f"w:{sid}", None)
         pending.pop(f"whisper_data:{wid}", None)
@@ -855,12 +855,12 @@ async def music_cb(c: Client, cb: CallbackQuery):
         data = pending.get(cb.data)
         
         if not data or data.get("type") not in ["youtube", "spotify", "applemusic"]:
-            return await cb.answer(font("❌ Expired"), show_alert=True)
+            return await cb.answer(font(" Expired"), show_alert=True)
         
-        await cb.answer(font("⏳ Processing..."))
+        await cb.answer(font(" Processing..."))
         
         bot = await get_bot_username()
-        emoji = "🎥" if platform == "youtube" else ("🎧" if platform == "spotify" else "🍎")
+        emoji = "" if platform == "youtube" else ("" if platform == "spotify" else "")
         
         await safe_edit(c, cb.inline_message_id, f"{emoji} <b>Fetching track info...</b>")
         
@@ -871,7 +871,7 @@ async def music_cb(c: Client, cb: CallbackQuery):
         file_path, metadata = await bitflow.download_audio(query)
         
         if not file_path or not metadata:
-            await safe_edit(c, cb.inline_message_id, "❌ Download failed. Please try again.")
+            await safe_edit(c, cb.inline_message_id, " Download failed. Please try again.")
             return
         
         title = metadata['title']
@@ -893,12 +893,12 @@ async def music_cb(c: Client, cb: CallbackQuery):
         
         caption = (
             f"{emoji} <b>{title}</b>\n\n"
-            f"👤 {artist}\n"
-            f"⏱ {duration}\n"
-            f"🎵 {platform_name}\n\n"
-            f"📅 {ist_time.strftime('%d %b %Y')}\n"
-            f"🕐 {ist_time.strftime('%I:%M %p IST')}\n\n"
-            f"💡 <code>@{bot} !{platform} song</code>"
+            f" {artist}\n"
+            f" {duration}\n"
+            f" {platform_name}\n\n"
+            f" {ist_time.strftime('%d %b %Y')}\n"
+            f" {ist_time.strftime('%I:%M %p IST')}\n\n"
+            f" <code>@{bot} !{platform} song</code>"
         )
         
         await c.edit_inline_media(
@@ -928,7 +928,7 @@ async def music_cb(c: Client, cb: CallbackQuery):
             safe_cleanup(thumb_path)
         
         if cb.inline_message_id:
-            await safe_edit(c, cb.inline_message_id, "❌ Upload error")
+            await safe_edit(c, cb.inline_message_id, " Upload error")
 
 @app.on_callback_query(filters.regex(r"^dl:"))
 async def download_cb(c: Client, cb: CallbackQuery):
@@ -940,10 +940,10 @@ async def download_cb(c: Client, cb: CallbackQuery):
         data = pending.get(cb.data)
         
         if not data or data.get("type") != "download":
-            return await cb.answer(font("❌ Expired"), show_alert=True)
+            return await cb.answer(font(" Expired"), show_alert=True)
         
         url = data.get("url")
-        await cb.answer(font("⏳ Processing..."))
+        await cb.answer(font(" Processing..."))
         
         bot = await get_bot_username()
         emoji = api.get_platform_emoji(platform)
@@ -955,13 +955,13 @@ async def download_cb(c: Client, cb: CallbackQuery):
         if not media_data:
             return await safe_edit(
                 c, cb.inline_message_id,
-                f"❌ Failed to fetch media\n\nCheck URL or try again"
+                f" Failed to fetch media\n\nCheck URL or try again"
             )
         
         video_url, photo_url = extract_media_urls(media_data)
         
         if not (video_url or photo_url):
-            return await safe_edit(c, cb.inline_message_id, "❌ No media found")
+            return await safe_edit(c, cb.inline_message_id, " No media found")
         
         metadata = extract_metadata(media_data, platform)
         
@@ -976,7 +976,7 @@ async def download_cb(c: Client, cb: CallbackQuery):
         file_path = await api.download_file(download_url, is_video)
         
         if not file_path:
-            return await safe_edit(c, cb.inline_message_id, "❌ Download failed")
+            return await safe_edit(c, cb.inline_message_id, " Download failed")
         
         await safe_edit(c, cb.inline_message_id, f"{emoji} <b>Uploading...</b>")
         
@@ -993,21 +993,21 @@ async def download_cb(c: Client, cb: CallbackQuery):
             }
             
             if platform in platform_links:
-                caption += f"👤 <a href='{platform_links[platform]}'>@{metadata['author']}</a>\n"
+                caption += f" <a href='{platform_links[platform]}'>@{metadata['author']}</a>\n"
             else:
-                caption += f"👤 @{metadata['author']}\n"
+                caption += f" @{metadata['author']}\n"
         
         if metadata['likes'] > 0:
-            caption += f"❤️ {metadata['likes']:,}\n"
+            caption += f" {metadata['likes']:,}\n"
         if metadata['comments'] > 0:
-            caption += f"💬 {metadata['comments']:,}\n"
+            caption += f" {metadata['comments']:,}\n"
         if metadata['views'] > 0:
-            caption += f"👁 {metadata['views']:,}\n"
+            caption += f" {metadata['views']:,}\n"
         
         caption += (
-            f"\n📅 {ist_time.strftime('%d %b %Y')}\n"
-            f"🕐 {ist_time.strftime('%I:%M %p IST')}\n\n"
-            f"💡 <code>@{bot} !dl [url]</code>"
+            f"\n {ist_time.strftime('%d %b %Y')}\n"
+            f" {ist_time.strftime('%I:%M %p IST')}\n\n"
+            f" <code>@{bot} !dl [url]</code>"
         )
         
         if is_video:
@@ -1044,4 +1044,4 @@ async def download_cb(c: Client, cb: CallbackQuery):
             safe_cleanup(thumb_path)
         
         if cb.inline_message_id:
-            await safe_edit(c, cb.inline_message_id, "❌ Download error")
+            await safe_edit(c, cb.inline_message_id, " Download error")

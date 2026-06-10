@@ -56,10 +56,10 @@ LOCK_DESCRIPTIONS = {
     'bots': 'messages sent by bots', 'cmd': 'command messages', 'other': 'other message types'
 }
 
-__module__ = "𝐋ᴏᴄᴋs🔒"
+__module__ = "𝐋ᴏᴄᴋs"
 
 __help__ = """
-❂ *locks module🔒*
+❂ *locks module*
 
 ❂ *commands*:
 - `/locktypes` — display all lockable content types  
@@ -311,7 +311,7 @@ async def locktypes_cmd(client: Client, message: Message):
     
     for lock_type in all_types:
         is_locked_val = locked_items and (lock_type in locked_items or "all" in locked_items)
-        status = "🔒 " if is_locked_val else ""
+        status = " " if is_locked_val else ""
         style = ButtonStyle.SUCCESS if is_locked_val else ButtonStyle.DANGER
         row.append(PyroButton(f"{status}{font(lock_type.capitalize())}", callback_data=f"locktoggle#{lock_type}", style=style))
         if len(row) == 3:
@@ -321,7 +321,7 @@ async def locktypes_cmd(client: Client, message: Message):
     if row:
         buttons.append(row)
 
-    txt = "🔐 <b>available lock types</b>\n\n<i>tap any button to toggle</i>\n\n"
+    txt = " <b>available lock types</b>\n\n<i>tap any button to toggle</i>\n\n"
     if locked_items:
         txt += f"<b>currently locked ({len(locked_items)}):</b>\n<code>{', '.join(locked_items)}</code>"
     else:
@@ -387,7 +387,7 @@ async def locktoggle_callback(client: Client, query: PyroCallbackQuery):
 
     for lt in all_types:
         is_locked_val = locked_items and (lt in locked_items or "all" in locked_items)
-        status = "🔒 " if is_locked_val else ""
+        status = " " if is_locked_val else ""
         style = ButtonStyle.SUCCESS if is_locked_val else ButtonStyle.DANGER
         row.append(PyroButton(f"{status}{font(lt.capitalize())}", callback_data=f"locktoggle#{lt}", style=style))
         if len(row) == 3:
@@ -397,7 +397,7 @@ async def locktoggle_callback(client: Client, query: PyroCallbackQuery):
     if row:
         buttons.append(row)
 
-    txt = "🔐 <b>available lock types</b>\n\n<i>tap any button to toggle</i>\n\n"
+    txt = " <b>available lock types</b>\n\n<i>tap any button to toggle</i>\n\n"
     if locked_items:
         txt += f"<b>currently locked ({len(locked_items)}):</b>\n<code>{', '.join(locked_items)}</code>"
     else:
@@ -415,7 +415,7 @@ async def locktoggle_callback(client: Client, query: PyroCallbackQuery):
     await query.answer(f"{lock_type} {action}!")
     
     mention = f"<a href='tg://user?id={query.from_user.id}'>{html.escape(query.from_user.first_name)}</a>"
-    log_text = f"{'🔒' if action == 'locked' else '🔓'} <b>{action.capitalize()} (via toggle)</b>\n" \
+    log_text = f"{'' if action == 'locked' else ''} <b>{action.capitalize()} (via toggle)</b>\n" \
                f"<b>Group:</b> {html.escape(query.message.chat.title)}\n" \
                f"<b>Type:</b> {lock_type}\n" \
                f"<b>By:</b> {mention}"
@@ -429,7 +429,7 @@ async def apply_lock_action(update, context, action: str):
 
     if not context.args:
         return await update.message.reply_text(
-            f"❌ please specify what to {action}.\n\n"
+            f" please specify what to {action}.\n\n"
             f"usage: `/{action} <type>` or `/{action} all`\n"
             f"example: `/{action} video`, `/{action} sticker`\n\n"
             f"use /locktypes to see all available types.",
@@ -439,7 +439,7 @@ async def apply_lock_action(update, context, action: str):
     permission = context.args[0].lower()
     if permission != 'all' and permission not in LOCK_TYPES:
         return await update.message.reply_text(
-            f"❌ invalid {action} type: `{permission}`\n\n"
+            f" invalid {action} type: `{permission}`\n\n"
             f"use /locktypes to see all available types.",
             parse_mode=constants.ParseMode.MARKDOWN
         )
@@ -451,7 +451,7 @@ async def apply_lock_action(update, context, action: str):
         if action == "lock":
             if await is_locked(chat.id, permission):
                 return await update.message.reply_text(
-                    f"⚠️ `{permission}` is already locked!",
+                    f" `{permission}` is already locked!",
                     parse_mode=constants.ParseMode.MARKDOWN
                 )
 
@@ -459,18 +459,18 @@ async def apply_lock_action(update, context, action: str):
                 for key in permissions:
                     permissions[key] = False
                 await update_lock(chat.id, 'all')
-                text = "🔒 <b>all content types</b>"
+                text = " <b>all content types</b>"
             else:
                 telegram_perm = LOCK_TYPES[permission]
                 if telegram_perm and telegram_perm in permissions:
                     permissions[telegram_perm] = False
                 await update_lock(chat.id, permission)
-                text = f"🔒 <code>{permission}</code>"
+                text = f" <code>{permission}</code>"
 
             await chat.set_permissions(ChatPermissions(**permissions))
-            await update.message.reply_text(f"✅ <b>locked!</b> {text}", parse_mode=constants.ParseMode.HTML)
+            await update.message.reply_text(f" <b>locked!</b> {text}", parse_mode=constants.ParseMode.HTML)
 
-            log_text = f"🔒 <b>Lock</b>\n" \
+            log_text = f" <b>Lock</b>\n" \
                        f"<b>Group:</b> {helpers.escape(chat.title)}\n" \
                        f"<b>Type:</b> {permission}\n" \
                        f"<b>By:</b> {update.effective_user.mention_html()}"
@@ -480,28 +480,28 @@ async def apply_lock_action(update, context, action: str):
             if permission == 'all':
                 locked_items = await get_locks(chat.id)
                 if not locked_items:
-                    return await update.message.reply_text(font("⚠️ nothing is locked!"))
+                    return await update.message.reply_text(font(" nothing is locked!"))
 
                 for key in permissions:
                     permissions[key] = True
                 await remove_all_locks(chat.id)
-                text = "🔓 <b>all content types</b>"
+                text = " <b>all content types</b>"
             else:
                 if not await is_locked(chat.id, permission):
                     return await update.message.reply_text(
-                        f"⚠️ `{permission}` is not locked!",
+                        f" `{permission}` is not locked!",
                         parse_mode=constants.ParseMode.MARKDOWN
                     )
                 telegram_perm = LOCK_TYPES[permission]
                 if telegram_perm and telegram_perm in permissions:
                     permissions[telegram_perm] = True
                 await remove_lock(chat.id, permission)
-                text = f"🔓 <code>{permission}</code>"
+                text = f" <code>{permission}</code>"
 
             await chat.set_permissions(ChatPermissions(**permissions))
-            await update.message.reply_text(f"✅ <b>unlocked!</b> {text}", parse_mode=constants.ParseMode.HTML)
+            await update.message.reply_text(f" <b>unlocked!</b> {text}", parse_mode=constants.ParseMode.HTML)
 
-            log_text = f"🔓 <b>Unlock</b>\n" \
+            log_text = f" <b>Unlock</b>\n" \
                        f"<b>Group:</b> {helpers.escape(chat.title)}\n" \
                        f"<b>Type:</b> {permission}\n" \
                        f"<b>By:</b> {update.effective_user.mention_html()}"
@@ -510,9 +510,9 @@ async def apply_lock_action(update, context, action: str):
     except Exception as e:
         error_msg = str(e)
         if "not enough rights" in error_msg.lower():
-            await update.message.reply_text(font("❌ i need admin rights to change permissions!"))
+            await update.message.reply_text(font(" i need admin rights to change permissions!"))
         else:
-            await update.message.reply_text(f"❌ error: <code>{error_msg}</code>", parse_mode=constants.ParseMode.HTML)
+            await update.message.reply_text(f" error: <code>{error_msg}</code>", parse_mode=constants.ParseMode.HTML)
 
 @Command("lock")
 @only_groups
@@ -535,19 +535,19 @@ async def locks_status(update: Update, context: ContextTypes.DEFAULT_TYPE):
     lockwarn_status = await get_lockwarn(chat_id)
     adminlock_status = await get_adminlock(chat_id)
 
-    txt = "🔐 <b>lock status</b>\n\n"
+    txt = " <b>lock status</b>\n\n"
     
     if locked_items:
-        txt += f"<b>🔒 currently locked ({len(locked_items)}):</b>\n"
+        txt += f"<b> currently locked ({len(locked_items)}):</b>\n"
         for item in locked_items:
             desc = LOCK_DESCRIPTIONS.get(item, item)
             txt += f"• <code>{item}</code> - {desc}\n"
     else:
-        txt += "<b>🔓 no locks active</b>\n"
+        txt += "<b> no locks active</b>\n"
     
-    txt += f"\n<b>⚙️ settings:</b>\n"
-    txt += f"• lockwarn: {'✅ enabled' if lockwarn_status else '❌ disabled'}\n"
-    txt += f"• adminlock: {'✅ enabled (admins affected)' if adminlock_status else '❌ disabled (admins exempt)'}"
+    txt += f"\n<b> settings:</b>\n"
+    txt += f"• lockwarn: {' enabled' if lockwarn_status else ' disabled'}\n"
+    txt += f"• adminlock: {' enabled (admins affected)' if adminlock_status else ' disabled (admins exempt)'}"
 
     await update.message.reply_text(txt, parse_mode=constants.ParseMode.HTML)
 
@@ -558,7 +558,7 @@ async def lockwarn_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if not context.args:
         current = await get_lockwarn(update.effective_chat.id)
         return await update.message.reply_text(
-            f"<b>lockwarn status:</b> {'✅ enabled' if current else '❌ disabled'}\n\n"
+            f"<b>lockwarn status:</b> {' enabled' if current else ' disabled'}\n\n"
             f"<b>usage:</b> <code>/lockwarn on|off</code>\n\n"
             f"<i>when enabled, users will receive warnings instead of silent deletion for locked content.</i>",
             parse_mode=constants.ParseMode.HTML
@@ -568,7 +568,7 @@ async def lockwarn_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await set_lockwarn(update.effective_chat.id, state)
     
     await update.message.reply_text(
-        f"✅ lockwarn {'enabled' if state else 'disabled'}.\n"
+        f" lockwarn {'enabled' if state else 'disabled'}.\n"
         f"users will now {'receive warnings' if state else 'have messages silently deleted'} for locked content.",
         parse_mode=constants.ParseMode.HTML
     )
@@ -580,7 +580,7 @@ async def adminlock_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if not context.args:
         current = await get_adminlock(update.effective_chat.id)
         return await update.message.reply_text(
-            f"<b>adminlock status:</b> {'✅ enabled' if current else '❌ disabled'}\n\n"
+            f"<b>adminlock status:</b> {' enabled' if current else ' disabled'}\n\n"
             f"<b>usage:</b> <code>/adminlock on|off</code>\n\n"
             f"<i>when enabled, locks will apply to admins too (admins treated as normal users).</i>",
             parse_mode=constants.ParseMode.HTML
@@ -590,7 +590,7 @@ async def adminlock_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await set_adminlock(update.effective_chat.id, state)
     
     await update.message.reply_text(
-        f"✅ adminlock {'enabled' if state else 'disabled'}.\n"
+        f" adminlock {'enabled' if state else 'disabled'}.\n"
         f"locks will now {'apply to admins too' if state else 'exempt admins'}.",
         parse_mode=constants.ParseMode.HTML
     )
@@ -651,7 +651,7 @@ async def delete_locked_content(update: Update, context: ContextTypes.DEFAULT_TY
                     await chat.ban_member(user.id)
                     await context.bot.send_message(
                         chat.id,
-                        f"🚫 {user_mention} banned after reaching {limit} warnings for locked content",
+                        f" {user_mention} banned after reaching {limit} warnings for locked content",
                         parse_mode=constants.ParseMode.HTML
                     )
                 elif action == "kick":
@@ -659,14 +659,14 @@ async def delete_locked_content(update: Update, context: ContextTypes.DEFAULT_TY
                     await chat.unban_member(user.id)
                     await context.bot.send_message(
                         chat.id,
-                        f"👋 {user_mention} removed after reaching {limit} warnings for locked content",
+                        f" {user_mention} removed after reaching {limit} warnings for locked content",
                         parse_mode=constants.ParseMode.HTML
                     )
                 elif action == "mute":
                     await chat.restrict_member(user.id, ChatPermissions(can_send_messages=False))
                     await context.bot.send_message(
                         chat.id,
-                        f"🔇 {user_mention} muted after reaching {limit} warnings for locked content",
+                        f" {user_mention} muted after reaching {limit} warnings for locked content",
                         parse_mode=constants.ParseMode.HTML
                     )
             else:
@@ -678,12 +678,12 @@ async def delete_locked_content(update: Update, context: ContextTypes.DEFAULT_TY
                 user_mention = await get_user_mention_fast(context.bot, chat.id, user.id)
                 await context.bot.send_message(
                     chat.id,
-                    f"⚠️ {user_mention} warned for sending locked content!\n"
-                    f"🔒 <b>Reason:</b> {lock_desc}\n"
-                    f"📊 <b>Warnings:</b> {len(warns)}/{limit}",
+                    f" {user_mention} warned for sending locked content!\n"
+                    f" <b>Reason:</b> {lock_desc}\n"
+                    f" <b>Warnings:</b> {len(warns)}/{limit}",
                     parse_mode=constants.ParseMode.HTML,
                     reply_markup=InlineKeyboardMarkup([[
-                        InlineKeyboardButton(font("❌ Remove Warning"), callback_data=f"unwarn#{chat.id}#{user.id}")
+                        InlineKeyboardButton(font(" Remove Warning"), callback_data=f"unwarn#{chat.id}#{user.id}")
                     ]])
                 )
         else:
@@ -749,7 +749,7 @@ async def delete_locked_commands(update: Update, context: ContextTypes.DEFAULT_T
                     await chat.ban_member(user.id)
                     await context.bot.send_message(
                         chat.id,
-                        f"🚫 {user_mention} banned after reaching {limit} warnings",
+                        f" {user_mention} banned after reaching {limit} warnings",
                         parse_mode=constants.ParseMode.HTML
                     )
                 elif action == "kick":
@@ -757,14 +757,14 @@ async def delete_locked_commands(update: Update, context: ContextTypes.DEFAULT_T
                     await chat.unban_member(user.id)
                     await context.bot.send_message(
                         chat.id,
-                        f"👋 {user_mention} removed after reaching {limit} warnings",
+                        f" {user_mention} removed after reaching {limit} warnings",
                         parse_mode=constants.ParseMode.HTML
                     )
                 elif action == "mute":
                     await chat.restrict_member(user.id, ChatPermissions(can_send_messages=False))
                     await context.bot.send_message(
                         chat.id,
-                        f"🔇 {user_mention} muted after reaching {limit} warnings",
+                        f" {user_mention} muted after reaching {limit} warnings",
                         parse_mode=constants.ParseMode.HTML
                     )
             else:
@@ -776,12 +776,12 @@ async def delete_locked_commands(update: Update, context: ContextTypes.DEFAULT_T
                 user_mention = await get_user_mention_fast(context.bot, chat.id, user.id)
                 await context.bot.send_message(
                     chat.id,
-                    f"⚠️ {user_mention} warned for using commands!\n"
-                    f"🔒 <b>Reason:</b> Commands are locked\n"
-                    f"📊 <b>Warnings:</b> {len(warns)}/{limit}",
+                    f" {user_mention} warned for using commands!\n"
+                    f" <b>Reason:</b> Commands are locked\n"
+                    f" <b>Warnings:</b> {len(warns)}/{limit}",
                     parse_mode=constants.ParseMode.HTML,
                     reply_markup=InlineKeyboardMarkup([[
-                        InlineKeyboardButton(font("❌ Remove Warning"), callback_data=f"unwarn#{chat.id}#{user.id}")
+                        InlineKeyboardButton(font(" Remove Warning"), callback_data=f"unwarn#{chat.id}#{user.id}")
                     ]])
                 )
         else:

@@ -5,10 +5,10 @@ from pyrogram.enums import ButtonStyle
 import re
 import math
 
-__module__ = "𝐂ᴀʟᴄᴜʟᴀᴛᴏʀ🧮"
+__module__ = "𝐂ᴀʟᴄᴜʟᴀᴛᴏʀ"
 
 __help__ = """
-**Calculator🧮**
+**Calculator**
 
 **Description:**
 Perform calculations directly using the bot with scientific mode.
@@ -61,8 +61,8 @@ def calc_btn(uid):
             InlineKeyboardButton(")", callback_data=f"c|{uid}|)", style=ButtonStyle.SUCCESS),
         ],
         [
-            InlineKeyboardButton(font("🧮 Scientific"), callback_data=f"c|{uid}|S", style=ButtonStyle.PRIMARY),
-            InlineKeyboardButton(font("❌ Close"), callback_data=f"c|{uid}|C", style=ButtonStyle.DANGER),
+            InlineKeyboardButton(font(" Scientific"), callback_data=f"c|{uid}|S", style=ButtonStyle.PRIMARY),
+            InlineKeyboardButton(font(" Close"), callback_data=f"c|{uid}|C", style=ButtonStyle.DANGER),
         ],
     ])
 
@@ -91,7 +91,7 @@ async def calc_cb(client, query):
         data = parts[2]
         
         if query.from_user.id != uid:
-            return await query.answer(font("⚠️ This is not your calculator!"), show_alert=True)
+            return await query.answer(font(" This is not your calculator!"), show_alert=True)
         
         if uid not in calc_states:
             calc_states[uid] = {"text": "", "mode": "basic"}

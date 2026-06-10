@@ -11,7 +11,7 @@ from AloneX.helpers.log_helper import log_action
 import asyncio
 
 
-__module__ = "𝐍ᴏᴛᴇs📝"
+__module__ = "𝐍ᴏᴛᴇs"
 
 __help__ = """
 ❂ *Commands:*
@@ -51,7 +51,7 @@ async def SendNoteHashtag(update, context):
     
     _note = await get_note_by_tag(chat.id, tag)
     if not _note:
-        return await m.reply_text(font('🔴 *Note not found!*'), parse_mode=constants.ParseMode.MARKDOWN)
+        return await m.reply_text(font(' *Note not found!*'), parse_mode=constants.ParseMode.MARKDOWN)
         
     NOTE = _note[0]
     file_type = NOTE['type']
@@ -77,12 +77,12 @@ async def ReNotes(update, context):
        changes = await reindex_notes(chat_id)
        if changes:
             return await m.reply_text(
-                   text='📝 *Rearranged notes order index.*', 
+                   text=' *Rearranged notes order index.*', 
                    parse_mode=constants.ParseMode.MARKDOWN
             )
        else:
            return await m.reply_text(
-                  text='🟢 *All are already ordered.*',
+                  text=' *All are already ordered.*',
                   parse_mode=constants.ParseMode.MARKDOWN
            )
 
@@ -99,7 +99,7 @@ async def GetNotes(update, context):
        notes = await get_notes_by_chat(chat_id)
   
        if not notes:
-            return await m.reply_text(font('🔴 Notes not found'), parse_mode=constants.ParseMode.MARKDOWN)
+            return await m.reply_text(font(' Notes not found'), parse_mode=constants.ParseMode.MARKDOWN)
 
        if chat_id != chat.id:
            try:
@@ -110,7 +110,7 @@ async def GetNotes(update, context):
        else:
            title = chat.title or chat.full_name
 
-       txt = f"📝 *Notes in {title}* — (`{chat_id}`)\n\n"
+       txt = f" *Notes in {title}* — (`{chat_id}`)\n\n"
        txt += "*NOTE INDEX, NOT TAG*\n\n"
        for note in notes:
            txt += f"{note['index']}, `#{note['tag']}`\n"
@@ -146,7 +146,7 @@ async def GetNote(update, context):
                     note = _note
                 
               if not note:
-                  return await m.reply_text(font('🔴 *Note not found*.'), parse_mode=constants.ParseMode.MARKDOWN)
+                  return await m.reply_text(font(' *Note not found*.'), parse_mode=constants.ParseMode.MARKDOWN)
                      
               file_type = note['type']
               reply = m.reply_to_message if m.reply_to_message else m
@@ -189,26 +189,26 @@ async def ClearNote(update, context):
        if pattern.isdigit():
               note = int(pattern)
               if await delete_note_by_index(chat_id, note):
-                    log_text = f"🗑️ <b>Note Deleted</b>\n" \
+                    log_text = f" <b>Note Deleted</b>\n" \
                                f"<b>Group:</b> {helpers.escape(chat.title)}\n" \
                                f"<b>Index:</b> {note}\n" \
                                f"<b>By:</b> {update.effective_user.mention_html()}"
                     asyncio.create_task(log_action(context.bot, chat_id, "notes", log_text))
-                    return await m.reply_text(font('🗑️ *Deleted Note!*'), parse_mode=constants.ParseMode.MARKDOWN)
+                    return await m.reply_text(font(' *Deleted Note!*'), parse_mode=constants.ParseMode.MARKDOWN)
               else:
-                    return await m.reply_text(font('🔴 *Note not found!*'), parse_mode=constants.ParseMode.MARKDOWN)
+                    return await m.reply_text(font(' *Note not found!*'), parse_mode=constants.ParseMode.MARKDOWN)
                 
        elif pattern.startswith('#'):
              tag = pattern.split('#')[1]
              if await delete_note_by_tag(chat_id, (tag.lower())):
-                  log_text = f"🗑️ <b>Note Deleted</b>\n" \
+                  log_text = f" <b>Note Deleted</b>\n" \
                              f"<b>Group:</b> {helpers.escape(chat.title)}\n" \
                              f"<b>Tag:</b> #{tag}\n" \
                              f"<b>By:</b> {update.effective_user.mention_html()}"
                   asyncio.create_task(log_action(context.bot, chat_id, "notes", log_text))
-                  return await m.reply_text(font('🗑️ *Deleted Note!*'), parse_mode=constants.ParseMode.MARKDOWN)
+                  return await m.reply_text(font(' *Deleted Note!*'), parse_mode=constants.ParseMode.MARKDOWN)
              else:
-                  return await m.reply_text(font('🔴 *Note not found!*'), parse_mode=constants.ParseMode.MARKDOWN)
+                  return await m.reply_text(font(' *Note not found!*'), parse_mode=constants.ParseMode.MARKDOWN)
        else:
              return await m.reply_text(font('*Not a valid note index or tag either.*'), parse_mode=constants.ParseMode.MARKDOWN)
             
@@ -251,11 +251,11 @@ async def SaveNote(update, context):
        is_saved = await save_note(chat_id, tag=(tag.lower()), type=file_type, text=text, file_id=file_id)
   
        if is_saved:
-           log_text = f"📝 <b>Note Saved</b>\n" \
+           log_text = f" <b>Note Saved</b>\n" \
                       f"<b>Group:</b> {helpers.escape(chat.title)}\n" \
                       f"<b>Tag:</b> #{tag}\n" \
                       f"<b>By:</b> {update.effective_user.mention_html()}"
            asyncio.create_task(log_action(context.bot, chat_id, "notes", log_text))
-           return await m.reply_text(f'🟢 *Note #{tag} saved!*\n*—› Use:* `/get #{tag}`', parse_mode=constants.ParseMode.MARKDOWN)
+           return await m.reply_text(f' *Note #{tag} saved!*\n*—› Use:* `/get #{tag}`', parse_mode=constants.ParseMode.MARKDOWN)
        else:
-           return await m.reply_text(f'🔴 *Note #{tag} failed to save!*', parse_mode=constants.ParseMode.MARKDOWN)
+           return await m.reply_text(f' *Note #{tag} failed to save!*', parse_mode=constants.ParseMode.MARKDOWN)

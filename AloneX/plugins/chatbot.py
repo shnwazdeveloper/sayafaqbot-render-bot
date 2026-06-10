@@ -8,7 +8,7 @@ from AloneX.helpers.decorator import protected_ids
 from AloneX.db.chatbot import add_chat, remove_chat, CHAT_IDS
 import config
 
-__module__ = "𝐂ʜᴀᴛ-𝐁ᴏᴛ🤖"
+__module__ = "𝐂ʜᴀᴛ-𝐁ᴏᴛ"
 __help__ = """
 ❂ *Chatbot Module* — A human-like AI chatbot that talks to you.
 
@@ -42,10 +42,10 @@ async def is_user_admin(chat_id: int, user_id: int):
 async def get_chatbot_keyboard(chat_id: int):
     enabled = chat_id in CHAT_IDS
     if enabled:
-        text = "🟢 Chatbot: ON"
+        text = " Chatbot: ON"
         style = ButtonStyle.SUCCESS
     else:
-        text = "🔴 Chatbot: OFF"
+        text = " Chatbot: OFF"
         style = ButtonStyle.DANGER
 
     return IKM([[IKB(font(text), callback_data="chatbot_toggle", style=style)]])
@@ -55,13 +55,13 @@ async def chatbot_toggle_cmd(_, message: Message):
     if not message.from_user:
         return
     if not await is_user_admin(message.chat.id, message.from_user.id):
-        return await message.reply_text(font("❌ You must be an admin to use this command."))
+        return await message.reply_text(font(" You must be an admin to use this command."))
 
     enabled = message.chat.id in CHAT_IDS
     status = "Enabled" if enabled else "Disabled"
 
     await message.reply_text(
-        font(f"🤖 **Chatbot Status:** {status}\n\nWhen enabled, I will respond to mentions and replies with a human-like personality."),
+        font(f" **Chatbot Status:** {status}\n\nWhen enabled, I will respond to mentions and replies with a human-like personality."),
         reply_markup=await get_chatbot_keyboard(message.chat.id)
     )
 
@@ -71,7 +71,7 @@ async def chatbot_toggle_callback(_, query: CallbackQuery):
     chat_id = query.message.chat.id
 
     if not await is_user_admin(chat_id, user_id):
-        return await query.answer(font("❌ This button is for admins only!"), show_alert=True)
+        return await query.answer(font(" This button is for admins only!"), show_alert=True)
 
     enabled = chat_id in CHAT_IDS
     if enabled:
@@ -87,7 +87,7 @@ async def chatbot_toggle_callback(_, query: CallbackQuery):
 
     status_text = "Enabled" if new_state else "Disabled"
     await query.message.edit_text(
-        font(f"🤖 **Chatbot Status:** {status_text}\n\nWhen enabled, I will respond to mentions and replies with a human-like personality."),
+        font(f" **Chatbot Status:** {status_text}\n\nWhen enabled, I will respond to mentions and replies with a human-like personality."),
         reply_markup=await get_chatbot_keyboard(chat_id)
     )
     await query.answer(font(f"Chatbot {'Enabled' if new_state else 'Disabled'}"))

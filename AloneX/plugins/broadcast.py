@@ -12,7 +12,7 @@ BROADCAST_CACHE = {}
 BROADCAST_DELAY = 0.5
 UPDATE_INTERVAL = 5
 
-__module__ = "𝐒ᴜᴅᴏ🛡️"
+__module__ = "𝐒ᴜᴅᴏ"
 
 __help__ = """
 *Sudo*
@@ -137,8 +137,8 @@ def build_keyboard(mode, preview_id):
     return InlineKeyboardMarkup(
         [
             [
-                InlineKeyboardButton(font("✅ Start"), callback_data=f"broadcast_start:{mode}:{preview_id}", style=ButtonStyle.SUCCESS),
-                InlineKeyboardButton(font("❌ Cancel"), callback_data=f"broadcast_cancel:{preview_id}", style=ButtonStyle.DANGER),
+                InlineKeyboardButton(font(" Start"), callback_data=f"broadcast_start:{mode}:{preview_id}", style=ButtonStyle.SUCCESS),
+                InlineKeyboardButton(font(" Cancel"), callback_data=f"broadcast_cancel:{preview_id}", style=ButtonStyle.DANGER),
             ]
         ]
     )
@@ -146,10 +146,10 @@ def build_keyboard(mode, preview_id):
 
 async def prepare_broadcast(client, message: Message, mode: str):
     if not message.reply_to_message:
-        return await message.reply_text(font("⚠️ Reply to a message to broadcast."))
+        return await message.reply_text(font(" Reply to a message to broadcast."))
 
     preview = await message.reply_text(
-        f"📢 Broadcast Preview\n\n➤ Mode: `{mode}`\n➤ Confirm to send.",
+        f" Broadcast Preview\n\n➤ Mode: `{mode}`\n➤ Confirm to send.",
         reply_markup=build_keyboard(mode, message.reply_to_message.id),
     )
 
@@ -174,16 +174,16 @@ async def handle_all(client, message):
 @pbot.on_callback_query(filters.regex(r"^broadcast_start:(.+?):(\d+)$"))
 async def confirm_broadcast(client, query: CallbackQuery):
     if query.from_user.id != OWNER_ID:
-        return await query.answer(font("⛔ Not allowed."), show_alert=True)
+        return await query.answer(font(" Not allowed."), show_alert=True)
 
     mode, preview_id = query.data.split(":")[1:]
     preview_id = int(preview_id)
 
-    await query.message.edit_text(font("🚀 Broadcast started..."))
+    await query.message.edit_text(font(" Broadcast started..."))
 
     msg = BROADCAST_CACHE.pop(preview_id, None)
     if not msg:
-        return await query.message.reply_text(font("⚠️ Original message not found."))
+        return await query.message.reply_text(font(" Original message not found."))
 
     if mode == "users":
         targets = await get_all_active_users()
@@ -209,9 +209,9 @@ async def confirm_broadcast(client, query: CallbackQuery):
     failed_chats = []
 
     status = await msg.reply_text(
-        f"🚀 Broadcasting to {label}...\n\n✅ Sent: {sent}\n❌ Failed: {failed}\n📦 Total: {total}\n⏱️ Progress: 0%",
+        f" Broadcasting to {label}...\n\n Sent: {sent}\n Failed: {failed}\n Total: {total}\n Progress: 0%",
         reply_markup=InlineKeyboardMarkup(
-            [[InlineKeyboardButton(font("❌ Stop"), callback_data="broadcast_stop", style=ButtonStyle.DANGER)]]
+            [[InlineKeyboardButton(font(" Stop"), callback_data="broadcast_stop", style=ButtonStyle.DANGER)]]
         ),
     )
 
@@ -237,9 +237,9 @@ async def confirm_broadcast(client, query: CallbackQuery):
             progress = int((i / total) * 100)
             try:
                 await status.edit_text(
-                    f"🚀 Broadcasting to {label}...\n\n✅ Sent: {sent}\n❌ Failed: {failed}\n📦 Total: {total}\n⏱️ Progress: {progress}%",
+                    f" Broadcasting to {label}...\n\n Sent: {sent}\n Failed: {failed}\n Total: {total}\n Progress: {progress}%",
                     reply_markup=InlineKeyboardMarkup(
-                        [[InlineKeyboardButton(font("❌ Stop"), callback_data="broadcast_stop", style=ButtonStyle.DANGER)]]
+                        [[InlineKeyboardButton(font(" Stop"), callback_data="broadcast_stop", style=ButtonStyle.DANGER)]]
                     ),
                 )
             except:
@@ -253,21 +253,21 @@ async def confirm_broadcast(client, query: CallbackQuery):
 
     try:
         await status.edit_text(
-            f"✅ Broadcast Finished!\n\n📦 Total: {total}\n✅ Sent: {sent}\n❌ Failed: {failed}\n\n🗑️ Cleaned: {len(failed_users)} users, {len(failed_chats)} chats"
+            f" Broadcast Finished!\n\n Total: {total}\n Sent: {sent}\n Failed: {failed}\n\n Cleaned: {len(failed_users)} users, {len(failed_chats)} chats"
         )
     except:
         pass
 
     if mode == "users":
-        await msg.reply_text(f"✅ Broadcast sent to {sent} users.\n🗑️ Removed {len(failed_users)} inactive users.")
+        await msg.reply_text(f" Broadcast sent to {sent} users.\n Removed {len(failed_users)} inactive users.")
     elif mode == "chats":
-        await msg.reply_text(f"✅ Broadcast sent to {sent} chats.\n🗑️ Removed {len(failed_chats)} inactive chats.")
+        await msg.reply_text(f" Broadcast sent to {sent} chats.\n Removed {len(failed_chats)} inactive chats.")
     else:
         await msg.reply_text(
-            f"✅ Broadcast completed!\n\n"
-            f"📤 Sent: {sent}\n"
-            f"❌ Failed: {failed}\n\n"
-            f"🗑️ Cleaned:\n"
+            f" Broadcast completed!\n\n"
+            f" Sent: {sent}\n"
+            f" Failed: {failed}\n\n"
+            f" Cleaned:\n"
             f"  • {len(failed_users)} inactive users\n"
             f"  • {len(failed_chats)} inactive chats"
         )
@@ -276,17 +276,17 @@ async def confirm_broadcast(client, query: CallbackQuery):
 @pbot.on_callback_query(filters.regex("^broadcast_cancel:(\\d+)$"))
 async def cancel_broadcast(_, query: CallbackQuery):
     if query.from_user.id != OWNER_ID:
-        return await query.answer(font("⛔ Not allowed."), show_alert=True)
+        return await query.answer(font(" Not allowed."), show_alert=True)
 
     preview_id = int(query.data.split(":")[1])
     BROADCAST_CACHE.pop(preview_id, None)
-    await query.message.edit_text(font("❌ Broadcast Cancelled."))
+    await query.message.edit_text(font(" Broadcast Cancelled."))
 
 
 @pbot.on_callback_query(filters.regex("^broadcast_stop$"))
 async def stop_broadcast(_, query: CallbackQuery):
     if query.from_user.id != OWNER_ID:
-        return await query.answer(font("⛔ Not allowed."), show_alert=True)
+        return await query.answer(font(" Not allowed."), show_alert=True)
 
     BROADCAST_CACHE["cancel_flag"] = True
-    await query.message.edit_text(font("🛑 Broadcast Stopped midway."))
+    await query.message.edit_text(font(" Broadcast Stopped midway."))

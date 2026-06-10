@@ -35,7 +35,7 @@ async def give_st_info(c: app, m: Message):
         [
             [
                 IKB(
-                    "➕ 𝗔𝗱𝗱 𝘀𝘁𝗶𝗰𝗸𝗲𝗿 𝗽𝗮𝗰𝗸",
+                    " 𝗔𝗱𝗱 𝘀𝘁𝗶𝗰𝗸𝗲𝗿 𝗽𝗮𝗰𝗸",
                     url=f"https://t.me/addstickers/{st_in.set_name}",
                     style=ButtonStyle.SUCCESS,
                 )
@@ -91,10 +91,10 @@ async def _packkang(client, message):
         total_stickers = len(shits)
         
         await txt.edit(
-            f"📦 **Pack Found!**\n\n"
+            f" **Pack Found!**\n\n"
             f"**Type:** {sticker_type}\n"
             f"**Total Stickers:** {total_stickers}\n\n"
-            f"⏳ Preparing batch kang..."
+            f" Preparing batch kang..."
         )
         sticks = []
         
@@ -109,10 +109,10 @@ async def _packkang(client, message):
                     access_hash=i.access_hash, 
                     file_reference=file_ref
                 )
-                emoji = "🙂"
+                emoji = ""
                 for attr in i.attributes:
                     if isinstance(attr, pyrogram.raw.types.DocumentAttributeSticker):
-                        emoji = attr.alt if attr.alt else "🙂"
+                        emoji = attr.alt if attr.alt else ""
                         break
                 
                 sticks.append(
@@ -125,7 +125,7 @@ async def _packkang(client, message):
                 continue
         
         if not sticks:
-            return await txt.edit("❌ No valid stickers found in pack!")
+            return await txt.edit(" No valid stickers found in pack!")
         short_name_new = f'pack_{str(uuid4()).replace("-","")}_by_{client.me.username}'
         user_id = await client.resolve_peer(message.from_user.id)
         INITIAL_BATCH = 30
@@ -135,8 +135,8 @@ async def _packkang(client, message):
         remaining_stickers = sticks[INITIAL_BATCH:]
         
         await txt.edit(
-            f"📦 Creating pack with first {len(initial_stickers)} stickers...\n"
-            f"⏳ Step 1 of {1 + (len(remaining_stickers) + ADD_BATCH_SIZE - 1) // ADD_BATCH_SIZE}"
+            f" Creating pack with first {len(initial_stickers)} stickers...\n"
+            f" Step 1 of {1 + (len(remaining_stickers) + ADD_BATCH_SIZE - 1) // ADD_BATCH_SIZE}"
         )
         max_retries = 3
         for attempt in range(max_retries):
@@ -161,8 +161,8 @@ async def _packkang(client, message):
                     if attempt < max_retries - 1:
                         wait_time = 3 ** attempt  # 3s, 9s, 27s
                         await txt.edit(
-                            f"⚠️ Server timeout (attempt {attempt + 1}/{max_retries})\n"
-                            f"⏳ Retrying in {wait_time}s..."
+                            f" Server timeout (attempt {attempt + 1}/{max_retries})\n"
+                            f" Retrying in {wait_time}s..."
                         )
                         await asyncio.sleep(wait_time)
                     else:
@@ -180,9 +180,9 @@ async def _packkang(client, message):
                 batch = remaining_stickers[start_idx:end_idx]
                 
                 await txt.edit(
-                    f"📦 Adding batch {batch_num + 1}/{total_batches}\n"
-                    f"✅ Added: {added}/{total_stickers}\n"
-                    f"⏳ Processing..."
+                    f" Adding batch {batch_num + 1}/{total_batches}\n"
+                    f" Added: {added}/{total_stickers}\n"
+                    f" Processing..."
                 )
                 
                 # Add batch of stickers
@@ -204,8 +204,8 @@ async def _packkang(client, message):
                             
                         except pyrogram.errors.exceptions.flood_420.FloodWait as e:
                             await txt.edit(
-                                f"⚠️ Rate limit!\n"
-                                f"⏳ Waiting {e.value}s...\n"
+                                f" Rate limit!\n"
+                                f" Waiting {e.value}s...\n"
                                 f"Progress: {added}/{total_stickers}"
                             )
                             await asyncio.sleep(e.value)
@@ -218,27 +218,27 @@ async def _packkang(client, message):
                 
                 if batch_num < total_batches - 1:
                     await txt.edit(
-                        f"✅ Batch {batch_num + 1} complete!\n"
-                        f"📊 Progress: {added}/{total_stickers}\n"
-                        f"⏳ Cooling down {BATCH_DELAY}s..."
+                        f" Batch {batch_num + 1} complete!\n"
+                        f" Progress: {added}/{total_stickers}\n"
+                        f" Cooling down {BATCH_DELAY}s..."
                     )
                     await asyncio.sleep(BATCH_DELAY)
         
         
         success_rate = (added / total_stickers) * 100
         await txt.edit(
-            f"""✅ **Pack Kanged Successfully!**
+            f""" **Pack Kanged Successfully!**
 
-📦 **Type:** {sticker_type}
-🎨 **Added:** {added}/{total_stickers} ({success_rate:.1f}%)
-📝 **Pack Name:** {pack_name}
+ **Type:** {sticker_type}
+ **Added:** {added}/{total_stickers} ({success_rate:.1f}%)
+ **Pack Name:** {pack_name}
 
 **Note:** Remove & re-add pack for instant update""",
             reply_markup=IKM(
                 [
                     [
                         IKB(
-                            "📦 View Pack", 
+                            " View Pack", 
                             url=f"http://t.me/addstickers/{short_name_new}",
                             style=ButtonStyle.SUCCESS,
                         )
@@ -248,17 +248,17 @@ async def _packkang(client, message):
         )
         
     except pyrogram.errors.exceptions.bad_request_400.StickersetInvalid:
-        await txt.edit("❌ Invalid sticker set!")
+        await txt.edit(" Invalid sticker set!")
     except pyrogram.errors.exceptions.bad_request_400.PeerIdInvalid:
-        await txt.edit("❌ Invalid user ID!")
+        await txt.edit(" Invalid user ID!")
     except pyrogram.errors.exceptions.bad_request_400.ShortnameOccupyFailed:
-        await txt.edit("❌ Failed to create pack. Please try again!")
+        await txt.edit(" Failed to create pack. Please try again!")
     except Exception as e:
         error_msg = str(e)
         if "TIMEOUT" in error_msg or "INTERDC" in error_msg:
             await txt.edit(
-                "❌ **Telegram Server Error**\n\n"
+                " **Telegram Server Error**\n\n"
                 "Server overloaded. Try again in a few minutes."
             )
         else:
-            await txt.edit(f"❌ Error: `{error_msg}`")
+            await txt.edit(f" Error: `{error_msg}`")

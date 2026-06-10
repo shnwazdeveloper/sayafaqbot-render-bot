@@ -203,7 +203,7 @@ def only_premium(func):
             uid=u.id
             if uid in protected_ids:return await func(client,*args,**kwargs)
             if uid not in _premium_set:
-                try:await m.reply_text("⚠️ This command only works for 'AloneX Premium' users!")
+                try:await m.reply_text(" This command only works for 'AloneX Premium' users!")
                 except:pass
                 return
             return await func(client,*args,**kwargs)
@@ -227,7 +227,7 @@ def no_self_action(func):
             if update.message and update.message.reply_to_message:
                 t=update.message.reply_to_message.from_user
                 if t and t.id==context.bot.id:
-                    asyncio.create_task(update.message.reply_text("**🤦 You are dumb! I won't ban/mute/warn myself.**"))
+                    asyncio.create_task(update.message.reply_text("** You are dumb! I won't ban/mute/warn myself.**"))
                     return
             return await func(update,context,*args,**kwargs)
         except:return
@@ -240,7 +240,7 @@ def no_admin_action(func):
             if update.message and update.message.reply_to_message:
                 t=update.message.reply_to_message.from_user;c=update.effective_chat
                 if await check_user_admin_cached(context.bot,c.id,t.id):
-                    asyncio.create_task(update.message.reply_text("**⚠️ I can't perform this action on an admin/owner!**",parse_mode='Markdown'))
+                    asyncio.create_task(update.message.reply_text("** I can't perform this action on an admin/owner!**",parse_mode='Markdown'))
                     return
             return await func(update,context,*args,**kwargs)
         except:return
@@ -249,7 +249,7 @@ def no_admin_action(func):
 def disableable(name:str|list[str]=None):
     def decorator(func):
         cn=name if isinstance(name,list)else[name or func.__name__.lower()]
-        for cmd in cn:DISABLEABLE_CMDS[cmd]="✅"
+        for cmd in cn:DISABLEABLE_CMDS[cmd]=""
         @wraps(func)
         async def wrapper(*args,**kwargs):
             try:
@@ -287,9 +287,9 @@ def disableable(name:str|list[str]=None):
                     if not is_private:
                         d=await get_disabled_cached(chat_obj.id)
                         if any(cmd in d for cmd in cn):
-                            for cmd in cn:DISABLEABLE_CMDS[cmd]="❌"
+                            for cmd in cn:DISABLEABLE_CMDS[cmd]=""
                             return
-                        for cmd in cn:DISABLEABLE_CMDS[cmd]="✅"
+                        for cmd in cn:DISABLEABLE_CMDS[cmd]=""
                 return await func(*args,**kwargs)
             except:return
         return wrapper
@@ -303,7 +303,7 @@ def unavailable(func):
             elif isinstance(client,pyrogram.Client):m=args[0];u=m.from_user
             else:return await func(client,*args,**kwargs)
             if u.id not in _dev_set:
-                asyncio.create_task(m.reply_text("⚠️ This command is temporarily unavailable for everyone!"))
+                asyncio.create_task(m.reply_text(" This command is temporarily unavailable for everyone!"))
                 return
             return await func(client,*args,**kwargs)
         except:return
@@ -335,7 +335,7 @@ def protect_sudos(func):
             if tuid:
                 if tuid in protected_ids or await is_sudo_user_db(tuid):
                     mn = mention_html(tuid, "this protected user")
-                    asyncio.create_task(m.reply_text(f"⚠️ You cannot perform this action on {mn}!",parse_mode="HTML"))
+                    asyncio.create_task(m.reply_text(f" You cannot perform this action on {mn}!",parse_mode="HTML"))
                     return
             return await func(update, context, *args, **kwargs)
         except:return
@@ -352,7 +352,7 @@ def spam_control(func):
             if not u or not getattr(u,"id",None):return await func(client,*args,**kwargs)
             uid=u.id
             if uid in SPAM_USERS:
-                asyncio.create_task(m.reply_text("⚠️ Wait! Don't spam commands!"))
+                asyncio.create_task(m.reply_text(" Wait! Don't spam commands!"))
                 return
             SPAM_USERS[uid]=True
             try:return await func(client,*args,**kwargs)
@@ -418,7 +418,7 @@ def with_args(value:int=1):
             try:
                 args=context.args
                 if len(args)!=value:
-                    asyncio.create_task(update.effective_message.reply_text(f"🙋‍♂️ Please provide exactly {value} argument(s)."))
+                    asyncio.create_task(update.effective_message.reply_text(f" Please provide exactly {value} argument(s)."))
                 else:return await func(update,context)
             except:return
         return wrapper
@@ -430,7 +430,7 @@ def devs_only(func):
         try:
             m=update.effective_message
             if m.from_user and m.from_user.id in _dev_set:return await func(update,context,*args,**kwargs)
-            asyncio.create_task(m.reply_text("🚫 Only Devs can use this command."))
+            asyncio.create_task(m.reply_text(" Only Devs can use this command."))
             return
         except:return
     return wrapper
@@ -441,7 +441,7 @@ def sudos_only(func):
         try:
             m=update.effective_message;u=m.from_user;txt=(m.text or"").split()[0].lower().lstrip("/!");uid=u.id
             if uid==_owner_id or uid in _sudo_set or uid in _dev_set or await is_sudo_user_db(uid):return await func(update,context,*args,**kwargs)
-            asyncio.create_task(m.reply_text(f"🚫 Only Sudo users can use the `{txt}` command.",parse_mode=constants.ParseMode.MARKDOWN))
+            asyncio.create_task(m.reply_text(f" Only Sudo users can use the `{txt}` command.",parse_mode=constants.ParseMode.MARKDOWN))
             return
         except:return
     return wrapper
@@ -452,7 +452,7 @@ def owner_only(func):
         try:
             u=update.effective_user
             if not u or u.id!=_owner_id:
-                asyncio.create_task(update.effective_message.reply_text("❌ Only the Owner can use this command."))
+                asyncio.create_task(update.effective_message.reply_text(" Only the Owner can use this command."))
                 return
             return await func(update,context,*args,**kwargs)
         except:return
@@ -464,7 +464,7 @@ def support_only(func):
         try:
             u=update.effective_user
             if not u or u.id not in _support_set:
-                asyncio.create_task(update.effective_message.reply_text("❌ Only Support users can use this command."))
+                asyncio.create_task(update.effective_message.reply_text(" Only Support users can use this command."))
                 return
             return await func(update,context,*args,**kwargs)
         except:return
@@ -476,7 +476,7 @@ def whitelist_only(func):
         try:
             u=update.effective_user
             if not u or u.id not in _whitelist_set:
-                asyncio.create_task(update.effective_message.reply_text("❌ Only Whitelisted users can use this command."))
+                asyncio.create_task(update.effective_message.reply_text(" Only Whitelisted users can use this command."))
                 return
             return await func(update,context,*args,**kwargs)
         except:return
@@ -512,7 +512,7 @@ def only_groups(func):
                 cached=chat_type_cache.get(ctk)
                 if cached is not None:
                     if not cached:
-                        asyncio.create_task(msg.reply_text("❌ <b>This command only works in groups!</b>",parse_mode="HTML"))
+                        asyncio.create_task(msg.reply_text(" <b>This command only works in groups!</b>",parse_mode="HTML"))
                         return
                     return await func(*args,**kwargs)
                 is_group=False
@@ -534,7 +534,7 @@ def only_groups(func):
                         conn = await connection_db.get_connected_chat(update.effective_user.id)
                         if conn:
                             return await func(*args,**kwargs)
-                    asyncio.create_task(msg.reply_text("❌ <b>This command only works in groups!</b>",parse_mode="HTML"))
+                    asyncio.create_task(msg.reply_text(" <b>This command only works in groups!</b>",parse_mode="HTML"))
                     return
                 return await func(*args,**kwargs)
             if len(args)>=2 and hasattr(args[1],"chat"):
@@ -547,7 +547,7 @@ def only_groups(func):
                 cached=chat_type_cache.get(ctk)
                 if cached is not None:
                     if not cached:
-                        try:asyncio.create_task(message.reply_text("❌ <b>This command only works in groups!</b>"))
+                        try:asyncio.create_task(message.reply_text(" <b>This command only works in groups!</b>"))
                         except:pass
                         return
                     return await func(*args,**kwargs)
@@ -570,7 +570,7 @@ def only_groups(func):
                         conn = await connection_db.get_connected_chat(message.from_user.id)
                         if conn:
                             return await func(*args,**kwargs)
-                    try:asyncio.create_task(message.reply_text("❌ <b>This command only works in groups!</b>"))
+                    try:asyncio.create_task(message.reply_text(" <b>This command only works in groups!</b>"))
                     except:pass
                     return
                 return await func(*args,**kwargs)
@@ -595,7 +595,7 @@ def RestrictedCallback(func):
         try:
             q=update.callback_query;uid=q.from_user.id;allowed=await get_allowed_users()
             if uid not in allowed:
-                asyncio.create_task(q.answer("⛔ This button isn't for you!",show_alert=True))
+                asyncio.create_task(q.answer(" This button isn't for you!",show_alert=True))
                 return
             return await func(update,context,*args,**kwargs)
         except:return
@@ -607,7 +607,7 @@ def group_owner_only(func):
         try:
             chat=update.effective_chat;u=update.effective_user;m=await get_member_cached(context.bot,chat.id,u.id)
             if m.status!=ChatMemberStatus.OWNER:
-                asyncio.create_task(update.effective_message.reply_text("🚫 This command is only for the group owner!"))
+                asyncio.create_task(update.effective_message.reply_text(" This command is only for the group owner!"))
                 return
             return await func(update,context,*args,**kwargs)
         except:return
@@ -646,7 +646,7 @@ def user_admin(func):
         member = await get_member_cached(context.bot, chat.id, user.id)
         if member.status in [ChatMemberStatus.ADMINISTRATOR, ChatMemberStatus.OWNER]:
             return await func(update, context, *args, **kwargs)
-        await update.effective_message.reply_text(font("❌ You must be an admin to use this command!"))
+        await update.effective_message.reply_text(font(" You must be an admin to use this command!"))
     return is_admin
 
 def admin_check(permission:str=None,protect_target:bool=True,check_mods:bool=False):
@@ -685,19 +685,19 @@ def admin_check(permission:str=None,protect_target:bool=True,check_mods:bool=Fal
                 try:
                     bm = await get_member_cached(context.bot, cid, context.bot.id)
                     if bm.status not in [constants.ChatMemberStatus.ADMINISTRATOR, constants.ChatMemberStatus.OWNER]:
-                        send_response("❌ I'm not an admin in this chat.")
+                        send_response(" I'm not an admin in this chat.")
                         return
                     if permission:
                         actual_perm = PERMISSION_MAP.get(permission, permission)
                         if not getattr(bm, actual_perm, False):
-                            send_response(f"❌ I'm missing the `{permission}` permission.")
+                            send_response(f" I'm missing the `{permission}` permission.")
                             return
                 except Forbidden:
-                    send_response("❌ I don't have access to this chat anymore.")
+                    send_response(" I don't have access to this chat anymore.")
                     return
                 except BadRequest as e:
                     if "Chat_admin_required" in str(e):
-                        send_response("❌ I need to be an admin to check permissions.")
+                        send_response(" I need to be an admin to check permissions.")
                         return
                     raise
                 try:
@@ -720,27 +720,27 @@ def admin_check(permission:str=None,protect_target:bool=True,check_mods:bool=Fal
                         
                         if not allowed:
                             if check_mods:
-                                send_response(f"❌ You don't have permission to {action_name}!")
+                                send_response(f" You don't have permission to {action_name}!")
                             else:
-                                send_response(f"❌ You are missing the `{permission}` permission.")
+                                send_response(f" You are missing the `{permission}` permission.")
                             return
                     else:
                         if check_mods:
                             has_mod_perm = await check_mod_permission_fast(cid, uid, permission, chat)
                             if not has_mod_perm:
-                                send_response(f"❌ You are not an admin and don't have mod permission!")
+                                send_response(f" You are not an admin and don't have mod permission!")
                                 return
                         else:
-                            send_response("❌ You are not an admin in this chat.")
+                            send_response(" You are not an admin in this chat.")
                             return
                 except:
                     if check_mods:
                         has_mod_perm = await check_mod_permission_fast(cid, uid, permission, chat)
                         if not has_mod_perm:
-                            send_response(f"❌ You don't have permission to {action_name}!")
+                            send_response(f" You don't have permission to {action_name}!")
                             return
                     else:
-                        send_response("❌ Failed to verify admin status!")
+                        send_response(" Failed to verify admin status!")
                         return
                 if protect_target:
                     tuid=None;tu=None
@@ -753,11 +753,11 @@ def admin_check(permission:str=None,protect_target:bool=True,check_mods:bool=Fal
                                 except:pass
                     except:pass
                     is_target_sudo=await is_sudo_user_db(tuid)if tuid else False
-                    if tuid and(tuid in _dev_set or is_target_sudo):send_response("❌ You cannot apply this command to protected users.");return
+                    if tuid and(tuid in _dev_set or is_target_sudo):send_response(" You cannot apply this command to protected users.");return
                     if tu:
                         try:
                             tm=await get_member_cached(context.bot,cid,tuid)
-                            if tm.status==constants.ChatMemberStatus.OWNER:send_response("❌ You cannot apply this command to the chat owner.");return
+                            if tm.status==constants.ChatMemberStatus.OWNER:send_response(" You cannot apply this command to the chat owner.");return
                         except:pass
                 return await func(update,context,*args,**kwargs)
             except Exception as e:print(e);return
@@ -773,30 +773,30 @@ async def handle_anon_verification(update:Update,context:ContextTypes.DEFAULT_TY
         q=update.callback_query;await q.answer()
         token=q.data.split(":",1)[1]
         if token not in ANON_VERIFICATIONS:
-            try:await q.edit_message_text("❌ Verification expired or invalid!")
+            try:await q.edit_message_text(" Verification expired or invalid!")
             except:pass
             return
         vdata=ANON_VERIFICATIONS.pop(token)
         cid=vdata['cid'];uid=q.from_user.id
         if q.message.chat.id!=cid:
-            await q.answer("❌ Wrong chat!",show_alert=True)
+            await q.answer(" Wrong chat!",show_alert=True)
             return
         check_mods=vdata.get('check_mods',True)
         perm=vdata.get('permission')
         try:
             bm = await get_member_cached(context.bot, cid, context.bot.id)
             if bm.status not in [constants.ChatMemberStatus.ADMINISTRATOR, constants.ChatMemberStatus.OWNER]:
-                try:await q.edit_message_text("❌ I'm not an admin in this chat!")
+                try:await q.edit_message_text(" I'm not an admin in this chat!")
                 except:pass
                 return
             if perm:
                 actual_perm = PERMISSION_MAP.get(perm, perm)
                 if not getattr(bm, actual_perm, False):
-                    try:await q.edit_message_text(f"❌ I'm missing the `{perm}` permission!")
+                    try:await q.edit_message_text(f" I'm missing the `{perm}` permission!")
                     except:pass
                     return
         except:
-            try:await q.edit_message_text("❌ Failed to verify bot permissions!")
+            try:await q.edit_message_text(" Failed to verify bot permissions!")
             except:pass
             return
         try:
@@ -819,32 +819,32 @@ async def handle_anon_verification(update:Update,context:ContextTypes.DEFAULT_TY
                 
                 if not allowed:
                     if check_mods:
-                        try:await q.edit_message_text(f"❌ You don't have permission to {perm}!")
+                        try:await q.edit_message_text(f" You don't have permission to {perm}!")
                         except:pass
                     else:
-                        try:await q.edit_message_text(f"❌ You are missing the `{perm}` permission!")
+                        try:await q.edit_message_text(f" You are missing the `{perm}` permission!")
                         except:pass
                     return
             else:
                 if check_mods:
                     has_mod_perm = await check_mod_permission_fast(cid, uid, perm, q.message.chat)
                     if not has_mod_perm:
-                        try:await q.edit_message_text("❌ You are not an admin and don't have mod permission!")
+                        try:await q.edit_message_text(" You are not an admin and don't have mod permission!")
                         except:pass
                         return
                 else:
-                    try:await q.edit_message_text("❌ You are not an admin in this chat!")
+                    try:await q.edit_message_text(" You are not an admin in this chat!")
                     except:pass
                     return
         except:
             if check_mods:
                 has_mod_perm = await check_mod_permission_fast(cid, uid, perm, q.message.chat)
                 if not has_mod_perm:
-                    try:await q.edit_message_text(f"❌ You don't have permission to {perm}!")
+                    try:await q.edit_message_text(f" You don't have permission to {perm}!")
                     except:pass
                     return
             else:
-                try:await q.edit_message_text("❌ Failed to verify admin status!")
+                try:await q.edit_message_text(" Failed to verify admin status!")
                 except:pass
                 return
         try:await q.message.delete()

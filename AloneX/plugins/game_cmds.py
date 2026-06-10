@@ -25,17 +25,17 @@ async def _setClaimCharacter(update, context):
       m = update.effective_message
       user = m.from_user
       if len(m.text.split()) < 2:
-           return await m.reply_text(font("Hey, dev did you forget to give character code just ? 🥴"))
+           return await m.reply_text(font("Hey, dev did you forget to give character code just ? "))
             
       try:
          character_id, limit = m.text.split()[1:]
          assert limit.isdigit() and character_id.isdigit()
       except Exception as e:
-            return await m.reply_text(f"❌ ERROR: {e}")
+            return await m.reply_text(f" ERROR: {e}")
 
       character = await get_character(character_id)
       if not character:
-           return await m.reply_text(font("Not a valid character code 🧐"))
+           return await m.reply_text(font("Not a valid character code "))
             
       code = encode_to_base64(m.text.split()[1])
       tokens[code] = {"users": [], "limit": int(limit)}
@@ -73,7 +73,7 @@ async def _claimCharacter(update, context):
                          text=f"Token {token} has been revoked."
                    )
              if user.id in users:
-                  return await m.reply_text("You can't use the token twice. 🤧")
+                  return await m.reply_text("You can't use the token twice. ")
                    
              character_id = decode_to_base64(token)
              character = await get_character(character_id)
@@ -85,7 +85,7 @@ async def _claimCharacter(update, context):
                         cash = int(character['cash']/2)
                         append(token, user.id)
                         await update_cash(user.id, cash)
-                        return await m.reply_text(f"You already own the character, but no worries 😉 I have added character half of the cash amount ({cash} 💸) to your account 🏦.")
+                        return await m.reply_text(f"You already own the character, but no worries  I have added character half of the cash amount ({cash} ) to your account .")
                   else:      
                      character_name = character['character_name']
                      health = character['health']
@@ -115,7 +115,7 @@ async def _claimCharacter(update, context):
 async def __gameStatus(update, context):
       m = update.effective_message
       user = m.from_user
-      msg = await m.reply_text(font("🔎 <b>Analyzing player status.</b>"), parse_mode=constants.ParseMode.HTML)
+      msg = await m.reply_text(font(" <b>Analyzing player status.</b>"), parse_mode=constants.ParseMode.HTML)
       level = await get_user_level(user.id)
       win_count = await get_user_win(user.id)
       lose_count = await get_user_lose(user.id)
@@ -123,15 +123,15 @@ async def __gameStatus(update, context):
       cash = await get_cash(user.id)
       text = \
 f"""
-<a href='https://files.catbox.moe/562cjr.jpg'>ℹ️</a> <b>{user.mention_html()}'s Game Status </b>:
+<a href='https://files.catbox.moe/562cjr.jpg'></a> <b>{user.mention_html()}'s Game Status </b>:
 
-🌀 <b>Name</b>: <code>{html.escape(user.full_name)}</code>
-🎚️ <b>Level</b>: <code>{level}</code>
-🏆 <b>Win's</b>: <code>{win_count}</code>
-☠️ <b>Lose's</b>: <code>{lose_count}</code>
+ <b>Name</b>: <code>{html.escape(user.full_name)}</code>
+ <b>Level</b>: <code>{level}</code>
+ <b>Win's</b>: <code>{win_count}</code>
+ <b>Lose's</b>: <code>{lose_count}</code>
 
-🛒 <b>Character's</b>: <code>{characters}</code>
-🏦 <b>Balance</b>: <code>{cash} doller</code>
+ <b>Character's</b>: <code>{characters}</code>
+ <b>Balance</b>: <code>{cash} doller</code>
 """
       return await msg.edit_text(
             text, parse_mode=constants.ParseMode.HTML
@@ -147,12 +147,12 @@ async def _userCharacters(update, context):
       user = m.from_user
       characters = await get_user_characters(user.id)
       if not characters:
-            return await m.reply_text(font("🥱 Try collecting some *characters* for REAL."))
+            return await m.reply_text(font(" Try collecting some *characters* for REAL."))
       else:
-          msg = await m.reply_text(font("🔎 Checking for characters ..."))
+          msg = await m.reply_text(font(" Checking for characters ..."))
           user_characters[user.id] = characters
           shuffled_dict = dict(random.sample(list(characters.items()), len(characters)))
-          text = f"ℹ️ <b>{user.mention_html()}'s Characters</b>:\n\n"
+          text = f" <b>{user.mention_html()}'s Characters</b>:\n\n"
           for character_id, character in shuffled_dict.items():
                 image = random.choice(character['images'])
                 text += f"✦ <code>{character_id}</code> : <b><a href='{image}'>{character['character_name']}</a></b> [<code>{character['health']} HP</code>] <code>Type {character['rarity_type']}</code>\n"
@@ -176,7 +176,7 @@ async def _addCharacter(update, context):
     args = m.text.split(maxsplit=3)
     if len(args) < 4:
         return await m.reply_text(
-            "⚠️ Usage: /addcharacter <name> <health> <cash>\n"
+            " Usage: /addcharacter <name> <health> <cash>\n"
             "Example: /addcharacter Naruto 200 2000\n"
             "Reply to an image to set it as character image."
         )
@@ -186,7 +186,7 @@ async def _addCharacter(update, context):
         health = int(args[2])
         cash = int(args[3])
     except ValueError:
-        return await m.reply_text(font("⚠️ Health and cash must be integers!"))
+        return await m.reply_text(font(" Health and cash must be integers!"))
 
     # Check if user replied to a photo
     images = []
@@ -212,8 +212,8 @@ async def _addCharacter(update, context):
 
     if result:
         return await m.reply_text(
-            f"✅ Character <b>{character_name}</b> added successfully with image!",
+            f" Character <b>{character_name}</b> added successfully with image!",
             parse_mode=constants.ParseMode.HTML
         )
     else:
-        return await m.reply_text(font("❌ Failed to add character."))
+        return await m.reply_text(font(" Failed to add character."))

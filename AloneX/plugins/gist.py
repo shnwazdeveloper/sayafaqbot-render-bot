@@ -52,13 +52,13 @@ async def gist(_, m: types.Message):
             os.remove(path)
             mime_type = r.document.mime_type or "text/plain"
         except Exception as e:
-            return await msg.edit_text(f"❌ Error processing document: {e}")
+            return await msg.edit_text(f" Error processing document: {e}")
     else:
         content = r.text or r.caption
         mime_type = m.text.split()[1] if len(m.text.split()) > 1 else "text/plain"
 
     if not content:
-        return await msg.edit_text(font("❌ *No content found to paste*"), parse_mode="markdown")
+        return await msg.edit_text(font(" *No content found to paste*"), parse_mode="markdown")
 
     api_url = "https://api.github.com/gists"
     headers = {
@@ -101,6 +101,6 @@ async def gist(_, m: types.Message):
                     await msg.edit(text, reply_markup=buttons, parse_mode="markdown")
                 else:
                     error_message = response_data.get("message", f"Unknown error: {response.status}")
-                    await msg.edit(f"❌ Gist creation failed: {error_message}")
+                    await msg.edit(f" Gist creation failed: {error_message}")
     except Exception as e:
-        await msg.edit(f"❌ ERROR: {str(e)}")
+        await msg.edit(f" ERROR: {str(e)}")

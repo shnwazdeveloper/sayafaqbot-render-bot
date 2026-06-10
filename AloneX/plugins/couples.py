@@ -12,10 +12,10 @@ from AloneX.helpers.decorator import Command, admin_check, only_groups
 from telegram import constants, helpers
 from telegram.error import BadRequest
 
-__module__ = "𝐂ᴏᴜᴘʟᴇs💑"
+__module__ = "𝐂ᴏᴜᴘʟᴇs"
 
 __help__ = """
-*𝐂ᴏᴜᴘʟᴇs💑*
+*𝐂ᴏᴜᴘʟᴇs*
 
 *Description:*  
 Manage virtual couples in your chat with daily assignments and fun interactions.
@@ -89,7 +89,7 @@ async def send_couple(msg, man, woman, photo, bot):
     """
     if not photo:
         return await msg.edit_text(
-            "❌ Could not find a valid couple image.",
+            " Could not find a valid couple image.",
             parse_mode=constants.ParseMode.MARKDOWN
         )
 
@@ -98,10 +98,10 @@ async def send_couple(msg, man, woman, photo, bot):
     woman_mention = helpers.mention_html(user_id=woman['user_id'], name=woman['name'])
     date_str = f"{today.year}-{today.month}-{today.day}"
     text = (
-        f"❣️ <b>Couple of the day (</b><code>{date_str}</code><b>)</b> ❣️\n\n"
-        f"🤵 <b>Husband</b>: <b>{man_mention}</b>\n"
-        f"👰 <b>Fiancée</b>: <b>{woman_mention}</b>\n\n"
-        f"✨ <b>Congrats By {config.BOT_USERNAME}</b>"
+        f" <b>Couple of the day (</b><code>{date_str}</code><b>)</b> \n\n"
+        f" <b>Husband</b>: <b>{man_mention}</b>\n"
+        f" <b>Fiancée</b>: <b>{woman_mention}</b>\n\n"
+        f" <b>Congrats By {config.BOT_USERNAME}</b>"
     )
 
     chat_id = msg.chat.id
@@ -124,13 +124,13 @@ async def send_couple(msg, man, woman, photo, bot):
         # Common cause: invalid file_id or URL; fallback to text with the error
         LOGGER.error(f"Failed to send couple photo: {e}")
         return await msg.edit_text(
-            f"{text}\n\n❌ Failed to send couple image: `{str(e)}`",
+            f"{text}\n\n Failed to send couple image: `{str(e)}`",
             parse_mode=constants.ParseMode.HTML
         )
     except Exception as e:
         LOGGER.error(f"Unexpected error when sending couple photo: {e}")
         return await msg.edit_text(
-            f"{text}\n\n❌ Failed to send couple image: `{str(e)}`",
+            f"{text}\n\n Failed to send couple image: `{str(e)}`",
             parse_mode=constants.ParseMode.HTML
         )
 
@@ -159,16 +159,16 @@ async def get_couples(update, context):
     bot = context.bot
     chat = m.chat
     # send a placeholder text (we will replace by sending a photo or editing)
-    msg = await chat.send_message(font('❣️ *Check-ing couples in chat*'), parse_mode=constants.ParseMode.MARKDOWN)
+    msg = await chat.send_message(font(' *Check-ing couples in chat*'), parse_mode=constants.ParseMode.MARKDOWN)
     couple = await get_couple(chat.id)
     if couple and len(couples := couple.get('couples', [])) != 0:
-        text = f"<b>💖 Couples in {chat.title} </b>💖\n\n<blockquote>"
+        text = f"<b> Couples in {chat.title} </b>\n\n<blockquote>"
         for idx, data in enumerate(couples, start=1):
             man = data['man']
             woman = data['woman']
             man_mention = helpers.mention_html(user_id=man['user_id'], name=man['name'])
             woman_mention = helpers.mention_html(user_id=woman['user_id'], name=woman['name'])
-            text += f"<b>{idx}, 🧑‍💼 {man_mention} & 👰 {woman_mention}</b>\n"
+            text += f"<b>{idx},  {man_mention} &  {woman_mention}</b>\n"
         text += f"</blockquote><b>\n\nBy {config.BOT_USERNAME}</b>"
         # Default image file_id used as cover if you want to show a photo
         media = "AgACAgQAAxkBAAEBfIFnVIvmG68Wy0PKbrD0q5vmtVG4IgACQ7YxG6hnpFKJAAHfTierp2MBAAMCAAN5AAM2BA"
@@ -192,7 +192,7 @@ async def get_couples(update, context):
         else:
             return await msg.edit_text(text, parse_mode=constants.ParseMode.HTML)
     else:
-        return await msg.edit_text(font('*👀 This chat has no couples yet. use /couple to find them.*'), parse_mode=constants.ParseMode.MARKDOWN)
+        return await msg.edit_text(font('* This chat has no couples yet. use /couple to find them.*'), parse_mode=constants.ParseMode.MARKDOWN)
 
 
 @Command('divorce')
@@ -207,9 +207,9 @@ async def divorce(update, context):
     if couple and (await remove_couple_by_user(chat.id, user.id)):
         other = get_opposite_person(couple, user.id)
         mention = helpers.mention_html(user_id=other['user_id'], name=other['name'])
-        return await m.reply_text(f'<b>You divorced with {mention} 💔</b>.', parse_mode=constants.ParseMode.HTML)
+        return await m.reply_text(f'<b>You divorced with {mention} </b>.', parse_mode=constants.ParseMode.HTML)
     else:
-        return await m.reply_text("*You didn't married anyone yet. 🤣*", parse_mode=constants.ParseMode.MARKDOWN)
+        return await m.reply_text("*You didn't married anyone yet. *", parse_mode=constants.ParseMode.MARKDOWN)
 
 
 couple_process = {}  # for avoid spam.
@@ -222,11 +222,11 @@ async def couple(update, context):
     bot = context.bot
     chat = m.chat
     today = date.today()
-    msg = await m.reply_text(font('*👀 Checking couple of the day ...*'), parse_mode=constants.ParseMode.MARKDOWN)
+    msg = await m.reply_text(font('* Checking couple of the day ...*'), parse_mode=constants.ParseMode.MARKDOWN)
     couple = await get_couple(chat.id)
     if couple and len(couple.get('couples', [])) == 30:
         try:
-            await msg.edit_text(font('🤯 *Maximum couples for this chat have been chosen, to clear couples in chat use /rmcouples.*'), parse_mode=constants.ParseMode.MARKDOWN)
+            await msg.edit_text(font(' *Maximum couples for this chat have been chosen, to clear couples in chat use /rmcouples.*'), parse_mode=constants.ParseMode.MARKDOWN)
         except Exception:
             pass
         return
@@ -237,14 +237,14 @@ async def couple(update, context):
         # Let's find a new couple for the day
         if couple_process.get(chat.id, False):
             try:
-                await msg.edit_text(font('*Spammer spotted!* 💀'), parse_mode=constants.ParseMode.MARKDOWN)
+                await msg.edit_text(font('*Spammer spotted!* '), parse_mode=constants.ParseMode.MARKDOWN)
             except Exception:
                 pass
             return
 
         couple_process[chat.id] = True
         try:
-            await msg.edit_text(font('*💖 Finding new couple of the day ...*'), parse_mode=constants.ParseMode.MARKDOWN)
+            await msg.edit_text(font('* Finding new couple of the day ...*'), parse_mode=constants.ParseMode.MARKDOWN)
             members = []
             members_data = []
             async for mbr in pbot.get_chat_members(chat.id):
@@ -255,11 +255,11 @@ async def couple(update, context):
                     members_data.append({mbr.user.id: mbr.user})
 
             if not members:
-                return await msg.edit_text("👀 *I couldn't find anyone here to make a match.*", parse_mode=constants.ParseMode.MARKDOWN)
+                return await msg.edit_text(" *I couldn't find anyone here to make a match.*", parse_mode=constants.ParseMode.MARKDOWN)
 
             users = await get_users_not_in_couples(chat.id, members)
             if len(users) < 2:
-                return await msg.edit_text(font("*🤣 We need more people to match a couple since most of them are already coupled!*"), parse_mode=constants.ParseMode.MARKDOWN)
+                return await msg.edit_text(font("* We need more people to match a couple since most of them are already coupled!*"), parse_mode=constants.ParseMode.MARKDOWN)
 
             # Choose two persons in chat who are not married yet
             man_id, woman_id = random.sample(users, 2)
@@ -268,15 +268,15 @@ async def couple(update, context):
             man = {'user_id': man_info.id, 'name': man_info.full_name}
             woman = {'user_id': woman_info.id, 'name': woman_info.full_name}
 
-            await msg.edit_text("😍 *New couple is decided, now making couple's art for them ...*", parse_mode=constants.ParseMode.MARKDOWN)
+            await msg.edit_text(" *New couple is decided, now making couple's art for them ...*", parse_mode=constants.ParseMode.MARKDOWN)
             photo = await create_couple_image(bot)
             if await update_couple(chat.id, man=man, woman=woman, day=today.day, photo_id=photo):
                 try:
                     await send_couple(msg, man, woman, photo, bot)
                 except Exception as e:
-                    return await msg.edit_text(f"👀 *Looks like we encountered an error when sending couple image*: `{str(e)}`.", parse_mode=constants.ParseMode.MARKDOWN)
+                    return await msg.edit_text(f" *Looks like we encountered an error when sending couple image*: `{str(e)}`.", parse_mode=constants.ParseMode.MARKDOWN)
             else:
-                return await msg.edit_text("*Couple are not updated 🤔 what's wrong.*", parse_mode=constants.ParseMode.MARKDOWN)
+                return await msg.edit_text("*Couple are not updated  what's wrong.*", parse_mode=constants.ParseMode.MARKDOWN)
         finally:
             # Always clear the process lock
             couple_process.pop(chat.id, None)
@@ -287,7 +287,7 @@ async def couple(update, context):
         try:
             await send_couple(msg, man, woman, photo, bot)
         except Exception as e:
-            return await msg.edit_text(f"👀 *Looks like we encountered an error when sending couple image*: `{str(e)}`.", parse_mode=constants.ParseMode.MARKDOWN)
+            return await msg.edit_text(f" *Looks like we encountered an error when sending couple image*: `{str(e)}`.", parse_mode=constants.ParseMode.MARKDOWN)
 
 
 @Command('rmcouples')
@@ -298,6 +298,6 @@ async def removeCouples(update, context):
     chat = m.chat
     doc = await remove_couple(chat.id)
     if doc:
-        await m.reply_text(font('😼 *Every couples in this chat has been cleaned.*'), parse_mode=constants.ParseMode.MARKDOWN)
+        await m.reply_text(font(' *Every couples in this chat has been cleaned.*'), parse_mode=constants.ParseMode.MARKDOWN)
     else:
-        await m.reply_text("✋ *Looks like there's no single couples saved.*", parse_mode=constants.ParseMode.MARKDOWN)
+        await m.reply_text(" *Looks like there's no single couples saved.*", parse_mode=constants.ParseMode.MARKDOWN)

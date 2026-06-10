@@ -30,25 +30,25 @@ def create_zip(source_dir, output_filename):
 @pbot.on_message(filters.command("backup", prefix_cmds) & filters.user(OWNER_ID), group=118)
 async def backup_database(_, message: Message):
     if message.chat.type != enums.ChatType.PRIVATE:
-        return await message.reply_text(font("⚠️ Use this command in private chat."))
+        return await message.reply_text(font(" Use this command in private chat."))
 
-    m = await message.reply_text(font("🔄 Backing up..."))
+    m = await message.reply_text(font(" Backing up..."))
     
     try:
         code1 = execute(f'mongodump --uri "{DB_URL}"')
         if int(code1) != 0:
-            return await m.edit_text(font("❌ Backup failed! Install mongodump."))
+            return await m.edit_text(font(" Backup failed! Install mongodump."))
         
-        await m.edit_text(font("📦 Compressing..."))
+        await m.edit_text(font(" Compressing..."))
         
         try:
             create_zip("dump", "backup.zip")
         except Exception as e:
-            return await m.edit_text(f"❌ Compression failed: {str(e)}")
+            return await m.edit_text(f" Compression failed: {str(e)}")
         
         await message.reply_document(
             document="backup.zip",
-            caption="✅ Backup complete"
+            caption=" Backup complete"
         )
         
         await m.delete()
@@ -56,7 +56,7 @@ async def backup_database(_, message: Message):
         
     except Exception as e:
         LOGGER.error(f"Backup error: {e}")
-        await m.edit_text(f"❌ Error: {str(e)}")
+        await m.edit_text(f" Error: {str(e)}")
     
     finally:
         try:
@@ -69,24 +69,24 @@ async def backup_database(_, message: Message):
 @pbot.on_message(filters.command("backupinfo", prefix_cmds) & filters.user(OWNER_ID), group=119)
 async def backup_info(_, message: Message):
     if message.chat.type != enums.ChatType.PRIVATE:
-        return await message.reply_text(font("⚠️ Use this command in private chat."))
+        return await message.reply_text(font(" Use this command in private chat."))
     
     if not message.reply_to_message or not message.reply_to_message.document:
-        return await message.reply_text(font("❌ Reply to backup.zip file with /backupinfo"))
+        return await message.reply_text(font(" Reply to backup.zip file with /backupinfo"))
     
-    m = await message.reply_text(font("📥 Checking backup..."))
+    m = await message.reply_text(font(" Checking backup..."))
     
     try:
         file_path = await message.reply_to_message.download(file_name="backup.zip")
         
         if not file_path or not os.path.exists(file_path):
-            return await m.edit_text(font("❌ Failed to download backup file"))
+            return await m.edit_text(font(" Failed to download backup file"))
         
         try:
             with zipfile.ZipFile(file_path, 'r') as zip_ref:
                 zip_ref.extractall(".")
         except Exception as e:
-            return await m.edit_text(f"❌ Invalid backup file: {str(e)}")
+            return await m.edit_text(f" Invalid backup file: {str(e)}")
         
         databases = []
         collections_info = ""
@@ -97,14 +97,14 @@ async def backup_info(_, message: Message):
                 bson_files = [f for f in os.listdir(db_path) if f.endswith('.bson')]
                 if bson_files:
                     databases.append(dir_name)
-                    collections_info += f"\n📁 **{dir_name}**\n"
+                    collections_info += f"\n **{dir_name}**\n"
                     for bson_file in bson_files:
                         collection_name = bson_file.replace('.bson', '')
                         file_size = os.path.getsize(os.path.join(db_path, bson_file))
                         size_mb = file_size / (1024 * 1024)
                         collections_info += f"  └ {collection_name} ({size_mb:.2f} MB)\n"
         
-        info_text = f"📊 **Backup Information**\n\n"
+        info_text = f" **Backup Information**\n\n"
         info_text += f"**Databases:** {len(databases)}\n"
         info_text += collections_info
         
@@ -112,7 +112,7 @@ async def backup_info(_, message: Message):
         
     except Exception as e:
         LOGGER.error(f"Backup info error: {e}")
-        await m.edit_text(f"❌ Error: {str(e)}")
+        await m.edit_text(f" Error: {str(e)}")
     
     finally:
         try:
@@ -125,40 +125,40 @@ async def backup_info(_, message: Message):
 @pbot.on_message(filters.command("restore", prefix_cmds) & filters.user(OWNER_ID), group=120)
 async def restore_database(_, message: Message):
     if message.chat.type != enums.ChatType.PRIVATE:
-        return await message.reply_text(font("⚠️ Use this command in private chat."))
+        return await message.reply_text(font(" Use this command in private chat."))
     
     if not message.reply_to_message or not message.reply_to_message.document:
-        return await message.reply_text(font("❌ Reply to backup.zip file with /restore"))
+        return await message.reply_text(font(" Reply to backup.zip file with /restore"))
     
-    m = await message.reply_text(font("📥 Downloading backup..."))
+    m = await message.reply_text(font(" Downloading backup..."))
     
     try:
         file_path = await message.reply_to_message.download(file_name="backup.zip")
         
         if not file_path or not os.path.exists(file_path):
-            return await m.edit_text(font("❌ Failed to download backup file"))
+            return await m.edit_text(font(" Failed to download backup file"))
         
-        await m.edit_text(font("📦 Extracting..."))
+        await m.edit_text(font(" Extracting..."))
         
         try:
             with zipfile.ZipFile(file_path, 'r') as zip_ref:
                 zip_ref.extractall(".")
         except Exception as e:
-            return await m.edit_text(f"❌ Extraction failed: {str(e)}")
+            return await m.edit_text(f" Extraction failed: {str(e)}")
         
-        await m.edit_text(font("🔄 Restoring databases..."))
+        await m.edit_text(font(" Restoring databases..."))
         
         code2 = execute(f'mongorestore --uri "{DB_URL}" --drop dump/')
         if int(code2) != 0:
-            return await m.edit_text(font("❌ Restore failed!"))
+            return await m.edit_text(font(" Restore failed!"))
         
-        await m.edit_text(font("✅ Restore complete!\nRestart bot: /restart"))
+        await m.edit_text(font(" Restore complete!\nRestart bot: /restart"))
         
         LOGGER.info("✓ Database restored successfully")
         
     except Exception as e:
         LOGGER.error(f"Restore error: {e}")
-        await m.edit_text(f"❌ Error: {str(e)}")
+        await m.edit_text(f" Error: {str(e)}")
     
     finally:
         try:
@@ -168,7 +168,7 @@ async def restore_database(_, message: Message):
             pass
 
 
-__mod_name__ = "𝐁ᴀᴄᴋᴜᴘ🔃"
+__mod_name__ = "𝐁ᴀᴄᴋᴜᴘ"
 __help__ = """
 **Database Backup & Restore**
 

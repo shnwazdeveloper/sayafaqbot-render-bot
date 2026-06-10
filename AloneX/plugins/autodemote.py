@@ -10,9 +10,9 @@ from AloneX.helpers.decorator import protected_ids
 # Track bans: {chat_id: {admin_id: [timestamp1, timestamp2, ...]}}
 BAN_TRACKER = {}
 
-__module__ = "𝐀ᴜᴛᴏ-𝐃ᴇᴍᴏᴛᴇ📉"
+__module__ = "𝐀ᴜᴛᴏ-𝐃ᴇᴍᴏᴛᴇ"
 __help__ = """
-*Auto-Demote📉* — Prevent admin abuse by automatically demoting admins who ban too many users too quickly
+*Auto-Demote* — Prevent admin abuse by automatically demoting admins who ban too many users too quickly
 
 • `/autodemote` — Toggle protection or check settings.
 • `/setautodemote <limit> <seconds>` — Set ban limits (Default: 3 bans in 10s).
@@ -43,10 +43,10 @@ async def get_autodemote_keyboard(chat_id: int):
     settings = await get_autodemote_settings(chat_id)
     enabled = settings["enabled"]
     if enabled:
-        text = "🟢 Autodemote: ON"
+        text = " Autodemote: ON"
         style = ButtonStyle.SUCCESS
     else:
-        text = "🔴 Autodemote: OFF"
+        text = " Autodemote: OFF"
         style = ButtonStyle.DANGER
 
     return InlineKeyboardMarkup([[InlineKeyboardButton(font(text), callback_data="ad_toggle", style=style)]])
@@ -54,7 +54,7 @@ async def get_autodemote_keyboard(chat_id: int):
 @pbot.on_message(filters.command("autodemote", prefixes=prefix_cmds) & filters.group)
 async def autodemote_cmd(_, message: Message):
     if not await is_user_admin(message.chat.id, message.from_user.id):
-        return await message.reply_text(font("❌ You must be an admin to use this command."))
+        return await message.reply_text(font(" You must be an admin to use this command."))
 
     chat_id = message.chat.id
     settings = await get_autodemote_settings(chat_id)
@@ -63,14 +63,14 @@ async def autodemote_cmd(_, message: Message):
         arg = message.command[1].lower()
         if arg in ["on", "enable"]:
             await set_autodemote_status(chat_id, True)
-            return await message.reply_text(font("✅ Autodemote protection <b>Enabled</b>."), reply_markup=await get_autodemote_keyboard(chat_id), parse_mode=enums.ParseMode.HTML)
+            return await message.reply_text(font(" Autodemote protection <b>Enabled</b>."), reply_markup=await get_autodemote_keyboard(chat_id), parse_mode=enums.ParseMode.HTML)
         elif arg in ["off", "disable"]:
             await set_autodemote_status(chat_id, False)
-            return await message.reply_text(font("❌ Autodemote protection <b>Disabled</b>."), reply_markup=await get_autodemote_keyboard(chat_id), parse_mode=enums.ParseMode.HTML)
+            return await message.reply_text(font(" Autodemote protection <b>Disabled</b>."), reply_markup=await get_autodemote_keyboard(chat_id), parse_mode=enums.ParseMode.HTML)
 
     status = "Enabled" if settings["enabled"] else "Disabled"
     status_text = (
-        f"📉 <b>Autodemote Status</b>\n\n"
+        f" <b>Autodemote Status</b>\n\n"
         f"<b>Status:</b> {status}\n"
         f"<b>Limit:</b> <code>{settings['limit']}</code> bans\n"
         f"<b>Window:</b> <code>{settings['window']}</code> seconds\n\n"
@@ -88,7 +88,7 @@ async def ad_toggle_cb(_, query: CallbackQuery):
     chat_id = query.message.chat.id
 
     if not await is_user_admin(chat_id, user_id):
-        return await query.answer(font("❌ This button is for admins only!"), show_alert=True)
+        return await query.answer(font(" This button is for admins only!"), show_alert=True)
 
     settings = await get_autodemote_settings(chat_id)
     new_state = not settings["enabled"]
@@ -96,7 +96,7 @@ async def ad_toggle_cb(_, query: CallbackQuery):
 
     status = "Enabled" if new_state else "Disabled"
     status_text = (
-        f"📉 <b>Autodemote Status</b>\n\n"
+        f" <b>Autodemote Status</b>\n\n"
         f"<b>Status:</b> {status}\n"
         f"<b>Limit:</b> <code>{settings['limit']}</code> bans\n"
         f"<b>Window:</b> <code>{settings['window']}</code> seconds\n\n"
@@ -112,12 +112,12 @@ async def ad_toggle_cb(_, query: CallbackQuery):
 @pbot.on_message(filters.command("setautodemote", prefixes=prefix_cmds) & filters.group)
 async def setautodemote_cmd(_, message: Message):
     if not await is_user_admin(message.chat.id, message.from_user.id):
-        return await message.reply_text(font("❌ Admin privilege required!"))
+        return await message.reply_text(font(" Admin privilege required!"))
 
     chat_id = message.chat.id
     if len(message.command) < 3 or not message.command[1].isdigit() or not message.command[2].isdigit():
         return await message.reply_text(
-            f"⚠️ {font('<b>Usage:</b>')} <code>/setautodemote &lt;ban_limit&gt; &lt;time_window_seconds&gt;</code>\n"
+            f" {font('<b>Usage:</b>')} <code>/setautodemote &lt;ban_limit&gt; &lt;time_window_seconds&gt;</code>\n"
             f"Example: <code>/setautodemote 3 10</code>",
             parse_mode=enums.ParseMode.HTML
         )
@@ -126,13 +126,13 @@ async def setautodemote_cmd(_, message: Message):
     window = int(message.command[2])
 
     if limit < 2 or limit > 50:
-        return await message.reply_text(font("❌ Limit must be between 2 and 50."))
+        return await message.reply_text(font(" Limit must be between 2 and 50."))
     if window < 5 or window > 3600:
-        return await message.reply_text(font("❌ Window must be between 5s and 3600s."))
+        return await message.reply_text(font(" Window must be between 5s and 3600s."))
 
     await set_autodemote_limits(chat_id, limit, window)
     await message.reply_text(
-        f"✅ {font('<b>Autodemote limits updated!</b>')}\n\n"
+        f" {font('<b>Autodemote limits updated!</b>')}\n\n"
         f"<b>Limit:</b> <code>{limit}</code> bans\n"
         f"<b>Window:</b> <code>{window}</code> seconds",
         parse_mode=enums.ParseMode.HTML
@@ -189,7 +189,7 @@ async def autodemote_watcher(client, update: ChatMemberUpdated):
         try:
             bot_member = await client.get_chat_member(chat_id, "me")
             if not bot_member.privileges or not bot_member.privileges.can_promote_members:
-                await client.send_message(chat_id, "⚠️ <b>Autodemote Alert!</b> Admin abuse detected but I lack <code>can_promote_members</code> permission to take action.", parse_mode=enums.ParseMode.HTML)
+                await client.send_message(chat_id, " <b>Autodemote Alert!</b> Admin abuse detected but I lack <code>can_promote_members</code> permission to take action.", parse_mode=enums.ParseMode.HTML)
                 return
         except:
             return
@@ -220,10 +220,10 @@ async def autodemote_watcher(client, update: ChatMemberUpdated):
             mention = f"<a href='tg://user?id={actor.id}'>{html.escape(actor.first_name)}</a>"
             await client.send_message(
                 chat_id,
-                f"📉 <b>Autodemote Action</b>\n\n"
-                f"<b>👤 Admin:</b> {mention} [<code>{actor.id}</code>]\n"
-                f"<b>🚫 Reason:</b> Ban abuse detected (<code>{settings['limit']}</code> bans in <code>{settings['window']}</code>s)\n"
-                f"<b>⚖️ Result:</b> Automatically demoted to member.",
+                f" <b>Autodemote Action</b>\n\n"
+                f"<b> Admin:</b> {mention} [<code>{actor.id}</code>]\n"
+                f"<b> Reason:</b> Ban abuse detected (<code>{settings['limit']}</code> bans in <code>{settings['window']}</code>s)\n"
+                f"<b> Result:</b> Automatically demoted to member.",
                 parse_mode=enums.ParseMode.HTML
             )
         except Exception as e:

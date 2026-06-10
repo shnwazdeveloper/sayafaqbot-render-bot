@@ -11,9 +11,9 @@ from AloneX.db.approval_db import is_user_approved
 from AloneX.db.antinsfw_db import get_antinsfw, set_antinsfw, get_antinsfw_admin, set_antinsfw_admin
 import config
 
-__module__ = "𝐀ɴᴛɪ-𝐍sғᴡ🛡️"
+__module__ = "𝐀ɴᴛɪ-𝐍sғᴡ"
 __help__ = """
-*𝐀ɴᴛɪ-𝐍sғᴡ🛡️* — Protect your group from porn content with AI detection
+*𝐀ɴᴛɪ-𝐍sғᴡ* — Protect your group from porn content with AI detection
 
 • `/antiporn` — Toggle anti-NSFW settings or check status.
 • `/nsfwstatus` — Check detection model status.
@@ -134,10 +134,10 @@ async def get_antiporn_keyboard(chat_id: int):
     user_mode = await get_antinsfw(chat_id)
     admin_mode = await get_antinsfw_admin(chat_id)
     
-    u_text = f"🟢 User Mode: ON" if user_mode else "🔴 User Mode: OFF"
+    u_text = f" User Mode: ON" if user_mode else " User Mode: OFF"
     u_style = ButtonStyle.SUCCESS if user_mode else ButtonStyle.DANGER
     
-    a_text = f"🟢 Admin Mode: ON" if admin_mode else "🔴 Admin Mode: OFF"
+    a_text = f" Admin Mode: ON" if admin_mode else " Admin Mode: OFF"
     a_style = ButtonStyle.SUCCESS if admin_mode else ButtonStyle.DANGER
     
     return IKM([
@@ -148,7 +148,7 @@ async def get_antiporn_keyboard(chat_id: int):
 @pbot.on_message(filters.command(["antiporn", "antipornadmin"], prefixes=prefix_cmds) & filters.group)
 async def antiporn_cmd(_, message: Message):
     if not await is_user_admin(message.chat.id, message.from_user.id):
-        return await message.reply_text(font("❌ You must be an admin to use this command."))
+        return await message.reply_text(font(" You must be an admin to use this command."))
 
     if len(message.command) > 1:
         arg = message.command[1].lower()
@@ -167,9 +167,9 @@ async def antiporn_cmd(_, message: Message):
     a_mode = await get_antinsfw_admin(message.chat.id)
 
     status_text = (
-        f"🛡️ <b>Anti-NSFW Status</b>\n\n"
-        f"👥 <b>Users Mode:</b> {'Enabled' if u_mode else 'Disabled'}\n"
-        f"👮 <b>Admin Mode:</b> {'Enabled' if a_mode else 'Disabled'}\n\n"
+        f" <b>Anti-NSFW Status</b>\n\n"
+        f" <b>Users Mode:</b> {'Enabled' if u_mode else 'Disabled'}\n"
+        f" <b>Admin Mode:</b> {'Enabled' if a_mode else 'Disabled'}\n\n"
         f"Click the buttons below to toggle."
     )
 
@@ -185,7 +185,7 @@ async def ap_toggle_cb(_, query: CallbackQuery):
     chat_id = query.message.chat.id
 
     if not await is_user_admin(chat_id, user_id):
-        return await query.answer(font("❌ This button is for admins only!"), show_alert=True)
+        return await query.answer(font(" This button is for admins only!"), show_alert=True)
 
     action = query.data.split("_")[-1]
 
@@ -200,9 +200,9 @@ async def ap_toggle_cb(_, query: CallbackQuery):
     a_mode = await get_antinsfw_admin(chat_id)
 
     status_text = (
-        f"🛡️ <b>Anti-NSFW Status</b>\n\n"
-        f"👥 <b>Users Mode:</b> {'Enabled' if u_mode else 'Disabled'}\n"
-        f"👮 <b>Admin Mode:</b> {'Enabled' if a_mode else 'Disabled'}\n\n"
+        f" <b>Anti-NSFW Status</b>\n\n"
+        f" <b>Users Mode:</b> {'Enabled' if u_mode else 'Disabled'}\n"
+        f" <b>Admin Mode:</b> {'Enabled' if a_mode else 'Disabled'}\n\n"
         f"Click the buttons below to toggle."
     )
     
@@ -216,25 +216,25 @@ async def ap_toggle_cb(_, query: CallbackQuery):
 @pbot.on_message(filters.command("nsfwstatus", prefixes=prefix_cmds) & filters.group)
 async def nsfw_status_cmd(_, message: Message):
     if not await is_user_admin(message.chat.id, message.from_user.id):
-        return await message.reply_text(font("❌ You must be an admin to use this command."))
+        return await message.reply_text(font(" You must be an admin to use this command."))
     
     if detector.loaded:
         status_text = (
-            "✅ <b>Model Status: Ready</b>\n\n"
-            "🤖 <b>Engine:</b> FalconsAI NSFW Detection\n"
-            "⚡ <b>Performance:</b> Optimized & Fast\n"
-            "🎯 <b>Accuracy:</b> High Confidence Mode\n"
-            "📊 <b>Threshold:</b> 65%"
+            " <b>Model Status: Ready</b>\n\n"
+            " <b>Engine:</b> FalconsAI NSFW Detection\n"
+            " <b>Performance:</b> Optimized & Fast\n"
+            " <b>Accuracy:</b> High Confidence Mode\n"
+            " <b>Threshold:</b> 65%"
         )
     elif detector.loading:
         status_text = (
-            "🔄 <b>Model Loading...</b>\n\n"
-            "⏳ Please wait, model will be ready soon"
+            " <b>Model Loading...</b>\n\n"
+            " Please wait, model will be ready soon"
         )
     else:
         status_text = (
-            "❌ <b>Model Failed</b>\n\n"
-            "🐛 NSFW detection is currently <b>disabled</b>"
+            " <b>Model Failed</b>\n\n"
+            " NSFW detection is currently <b>disabled</b>"
         )
     
     await message.reply_text(font(status_text), parse_mode=enums.ParseMode.HTML)
@@ -287,10 +287,10 @@ async def auto_nsfw_check_pyro(client, message: Message):
             
             mention = f"<a href='tg://user?id={user_id}'>{html.escape(message.from_user.first_name if message.from_user else 'User')}</a>"
             warning = await message.reply_text(
-                f"🔞 <b>NSFW CONTENT DETECTED!</b>\n\n"
-                f"👤 <b>User:</b> {mention}\n"
-                f"⚠️ <b>Action:</b> Content removed automatically\n"
-                f"🛡️ <b>Reason:</b> Inappropriate content",
+                f" <b>NSFW CONTENT DETECTED!</b>\n\n"
+                f" <b>User:</b> {mention}\n"
+                f" <b>Action:</b> Content removed automatically\n"
+                f" <b>Reason:</b> Inappropriate content",
                 parse_mode=enums.ParseMode.HTML
             )
             await asyncio.sleep(5)

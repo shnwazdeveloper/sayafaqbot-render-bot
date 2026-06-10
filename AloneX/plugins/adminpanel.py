@@ -73,19 +73,19 @@ def build_keyboard(chat_id: int, user_id: int, perms: dict, has_title: bool = Fa
         for j in range(2):
             if i + j < len(PERMISSIONS):
                 key, label = PERMISSIONS[i + j]
-                icon = "✅" if perms.get(key, False) else "❌"
+                icon = "" if perms.get(key, False) else ""
                 style = ButtonStyle.SUCCESS if perms.get(key, False) else ButtonStyle.DANGER
                 row.append(InlineKeyboardButton(f"{icon} {label}", callback_data=f"ap|t|{key}|{chat_id}|{user_id}", style=style))
         buttons.append(row)
-    buttons.append([InlineKeyboardButton(f"{'📝' if has_title else '➕'} Edit Custom Title", callback_data=f"ap|title|{chat_id}|{user_id}", style=ButtonStyle.PRIMARY)])
+    buttons.append([InlineKeyboardButton(f"{'' if has_title else ''} Edit Custom Title", callback_data=f"ap|title|{chat_id}|{user_id}", style=ButtonStyle.PRIMARY)])
     buttons.append([
-        InlineKeyboardButton(font("⚡ Full Rights"), callback_data=f"ap|full|{chat_id}|{user_id}", style=ButtonStyle.SUCCESS),
-        InlineKeyboardButton(font("🔄 Reset"), callback_data=f"ap|reset|{chat_id}|{user_id}", style=ButtonStyle.PRIMARY)
+        InlineKeyboardButton(font(" Full Rights"), callback_data=f"ap|full|{chat_id}|{user_id}", style=ButtonStyle.SUCCESS),
+        InlineKeyboardButton(font(" Reset"), callback_data=f"ap|reset|{chat_id}|{user_id}", style=ButtonStyle.PRIMARY)
     ])
-    buttons.append([InlineKeyboardButton(font("🔧 Manage in DM"), callback_data=f"ap|manage|{chat_id}|{user_id}", style=ButtonStyle.PRIMARY)])
+    buttons.append([InlineKeyboardButton(font(" Manage in DM"), callback_data=f"ap|manage|{chat_id}|{user_id}", style=ButtonStyle.PRIMARY)])
     buttons.append([
-        InlineKeyboardButton(font("✅ Promote"), callback_data=f"ap|promote|{chat_id}|{user_id}", style=ButtonStyle.SUCCESS),
-        InlineKeyboardButton(font("❌ Close"), callback_data=f"ap|close|{chat_id}|{user_id}", style=ButtonStyle.DANGER)
+        InlineKeyboardButton(font(" Promote"), callback_data=f"ap|promote|{chat_id}|{user_id}", style=ButtonStyle.SUCCESS),
+        InlineKeyboardButton(font(" Close"), callback_data=f"ap|close|{chat_id}|{user_id}", style=ButtonStyle.DANGER)
     ])
     return InlineKeyboardMarkup(buttons)
 
@@ -96,18 +96,18 @@ def build_manage_keyboard(chat_id: int, user_id: int, perms: dict, has_title: bo
         for j in range(2):
             if i + j < len(PERMISSIONS):
                 key, label = PERMISSIONS[i + j]
-                icon = "✅" if perms.get(key, False) else "❌"
+                icon = "" if perms.get(key, False) else ""
                 style = ButtonStyle.SUCCESS if perms.get(key, False) else ButtonStyle.DANGER
                 row.append(InlineKeyboardButton(f"{icon} {label}", callback_data=f"mg|t|{key}|{chat_id}|{user_id}", style=style))
         buttons.append(row)
-    buttons.append([InlineKeyboardButton(f"{'📝' if has_title else '➕'} Edit Custom Title", callback_data=f"mg|title|{chat_id}|{user_id}", style=ButtonStyle.PRIMARY)])
+    buttons.append([InlineKeyboardButton(f"{'' if has_title else ''} Edit Custom Title", callback_data=f"mg|title|{chat_id}|{user_id}", style=ButtonStyle.PRIMARY)])
     buttons.append([
-        InlineKeyboardButton(font("⚡ Full Rights"), callback_data=f"mg|full|{chat_id}|{user_id}", style=ButtonStyle.SUCCESS),
-        InlineKeyboardButton(font("🔄 Reset"), callback_data=f"mg|reset|{chat_id}|{user_id}", style=ButtonStyle.PRIMARY)
+        InlineKeyboardButton(font(" Full Rights"), callback_data=f"mg|full|{chat_id}|{user_id}", style=ButtonStyle.SUCCESS),
+        InlineKeyboardButton(font(" Reset"), callback_data=f"mg|reset|{chat_id}|{user_id}", style=ButtonStyle.PRIMARY)
     ])
     buttons.append([
-        InlineKeyboardButton(font("✅ Apply"), callback_data=f"mg|apply|{chat_id}|{user_id}", style=ButtonStyle.SUCCESS),
-        InlineKeyboardButton(font("❌ Cancel"), callback_data=f"mg|cancel|{chat_id}|{user_id}", style=ButtonStyle.DANGER)
+        InlineKeyboardButton(font(" Apply"), callback_data=f"mg|apply|{chat_id}|{user_id}", style=ButtonStyle.SUCCESS),
+        InlineKeyboardButton(font(" Cancel"), callback_data=f"mg|cancel|{chat_id}|{user_id}", style=ButtonStyle.DANGER)
     ])
     return InlineKeyboardMarkup(buttons)
 
@@ -246,28 +246,28 @@ async def open_admin_panel(_, message: Message):
     # Check bot permissions
     success, error_msg, bot_member = await check_bot_perms(message.chat.id)
     if not success:
-        return await message.reply(f"❌ I have no power - {error_msg}")
+        return await message.reply(f" I have no power - {error_msg}")
     
     # Extract target user
     user_id = await extract_user_pyro(message)
     if not user_id:
-        return await message.reply(font("❌ Reply to user or mention them or provide user ID"))
+        return await message.reply(font(" Reply to user or mention them or provide user ID"))
     
     # Get user details
     user, username = await get_user_details(user_id)
     if not user:
-        return await message.reply(font("❌ User not found"))
+        return await message.reply(font(" User not found"))
     
     if user.is_bot:
-        return await message.reply(font("❌ Cannot promote bots"))
+        return await message.reply(font(" Cannot promote bots"))
     
     if user_id == message.from_user.id:
-        return await message.reply(font("❌ Cannot promote yourself"))
+        return await message.reply(font(" Cannot promote yourself"))
     
     # Check if invoker has permission to promote this user
     can_promote, perm_error = await check_user_perms(message.chat.id, user_id, message.from_user.id)
     if not can_promote:
-        return await message.reply(f"❌ {perm_error}")
+        return await message.reply(f" {perm_error}")
     
     # Cache permissions
     key = cache_key(message.chat.id, user_id)
@@ -284,10 +284,10 @@ async def open_admin_panel(_, message: Message):
         title_cache.pop(key, None)
     
     await message.reply(
-        f"🔧 Admin Panel\n\n"
-        f"👤 User: {user.mention}\n"
-        f"🆔 ID: {user_id}\n"
-        f"📝 Username: {username}\n\n"
+        f" Admin Panel\n\n"
+        f" User: {user.mention}\n"
+        f" ID: {user_id}\n"
+        f" Username: {username}\n\n"
         f"Toggle permissions:",
         reply_markup=build_keyboard(message.chat.id, user_id, perm_cache[key], title_cache.get(key) is not None)
     )
@@ -303,12 +303,12 @@ async def handle_callback(_, query: CallbackQuery):
         perms = perm_cache.get(key, {})
         current_title = title_cache.get(key)
     except:
-        return await query.answer(font("❌ Invalid data"), show_alert=True)
+        return await query.answer(font(" Invalid data"), show_alert=True)
     
     # Check if invoker still has permission
     can_promote, perm_error = await check_user_perms(chat_id, user_id, query.from_user.id)
     if not can_promote:
-        return await query.answer(f"❌ {perm_error}", show_alert=True)
+        return await query.answer(f" {perm_error}", show_alert=True)
     
     if action == "t":
         perm_key = parts[2]
@@ -318,11 +318,11 @@ async def handle_callback(_, query: CallbackQuery):
             await query.message.edit_reply_markup(build_keyboard(chat_id, user_id, perms, current_title is not None))
         except:
             pass
-        await query.answer(f"{'✅ Enabled' if perms[perm_key] else '❌ Disabled'}")
+        await query.answer(f"{' Enabled' if perms[perm_key] else ' Disabled'}")
         
     elif action == "title":
         waiting_for_title[query.from_user.id] = key
-        await query.answer(font("📝 Send admin title in group (max 16 chars)"), show_alert=True)
+        await query.answer(font(" Send admin title in group (max 16 chars)"), show_alert=True)
         
     elif action == "full":
         for perm_key, _ in PERMISSIONS:
@@ -332,7 +332,7 @@ async def handle_callback(_, query: CallbackQuery):
             await query.message.edit_reply_markup(build_keyboard(chat_id, user_id, perms, current_title is not None))
         except:
             pass
-        await query.answer(font("⚡ Full rights enabled"))
+        await query.answer(font(" Full rights enabled"))
         
     elif action == "reset":
         perms = {perm_key: True if perm_key == "can_invite_users" else False for perm_key, _ in PERMISSIONS}
@@ -341,22 +341,22 @@ async def handle_callback(_, query: CallbackQuery):
             await query.message.edit_reply_markup(build_keyboard(chat_id, user_id, perms, current_title is not None))
         except:
             pass
-        await query.answer(font("🔄 Reset to default"))
+        await query.answer(font(" Reset to default"))
         
     elif action == "manage":
         bot_username = (await app.get_me()).username
-        dm_button = InlineKeyboardMarkup([[InlineKeyboardButton(font("📱 Open in DM"), url=f"https://t.me/{bot_username}?start=manage_{chat_id}_{user_id}", style=ButtonStyle.PRIMARY)]])
+        dm_button = InlineKeyboardMarkup([[InlineKeyboardButton(font(" Open in DM"), url=f"https://t.me/{bot_username}?start=manage_{chat_id}_{user_id}", style=ButtonStyle.PRIMARY)]])
         try:
             await query.message.edit_text(
-                f"🔧 Manage Admin Rights\n\n"
-                f"🆔 User: {user_id}\n"
-                f"💬 Chat: {chat_id}\n\n"
+                f" Manage Admin Rights\n\n"
+                f" User: {user_id}\n"
+                f" Chat: {chat_id}\n\n"
                 f"Click button to manage in DM:",
                 reply_markup=dm_button
             )
             await query.answer(font("Click button to open DM"))
         except:
-            await query.answer(font("❌ Error"), show_alert=True)
+            await query.answer(font(" Error"), show_alert=True)
             
     elif action == "close":
         perm_cache.pop(key, None)
@@ -371,7 +371,7 @@ async def handle_callback(_, query: CallbackQuery):
         # Check bot permissions
         success, error_msg, bot_member = await check_bot_perms(chat_id)
         if not success:
-            return await query.message.edit_text(f"❌ I have no power - {error_msg}")
+            return await query.message.edit_text(f" I have no power - {error_msg}")
         
         # Check if bot has all required permissions
         missing = []
@@ -382,13 +382,13 @@ async def handle_callback(_, query: CallbackQuery):
         
         if missing:
             missing_text = "\n• ".join(missing)
-            return await query.message.edit_text(f"❌ I don't have these permissions:\n• {missing_text}")
+            return await query.message.edit_text(f" I don't have these permissions:\n• {missing_text}")
         
         # Create privileges object
         try:
             privileges = ChatAdministratorRights(**perms)
         except Exception as e:
-            return await query.message.edit_text(f"❌ Invalid permissions: {str(e)}")
+            return await query.message.edit_text(f" Invalid permissions: {str(e)}")
         
         # Promote user
         success, result = await safe_promote(chat_id, user_id, privileges, current_title)
@@ -400,9 +400,9 @@ async def handle_callback(_, query: CallbackQuery):
             waiting_for_title.pop(query.from_user.id, None)
             
             title_text = f" with title '{current_title}'" if current_title else ""
-            await query.message.edit_text(f"✅ User {result}{title_text}")
+            await query.message.edit_text(f" User {result}{title_text}")
         else:
-            await query.message.edit_text(f"❌ {result}")
+            await query.message.edit_text(f" {result}")
 
 @app.on_callback_query(filters.regex(r"^mg\|"), group=-622)
 async def handle_manage_callback(_, query: CallbackQuery):
@@ -415,12 +415,12 @@ async def handle_manage_callback(_, query: CallbackQuery):
         perms = perm_cache.get(key, {})
         current_title = title_cache.get(key)
     except:
-        return await query.answer(font("❌ Invalid data"), show_alert=True)
+        return await query.answer(font(" Invalid data"), show_alert=True)
     
     # Check if invoker still has permission
     can_promote, perm_error = await check_user_perms(chat_id, user_id, query.from_user.id)
     if not can_promote:
-        return await query.answer(f"❌ {perm_error}", show_alert=True)
+        return await query.answer(f" {perm_error}", show_alert=True)
     
     if action == "t":
         perm_key = parts[2]
@@ -430,11 +430,11 @@ async def handle_manage_callback(_, query: CallbackQuery):
             await query.message.edit_reply_markup(build_manage_keyboard(chat_id, user_id, perms, current_title is not None))
         except:
             pass
-        await query.answer(f"{'✅ Enabled' if perms[perm_key] else '❌ Disabled'}")
+        await query.answer(f"{' Enabled' if perms[perm_key] else ' Disabled'}")
         
     elif action == "title":
         waiting_for_title[query.from_user.id] = key
-        await query.answer(font("📝 Send admin title in DM (max 16 chars)"), show_alert=True)
+        await query.answer(font(" Send admin title in DM (max 16 chars)"), show_alert=True)
         
     elif action == "full":
         for perm_key, _ in PERMISSIONS:
@@ -444,7 +444,7 @@ async def handle_manage_callback(_, query: CallbackQuery):
             await query.message.edit_reply_markup(build_manage_keyboard(chat_id, user_id, perms, current_title is not None))
         except:
             pass
-        await query.answer(font("⚡ Full rights enabled"))
+        await query.answer(font(" Full rights enabled"))
         
     elif action == "reset":
         perms = {perm_key: True if perm_key == "can_invite_users" else False for perm_key, _ in PERMISSIONS}
@@ -453,13 +453,13 @@ async def handle_manage_callback(_, query: CallbackQuery):
             await query.message.edit_reply_markup(build_manage_keyboard(chat_id, user_id, perms, current_title is not None))
         except:
             pass
-        await query.answer(font("🔄 Reset to default"))
+        await query.answer(font(" Reset to default"))
         
     elif action == "apply":
         # Check bot permissions
         success, error_msg, bot_member = await check_bot_perms(chat_id)
         if not success:
-            return await query.message.edit_text(f"❌ I have no power - {error_msg}")
+            return await query.message.edit_text(f" I have no power - {error_msg}")
         
         # Check if bot has all required permissions
         missing = []
@@ -470,13 +470,13 @@ async def handle_manage_callback(_, query: CallbackQuery):
         
         if missing:
             missing_text = "\n• ".join(missing)
-            return await query.message.edit_text(f"❌ I don't have these permissions:\n• {missing_text}")
+            return await query.message.edit_text(f" I don't have these permissions:\n• {missing_text}")
         
         # Create privileges object
         try:
             privileges = ChatAdministratorRights(**perms)
         except Exception as e:
-            return await query.message.edit_text(f"❌ Invalid permissions: {str(e)}")
+            return await query.message.edit_text(f" Invalid permissions: {str(e)}")
         
         # Promote user
         success, result = await safe_promote(chat_id, user_id, privileges, current_title)
@@ -488,9 +488,9 @@ async def handle_manage_callback(_, query: CallbackQuery):
             waiting_for_title.pop(query.from_user.id, None)
             
             title_text = f" with title '{current_title}'" if current_title else ""
-            await query.message.edit_text(f"✅ User {result}{title_text}")
+            await query.message.edit_text(f" User {result}{title_text}")
         else:
-            await query.message.edit_text(f"❌ {result}")
+            await query.message.edit_text(f" {result}")
             
     elif action == "cancel":
         perm_cache.pop(key, None)
@@ -498,7 +498,7 @@ async def handle_manage_callback(_, query: CallbackQuery):
         waiting_for_title.pop(query.from_user.id, None)
         try:
             await query.message.delete()
-            await query.answer(font("❌ Cancelled"))
+            await query.answer(font(" Cancelled"))
         except:
             pass
 
@@ -512,7 +512,7 @@ async def handle_admin_deeplink(message, args):
             # Check if invoker has permission
             can_promote, perm_error = await check_user_perms(chat_id, user_id, message.from_user.id)
             if not can_promote:
-                return await message.reply(f"❌ {perm_error}")
+                return await message.reply(f" {perm_error}")
             
             key = cache_key(chat_id, user_id)
             if key not in perm_cache:
@@ -537,17 +537,17 @@ async def handle_admin_deeplink(message, args):
                 chat_name = f"Chat {chat_id}"
             
             await message.reply(
-                f"🔧 Manage Admin Rights\n\n"
-                f"👤 User: {user.mention if user else user_id}\n"
-                f"🆔 ID: {user_id}\n"
-                f"💬 Chat: {chat_name}\n"
-                f"📝 Username: {username}\n\n"
+                f" Manage Admin Rights\n\n"
+                f" User: {user.mention if user else user_id}\n"
+                f" ID: {user_id}\n"
+                f" Chat: {chat_name}\n"
+                f" Username: {username}\n\n"
                 f"Toggle permissions:",
                 reply_markup=build_manage_keyboard(chat_id, user_id, perms, current_title is not None)
             )
             return True
         except Exception as e:
-            await message.reply(f"❌ Error: {str(e)}")
+            await message.reply(f" Error: {str(e)}")
             return True
     return False
 
@@ -563,7 +563,7 @@ async def capture_title_group(_, message: Message):
     title = message.text.strip()
     
     if len(title) > 16:
-        return await message.reply(font("❌ Title must be 16 chars max"))
+        return await message.reply(font(" Title must be 16 chars max"))
     
     title_cache[key] = title
     
@@ -571,11 +571,11 @@ async def capture_title_group(_, message: Message):
         chat_id, target_user_id = map(int, key.split(":"))
         perms = perm_cache.get(key, {})
         await message.reply(
-            f"✅ Title set: {title}",
+            f" Title set: {title}",
             reply_markup=build_keyboard(chat_id, target_user_id, perms, True)
         )
     except:
-        await message.reply(f"✅ Title saved: {title}")
+        await message.reply(f" Title saved: {title}")
 
 @app.on_message(filters.text & filters.private, group=-622)
 async def capture_title_dm(_, message: Message):
@@ -589,7 +589,7 @@ async def capture_title_dm(_, message: Message):
     title = message.text.strip()
     
     if len(title) > 16:
-        return await message.reply(font("❌ Title must be 16 chars max"))
+        return await message.reply(font(" Title must be 16 chars max"))
     
     title_cache[key] = title
     
@@ -597,8 +597,8 @@ async def capture_title_dm(_, message: Message):
         chat_id, target_user_id = map(int, key.split(":"))
         perms = perm_cache.get(key, {})
         await message.reply(
-            f"✅ Title set: {title}",
+            f" Title set: {title}",
             reply_markup=build_manage_keyboard(chat_id, target_user_id, perms, True)
         )
     except:
-        await message.reply(f"✅ Title saved: {title}")
+        await message.reply(f" Title saved: {title}")

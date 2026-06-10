@@ -6,10 +6,10 @@ from AloneX.helpers.scripts import GetZzzCodeAi, ZzzAiCodeGenerator, ZzzAiCodeCo
 from telegram import constants
 
 
-__module__ = "𝐙ᴀɪ💻"
+__module__ = "𝐙ᴀɪ"
 
 __help__ = """
-*ZAi💻*
+*ZAi*
 
 *Description:*  
 This module provides AI-powered code generation and conversion tools. Convert code between languages, generate new code, and retrieve previous outputs using unique IDs.
@@ -32,12 +32,12 @@ async def GetZzzAiOutput(update, context):
    bot = context.bot
    
    if len(m.text.split()) < 2:
-        return await m.reply_text("🧐 Where's that unique file id ?")
+        return await m.reply_text(" Where's that unique file id ?")
       
    file_id = m.text.split(maxsplit=1)[1]
    isVaild = is_base64_encoded(file_id)
    if not isVaild:
-       return await m.reply_text(font("🕵️ Why did you give me some random string instead of a actual file id"))
+       return await m.reply_text(font(" Why did you give me some random string instead of a actual file id"))
    request_url = decode_to_base64(file_id)
    result = await GetZzzCodeAi(request_url)
    output = result.get('output')
@@ -54,7 +54,7 @@ async def GetZzzAiOutput(update, context):
        )
    else:
        return await m.reply_text(
-          "🙋 *Something went wrong try again some later if its still didn't work try request again 🤷*", 
+          " *Something went wrong try again some later if its still didn't work try request again *", 
           parse_mode=constants.ParseMode.MARKDOWN
        )
 
@@ -86,22 +86,22 @@ async def ZzzAiConvert(update, context):
       
    else:
        return await m.reply_text(
-         "*🙋 Make sure you to reply a code txt document or text message. with* `/zzzcai lang to_lang`🙋",
+         "* Make sure you to reply a code txt document or text message. with* `/zzzcai lang to_lang`",
           parse_mode=constants.ParseMode.MARKDOWN
        )
       
    if len(m.text.split()) < 3:
         return await m.reply_text(
-           "🧐 E.g. ```python\n /zzzcai py | c``` for convert python code to c program.",
+           " E.g. ```python\n /zzzcai py | c``` for convert python code to c program.",
            parse_mode=constants.ParseMode.MARKDOWN
          )
    try:
      lang, to_lang = m.text.split(maxsplit=1)[1].split('|')
    except Exception as e:
-       return await m.reply_text(f"❌ Error: {str(e)}")
+       return await m.reply_text(f" Error: {str(e)}")
 
    msg = await m.reply_text(
-      "⏳ *Please wait! Started to converting...*",
+      " *Please wait! Started to converting...*",
       parse_mode=constants.ParseMode.MARKDOWN
    )
    
@@ -129,7 +129,7 @@ async def ZzzAiConvert(update, context):
            )
    else:
        await msg.edit_text(
-           f"🙋 hey {user.first_name}!, Sorry the code has been started to convert but please wait and try again later with `/getzzzai {request_url}` for get the code...",
+           f" hey {user.first_name}!, Sorry the code has been started to convert but please wait and try again later with `/getzzzai {request_url}` for get the code...",
            parse_mode=constants.ParseMode.MARKDOWN
        )
 
@@ -145,17 +145,17 @@ async def ZzzAiGenerator(update, context):
    
    if len(m.text.split()) < 2:
         return await m.reply_text(
-           "🧐 E.g ```\n/zzzai write a code a say hello in c, cpp, py, js```",
+           " E.g ```\n/zzzai write a code a say hello in c, cpp, py, js```",
            parse_mode=constants.ParseMode.MARKDOWN
          )
    try:
      lang = "anything"
      code = m.text.split(maxsplit=1)[1]
    except Exception as e:
-       return await m.reply_text(f"❌ Error: {e}")
+       return await m.reply_text(f" Error: {e}")
 
    msg = await m.reply_text(
-      "⏳ *Please wait! started to generating...*",
+      " *Please wait! started to generating...*",
       parse_mode=constants.ParseMode.MARKDOWN
    )
    
@@ -183,7 +183,7 @@ async def ZzzAiGenerator(update, context):
            )
    else:
        await msg.edit_text(
-           f"🙋 hey {user.first_name}!, Sorry the code has been started to generate but please wait and try again later with `/getzzz {request_url}` for get the code...",
+           f" hey {user.first_name}!, Sorry the code has been started to generate but please wait and try again later with `/getzzz {request_url}` for get the code...",
            parse_mode=constants.ParseMode.MARKDOWN
        )
 

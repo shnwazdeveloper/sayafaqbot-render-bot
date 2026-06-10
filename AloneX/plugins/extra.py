@@ -20,7 +20,7 @@ from AloneX import (
     BOT_USERNAME,
 )
 
-__module__ = "𝐄xᴛʀᴀ⚠️"
+__module__ = "𝐄xᴛʀᴀ"
 
 __help__ = """
 *Extra Fun & Utility Commands*  
@@ -110,12 +110,12 @@ async def Base64Encrypter(update, context):
             decode = decode_to_base64(string)
             return await m.reply_text(decode)
         else:
-           return await m.reply_text(font("It seems not a base64 encoded string 🤷"))
+           return await m.reply_text(font("It seems not a base64 encoded string "))
           
     else:
       
         if is_base64_encoded(string):
-            return await m.reply_text("Doesn't it already encoded? 🙋")
+            return await m.reply_text("Doesn't it already encoded? ")
         else:
             encode = encode_to_base64(string)
             return await m.reply_text(encode)
@@ -145,7 +145,7 @@ MORSE_CODE_DICT = { 'A':'.-', 'B':'-...',
 async def morse_encrypt(bot, message: types.Message):
     cmd = message.command
 
-    msg = await message.reply_text(font("ℹ️ **Encoding ...**"))
+    msg = await message.reply_text(font(" **Encoding ...**"))
     async def encrypt(message):
        cipher = ''
        for letter in message:

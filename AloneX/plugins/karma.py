@@ -11,17 +11,17 @@ from AloneX.db.karma import (
     get_leaderboard
 )
 
-__module__ = "𝐊ᴀʀᴍᴀ✨"
+__module__ = "𝐊ᴀʀᴍᴀ"
 __help__ = """
-*Karma System✨*
+*Karma System*
 
 *Description:*
 Karma system for groups where members can upvote or downvote each other based on their contributions.
 
 *Upvote Keywords:*
-`+`, `+1`, `thanks`, `good`, `agree`, `👍`, etc.
+`+`, `+1`, `thanks`, `good`, `agree`, ``, etc.
 *Downvote Keywords:*
-`-`, `-1`, `bad`, `disagree`, `👎`, etc.
+`-`, `-1`, `bad`, `disagree`, ``, etc.
 
 *Commands:*
 ❂ `/karma` – Reply to a user to check their karma, or send alone for leaderboard
@@ -30,8 +30,8 @@ Karma system for groups where members can upvote or downvote each other based on
 *Note:* You cannot upvote/downvote yourself.
 """
 
-regex_upvote = r"^(\++|\+1|thx|tnx|tq|ty|thankyou|thank you|thanx|thanks|pro|cool|good|agree|👍|\++ .+)$"
-regex_downvote = r"^(-+|-1|not cool|disagree|worst|bad|👎|-+ .+)$"
+regex_upvote = r"^(\++|\+1|thx|tnx|tq|ty|thankyou|thank you|thanx|thanks|pro|cool|good|agree||\++ .+)$"
+regex_downvote = r"^(-+|-1|not cool|disagree|worst|bad||-+ .+)$"
 
 async def is_admin(chat_id: int, user_id: int):
     if user_id in DEV_LIST:
@@ -111,7 +111,7 @@ async def command_karma(_, message: Message):
         if not leaderboard:
             return await m.edit("No karma data found for this chat.")
 
-        output = f"✨ **Karma Leaderboard for {html.escape(message.chat.title)}**\n\n"
+        output = f" **Karma Leaderboard for {html.escape(message.chat.title)}**\n\n"
         for i, (user_id, karma_count) in enumerate(leaderboard, 1):
             try:
                 user = await pbot.get_users(user_id)
@@ -129,12 +129,12 @@ async def command_karma(_, message: Message):
         user_id = message.reply_to_message.from_user.id
         user_name = message.reply_to_message.from_user.first_name
         karma_value = await get_user_karma(chat_id, user_id)
-        await message.reply_text(f"✨ **{user_name}** has `{karma_value}` karma points.")
+        await message.reply_text(f" **{user_name}** has `{karma_value}` karma points.")
 
 @pbot.on_message(filters.command("karmatoggle", prefix_cmds) & filters.group)
 async def karmatoggle(_, message: Message):
     if not await is_admin(message.chat.id, message.from_user.id):
-        return await message.reply_text(font("❌ Admins only."))
+        return await message.reply_text(font(" Admins only."))
 
     usage = "**Usage:**\n`/karmatoggle [enable|disable]`"
     if len(message.command) != 2:
@@ -143,9 +143,9 @@ async def karmatoggle(_, message: Message):
     state = message.command[1].lower()
     if state == "enable":
         await set_karma_status(message.chat.id, True)
-        await message.reply_text(font("✅ Enabled Karma System for this chat."))
+        await message.reply_text(font(" Enabled Karma System for this chat."))
     elif state == "disable":
         await set_karma_status(message.chat.id, False)
-        await message.reply_text(font("❌ Disabled Karma System for this chat."))
+        await message.reply_text(font(" Disabled Karma System for this chat."))
     else:
         await message.reply_text(usage)

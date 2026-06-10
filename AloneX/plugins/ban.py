@@ -137,7 +137,7 @@ async def ban_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 asyncio.create_task(auto_delete(m, 5))
             else:
                 await m.reply_html(resp, reply_markup=InlineKeyboardMarkup([[
-                    InlineKeyboardButton(font("✅ Unban (Admin Only)"), callback_data=f"unban_{sc.id}")
+                    InlineKeyboardButton(font(" Unban (Admin Only)"), callback_data=f"unban_{sc.id}")
                 ]]))
             return
         except BadRequest as e:
@@ -208,7 +208,7 @@ async def ban_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
         
         # Build response with proper HTML escaping
         reason_safe = html.escape(reason)
-        resp = f"🚫{mention} has been {BAN_TEXT[cmd]}.\n\n<b>📝Reason:</b> {reason_safe}"
+        resp = f"{mention} has been {BAN_TEXT[cmd]}.\n\n<b>Reason:</b> {reason_safe}"
         
         if until_date:
             resp += f"\n<b>Ban expires:</b> {until_date.strftime('%Y-%m-%d at %H:%M:%S UTC')}"
@@ -222,7 +222,7 @@ async def ban_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
             except:
                 title = str(chat_id)
 
-        log_text = f"🚫 <b>{BAN_TEXT[cmd].capitalize()}</b>\n" \
+        log_text = f" <b>{BAN_TEXT[cmd].capitalize()}</b>\n" \
                    f"<b>Group:</b> {html.escape(title)}\n" \
                    f"<b>User:</b> {mention} (<code>{user_id}</code>)\n" \
                    f"<b>By:</b> {update.effective_user.mention_html()}\n" \
@@ -241,7 +241,7 @@ async def ban_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
             asyncio.create_task(auto_delete(m, 5))
         else:
             await m.reply_text(resp, parse_mode=constants.ParseMode.HTML, reply_markup=InlineKeyboardMarkup([[
-                InlineKeyboardButton(font("✅ Unban (Admin Only)"), callback_data=f"unban_{user_id}")
+                InlineKeyboardButton(font(" Unban (Admin Only)"), callback_data=f"unban_{user_id}")
             ]]))
     except Forbidden:
         await m.reply_text(font("I do not have permission to ban users in this chat. Please ensure I have the necessary admin rights."))
@@ -293,7 +293,7 @@ async def unban_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
             except:
                 title = str(chat_id)
 
-        log_text = f"🔓 <b>Unbanned</b>\n" \
+        log_text = f" <b>Unbanned</b>\n" \
                    f"<b>Group:</b> {html.escape(title)}\n" \
                    f"<b>User:</b> {mention} (<code>{user_id}</code>)\n" \
                    f"<b>By:</b> {update.effective_user.mention_html()}"
@@ -336,7 +336,7 @@ async def unban_button(update: Update, context: ContextTypes.DEFAULT_TYPE):
             mention = await get_user_mention(context.bot, chat_id, user_id)
             await query.message.edit_text(f"{mention} has been unbanned.", parse_mode=constants.ParseMode.HTML)
 
-            log_text = f"🔓 <b>Unbanned (via button)</b>\n" \
+            log_text = f" <b>Unbanned (via button)</b>\n" \
                        f"<b>Group:</b> {html.escape(chat_obj.title)}\n" \
                        f"<b>User:</b> {mention} (<code>{user_id}</code>)\n" \
                        f"<b>By:</b> {query.from_user.mention_html()}"
@@ -428,7 +428,7 @@ async def mute_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
         # Build response with proper HTML escaping
         mute_type = "temporarily muted" if is_temp else "muted"
         reason_safe = html.escape(reason)
-        resp = f"🚷{mention} has been {mute_type}.\n\n<b>📝Reason:</b> {reason_safe}"
+        resp = f"{mention} has been {mute_type}.\n\n<b>Reason:</b> {reason_safe}"
         
         if until_date:
             resp += f"\n<b>Mute expires:</b> {until_date.strftime('%Y-%m-%d at %H:%M:%S UTC')}"
@@ -441,7 +441,7 @@ async def mute_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
             except:
                 title = str(chat_id)
 
-        log_text = f"🔇 <b>{mute_type.capitalize()}</b>\n" \
+        log_text = f" <b>{mute_type.capitalize()}</b>\n" \
                    f"<b>Group:</b> {html.escape(title)}\n" \
                    f"<b>User:</b> {mention} (<code>{user_id}</code>)\n" \
                    f"<b>By:</b> {update.effective_user.mention_html()}\n" \
@@ -460,7 +460,7 @@ async def mute_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
             asyncio.create_task(auto_delete(m, 5))
         else:
             await m.reply_text(resp, parse_mode=constants.ParseMode.HTML, reply_markup=InlineKeyboardMarkup([[
-                InlineKeyboardButton(font("✅ Unmute (Admin Only)"), callback_data=f"unmute_{user_id}")
+                InlineKeyboardButton(font(" Unmute (Admin Only)"), callback_data=f"unmute_{user_id}")
             ]]))
     except Forbidden:
         await m.reply_text(font("I do not have permission to mute users in this chat. Please ensure I have the necessary admin rights."))
@@ -511,7 +511,7 @@ async def unmute_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
             except:
                 title = str(chat_id)
 
-        log_text = f"🔊 <b>Unmuted</b>\n" \
+        log_text = f" <b>Unmuted</b>\n" \
                    f"<b>Group:</b> {html.escape(title)}\n" \
                    f"<b>User:</b> {mention} (<code>{user_id}</code>)\n" \
                    f"<b>By:</b> {update.effective_user.mention_html()}"
@@ -555,7 +555,7 @@ async def unmute_button(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await query.message.edit_text(f"{mention} has been unmuted.", parse_mode=constants.ParseMode.HTML)
 
         chat_obj = await context.bot.get_chat(chat_id)
-        log_text = f"🔊 <b>Unmuted (via button)</b>\n" \
+        log_text = f" <b>Unmuted (via button)</b>\n" \
                    f"<b>Group:</b> {html.escape(chat_obj.title)}\n" \
                    f"<b>User:</b> {mention} (<code>{user_id}</code>)\n" \
                    f"<b>By:</b> {query.from_user.mention_html()}"
@@ -606,7 +606,7 @@ async def kick_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
             reason = reason[:197] + "..."
         bot_member = await context.bot.get_chat_member(chat_id, context.bot.id)
         if not bot_member.can_restrict_members:
-            return await m.reply_text("❌ I don't have permission to kick channels in this group.")
+            return await m.reply_text(" I don't have permission to kick channels in this group.")
         channel_name = await get_chat_name(context.bot, sender_chat.id)
         try:
             await context.bot.ban_chat_sender_chat(chat_id=chat_id, sender_chat_id=sender_chat.id)
@@ -619,15 +619,15 @@ async def kick_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
                     pass
             reason_safe = html.escape(reason)
             success_msg = (
-                f"👢 Channel <b>{channel_name}</b> has been kicked from the group!\n"
-                f"📄 Reason: {reason_safe}"
+                f" Channel <b>{channel_name}</b> has been kicked from the group!\n"
+                f" Reason: {reason_safe}"
             )
             return await m.reply_html(success_msg)
         except BadRequest as e:
-            return await m.reply_text(f"❌ Cannot kick channel: {html.escape(str(e))}")
+            return await m.reply_text(f" Cannot kick channel: {html.escape(str(e))}")
         except Exception as e:
             logger.error(f"Error kicking channel: {e}")
-            return await m.reply_text(font("❌ Failed to kick the channel."))
+            return await m.reply_text(font(" Failed to kick the channel."))
     
     # Handle user kicks
     try:
@@ -636,7 +636,7 @@ async def kick_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
             user_id = await get_user_id_from_args_or_reply(m, args)
         if not user_id:
             return await m.reply_text(
-                "❌ Usage: Reply to a message or provide username/ID to kick.\n"
+                " Usage: Reply to a message or provide username/ID to kick.\n"
                 "Example: /kick @username reason or /kick 123456789 reason"
             )
         reason = "No reason provided."
@@ -649,19 +649,19 @@ async def kick_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
             reason = reason[:197] + "..."
         bot_member = await context.bot.get_chat_member(chat_id, context.bot.id)
         if not bot_member.can_restrict_members:
-            return await m.reply_text("❌ I don't have permission to kick users in this group.")
+            return await m.reply_text(" I don't have permission to kick users in this group.")
         try:
             member = await context.bot.get_chat_member(chat_id, user_id)
             target_user = member.user
             if member.status in [ChatMemberStatus.OWNER, ChatMemberStatus.ADMINISTRATOR]:
-                return await m.reply_text(font("❌ Cannot kick administrators or group creator."))
+                return await m.reply_text(font(" Cannot kick administrators or group creator."))
             if target_user.id == context.bot.id:
-                return await m.reply_text(font("❌ I cannot kick myself!"))
+                return await m.reply_text(font(" I cannot kick myself!"))
         except BadRequest:
-            return await m.reply_text(font("❌ User not found in this group."))
+            return await m.reply_text(font(" User not found in this group."))
         except Exception as e:
             logger.error(f"Error getting member info: {e}")
-            return await m.reply_text(font("❌ Failed to get user information."))
+            return await m.reply_text(font(" Failed to get user information."))
         if command == "dkick" and m.reply_to_message:
             try:
                 await m.reply_to_message.delete()
@@ -672,16 +672,16 @@ async def kick_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
             await context.bot.ban_chat_member(chat_id, user_id)
             await context.bot.unban_chat_member(chat_id, user_id)
         except Forbidden:
-            return await m.reply_text("❌ I don't have permission to kick users here.")
+            return await m.reply_text(" I don't have permission to kick users here.")
         except BadRequest as e:
             error_msg = getattr(e, 'message', str(e))
-            return await m.reply_text(f"❌ Cannot kick user: {html.escape(error_msg)}")
+            return await m.reply_text(f" Cannot kick user: {html.escape(error_msg)}")
         first_name = html.escape(target_user.first_name or "User")
         mention = helpers.mention_html(target_user.id, first_name)
         reason_safe = html.escape(reason)
         success_msg = (
-            f"👢 {mention} has been kicked from the group!\n"
-            f"📄 Reason: {reason_safe}"
+            f" {mention} has been kicked from the group!\n"
+            f" Reason: {reason_safe}"
         )
 
         title = update.effective_chat.title
@@ -692,7 +692,7 @@ async def kick_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
             except:
                 title = str(chat_id)
 
-        log_text = f"👢 <b>Kicked</b>\n" \
+        log_text = f" <b>Kicked</b>\n" \
                    f"<b>Group:</b> {html.escape(title)}\n" \
                    f"<b>User:</b> {mention} (<code>{user_id}</code>)\n" \
                    f"<b>By:</b> {update.effective_user.mention_html()}\n" \
@@ -702,10 +702,10 @@ async def kick_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
         return await m.reply_html(success_msg)
     except TelegramError as e:
         logger.error(f"Telegram error in kick command: {e}")
-        return await m.reply_text(f"❌ Telegram error: {html.escape(str(e))}")
+        return await m.reply_text(f" Telegram error: {html.escape(str(e))}")
     except Exception as e:
         logger.error(f"Unexpected error in kick command: {e}")
-        return await m.reply_text(font("❌ An unexpected error occurred while kicking the user."))
+        return await m.reply_text(font(" An unexpected error occurred while kicking the user."))
 
 @Command("skick")
 @admin_check("can_restrict_members")
@@ -739,7 +739,7 @@ async def silent_kick(update: Update, context: ContextTypes.DEFAULT_TYPE):
             return
         bot_member = await chat.get_member(context.bot.id)
         if not bot_member.can_restrict_members:
-            return await m.reply_text("❌ I don't have permission to kick users.")
+            return await m.reply_text(" I don't have permission to kick users.")
         try:
             member = await chat.get_member(user_id)
             if member.status in ['creator', 'administrator']:
@@ -762,31 +762,31 @@ async def kick_me(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user = m.from_user
     try:
         if user.id in DEV_LIST:
-            return await m.reply_text("😎 You're too powerful to kick yourself!")
+            return await m.reply_text(" You're too powerful to kick yourself!")
         bot_member = await m.chat.get_member(context.bot.id)
         if not bot_member.can_restrict_members:
-            return await m.reply_text("❌ I don't have permission to kick users.")
+            return await m.reply_text(" I don't have permission to kick users.")
         user_member = await m.chat.get_member(user.id)
         if user_member.status in ['creator', 'administrator']:
-            return await m.reply_text(font("❌ Administrators cannot kick themselves using this command."))
+            return await m.reply_text(font(" Administrators cannot kick themselves using this command."))
         await m.chat.ban_member(user.id)
         await m.chat.unban_member(user.id)
-        await m.reply_text(font("👋 You kicked yourself from the group. Goodbye!"))
+        await m.reply_text(font(" You kicked yourself from the group. Goodbye!"))
 
-        log_text = f"👢 <b>User Kicked Self</b>\n" \
+        log_text = f" <b>User Kicked Self</b>\n" \
                    f"<b>Group:</b> {html.escape(m.chat.title)}\n" \
                    f"<b>User:</b> {user.mention_html()} (<code>{user.id}</code>)"
         asyncio.create_task(log_action(context.bot, m.chat.id, "bans", log_text))
     except Forbidden:
-        await m.reply_text("❌ I don't have permission to kick users.")
+        await m.reply_text(" I don't have permission to kick users.")
     except BadRequest as e:
         error_msg = getattr(e, 'message', str(e))
-        await m.reply_text(f"❌ Cannot kick you: {html.escape(error_msg)}")
+        await m.reply_text(f" Cannot kick you: {html.escape(error_msg)}")
     except Exception as e:
         logger.error(f"Error in kickme command: {e}")
-        await m.reply_text(font("❌ Failed to kick you due to an unexpected error."))
+        await m.reply_text(font(" Failed to kick you due to an unexpected error."))
 
-__module__ = "𝐁ᴀɴs🚫"
+__module__ = "𝐁ᴀɴs"
 
 __help__ = """
 *Ban Commands*

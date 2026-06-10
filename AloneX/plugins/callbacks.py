@@ -102,28 +102,28 @@ def get_or_create_session(session_id: str, user_id: int, page_num: int = 0) -> d
 
 def build_pagination_buttons(page_num: int, total_pages: int, user_id: int) -> list:
     if total_pages <= 1:
-        return [ptypes.InlineKeyboardButton(font('❌𝐂ʟᴏsᴇ'), callback_data=f"delete#{user_id}", style=ButtonStyle.DANGER)]
+        return [ptypes.InlineKeyboardButton(font('𝐂ʟᴏsᴇ'), callback_data=f"delete#{user_id}", style=ButtonStyle.DANGER)]
     if page_num == 0:
-        return [ptypes.InlineKeyboardButton(font('❌𝐂ʟᴏsᴇ'), callback_data=f"delete#{user_id}", style=ButtonStyle.DANGER), ptypes.InlineKeyboardButton(font('➡️𝐍ᴇxᴛ'), callback_data=f"helpcq_next#{user_id}#{page_num}", style=ButtonStyle.PRIMARY)]
+        return [ptypes.InlineKeyboardButton(font('𝐂ʟᴏsᴇ'), callback_data=f"delete#{user_id}", style=ButtonStyle.DANGER), ptypes.InlineKeyboardButton(font('𝐍ᴇxᴛ'), callback_data=f"helpcq_next#{user_id}#{page_num}", style=ButtonStyle.PRIMARY)]
     elif page_num == total_pages - 1:
-        return [ptypes.InlineKeyboardButton(font('⬅️𝐁ᴀᴄᴋ'), callback_data=f"helpcq_back#{user_id}#{page_num}", style=ButtonStyle.PRIMARY), ptypes.InlineKeyboardButton(font('❌𝐂ʟᴏsᴇ'), callback_data=f"delete#{user_id}", style=ButtonStyle.DANGER)]
+        return [ptypes.InlineKeyboardButton(font('𝐁ᴀᴄᴋ'), callback_data=f"helpcq_back#{user_id}#{page_num}", style=ButtonStyle.PRIMARY), ptypes.InlineKeyboardButton(font('𝐂ʟᴏsᴇ'), callback_data=f"delete#{user_id}", style=ButtonStyle.DANGER)]
     else:
-        return [ptypes.InlineKeyboardButton(font('⬅️𝐁ᴀᴄᴋ'), callback_data=f"helpcq_back#{user_id}#{page_num}", style=ButtonStyle.PRIMARY), ptypes.InlineKeyboardButton(font('➡️𝐍ᴇxᴛ'), callback_data=f"helpcq_next#{user_id}#{page_num}", style=ButtonStyle.PRIMARY)]
+        return [ptypes.InlineKeyboardButton(font('𝐁ᴀᴄᴋ'), callback_data=f"helpcq_back#{user_id}#{page_num}", style=ButtonStyle.PRIMARY), ptypes.InlineKeyboardButton(font('𝐍ᴇxᴛ'), callback_data=f"helpcq_next#{user_id}#{page_num}", style=ButtonStyle.PRIMARY)]
 
 @pbot.on_callback_query(pfilters.regex('^stream'))
 async def stream_callback(client, query):
-    await query.answer(font("⏳ Generating stream link..."))
+    await query.answer(font(" Generating stream link..."))
     data = query.data
     user = query.from_user
     user_id = int(data.split('#')[1])
     if user.id != user_id:
-        return await query.answer(font('💀 This is not yours!'), show_alert=True)
+        return await query.answer(font(' This is not yours!'), show_alert=True)
     msg = query.message
     log_msg = await msg.forward(config.FILE_DB_CHANNEL)
     watch, download = gen_link(log_msg)
     caption = f"```\n{msg.caption}```"
-    caption += ('\n\n✨ **Your stream link has been generated**:\n\n' f'📺 **Watch link**: {watch}\n' f'📩 **Download link**: {download}\n\n' f'❤️ **By {client.me.username}**')
-    buttons = [[ptypes.InlineKeyboardButton(font('Watch 📺'), url=watch, style=ButtonStyle.PRIMARY), ptypes.InlineKeyboardButton(font('Download 📩'), url=download, style=ButtonStyle.SUCCESS)]]
+    caption += ('\n\n **Your stream link has been generated**:\n\n' f' **Watch link**: {watch}\n' f' **Download link**: {download}\n\n' f' **By {client.me.username}**')
+    buttons = [[ptypes.InlineKeyboardButton(font('Watch '), url=watch, style=ButtonStyle.PRIMARY), ptypes.InlineKeyboardButton(font('Download '), url=download, style=ButtonStyle.SUCCESS)]]
     await query.edit_message_caption(caption=caption, reply_markup=ptypes.InlineKeyboardMarkup(buttons))
 
 @pbot.on_callback_query(pfilters.regex('^helpcq'))
@@ -135,7 +135,7 @@ async def help_pagination_callback(client, query):
     page_num = int(data[2])
     
     if user.id != user_id:
-        return await query.answer("⚠️ Don't trigger others commands!", show_alert=True)
+        return await query.answer(" Don't trigger others commands!", show_alert=True)
     
     if cmd == "helpcq_next":
         page_num += 1
@@ -154,7 +154,7 @@ async def help_pagination_callback(client, query):
     pagination_buttons = build_pagination_buttons(page_num, total_pages, user_id)
     current_page_buttons = [list(row) for row in pages[page_num]]
     current_page_buttons.append(pagination_buttons)
-    current_page_buttons.append([ptypes.InlineKeyboardButton(font("🔄 Back"), callback_data=f"back_{user.id}", style=ButtonStyle.PRIMARY)])
+    current_page_buttons.append([ptypes.InlineKeyboardButton(font(" Back"), callback_data=f"back_{user.id}", style=ButtonStyle.PRIMARY)])
     
     try:
         await query.edit_message_reply_markup(reply_markup=ptypes.InlineKeyboardMarkup(current_page_buttons))
@@ -168,20 +168,20 @@ async def delete_message_callback(client, query):
     user_id = int(data.split("#")[1]) if "#" in data else int(data.replace("delete", ""))
     
     if query.from_user.id == user_id:
-        await query.answer(font("⛔ Deleting..."), show_alert=False)
+        await query.answer(font(" Deleting..."), show_alert=False)
         await message.delete()
         return
     
     try:
         member = await message.chat.get_member(query.from_user.id)
         if member.status in [ptypes.ChatMemberStatus.ADMINISTRATOR, ptypes.ChatMemberStatus.OWNER]:
-            await query.answer(font("⛔ Deleting..."), show_alert=False)
+            await query.answer(font(" Deleting..."), show_alert=False)
             await message.delete()
             return
     except:
         pass
     
-    await query.answer("❌ You can't delete this message!", show_alert=True)
+    await query.answer(" You can't delete this message!", show_alert=True)
 
 @pbot.on_callback_query(pfilters.regex('^help_callback'))
 async def music_help_callback(client, query):
@@ -189,13 +189,13 @@ async def music_help_callback(client, query):
     data = query.data.split()
     
     if len(data) < 2:
-        return await query.answer(font("❌ Invalid callback data!"), show_alert=True)
+        return await query.answer(font(" Invalid callback data!"), show_alert=True)
     
     callback_type = data[1]
     if len(data) >= 3 and data[2].isdigit():
         user_id = int(data[2])
         if user.id != user_id:
-            return await query.answer("⚠️ Don't trigger others commands!", show_alert=True)
+            return await query.answer(" Don't trigger others commands!", show_alert=True)
     
     await query.answer(f"Music help for {callback_type}")
 
@@ -205,13 +205,13 @@ async def module_help_callback(client, query):
     data = query.data.split("_")
     
     if len(data) < 2:
-        return await query.answer(font("❌ Invalid callback data!"), show_alert=True)
+        return await query.answer(font(" Invalid callback data!"), show_alert=True)
     if not data[-1].isdigit():
-        return await query.answer(font("❌ Invalid callback data!"), show_alert=True)
+        return await query.answer(font(" Invalid callback data!"), show_alert=True)
     
     user_id = int(data[-1])
     if user.id != user_id:
-        return await query.answer("⚠️ Don't trigger others commands!", show_alert=True)
+        return await query.answer(" Don't trigger others commands!", show_alert=True)
     
     if len(data) == 2:
         await query.answer(font("Here is the help menu..."))
@@ -226,7 +226,7 @@ async def module_help_callback(client, query):
         pagination_buttons = build_pagination_buttons(page_num, total_pages, user.id)
         current_page_buttons = [list(row) for row in pages[page_num]]
         current_page_buttons.append(pagination_buttons)
-        current_page_buttons.append([ptypes.InlineKeyboardButton(font("🔄 Back"), callback_data=f"back_{user.id}", style=ButtonStyle.PRIMARY)])
+        current_page_buttons.append([ptypes.InlineKeyboardButton(font(" Back"), callback_data=f"back_{user.id}", style=ButtonStyle.PRIMARY)])
         
         mention = f"[{user.first_name}](tg://user?id={user.id})"
         caption = (
@@ -259,10 +259,10 @@ async def module_help_callback(client, query):
             clean_help_text = safe_markdown_text(help_text)
             clean_module_name_display = clean_module_name(module_key)
             text = (
-                f"**⚡ Help for the module**: **{clean_module_name_display.upper()}**\n\n"
+                f"** Help for the module**: **{clean_module_name_display.upper()}**\n\n"
                 f"{clean_help_text}"
             )
-            buttons = [[ptypes.InlineKeyboardButton(font("🔄 Back"), callback_data=f"help_{user.id}", style=ButtonStyle.PRIMARY)]]
+            buttons = [[ptypes.InlineKeyboardButton(font(" Back"), callback_data=f"help_{user.id}", style=ButtonStyle.PRIMARY)]]
 
             if len(text) > 1024:
                 try:
@@ -282,7 +282,7 @@ async def module_help_callback(client, query):
             try:
                 fallback_text = f"**Help for module: {module_key.upper()}**\n\n{str(help_text)}"
                 fallback_text = html.escape(fallback_text)
-                buttons = [[ptypes.InlineKeyboardButton(font("🔄 Back"), callback_data=f"help_{user.id}", style=ButtonStyle.PRIMARY)]]
+                buttons = [[ptypes.InlineKeyboardButton(font(" Back"), callback_data=f"help_{user.id}", style=ButtonStyle.PRIMARY)]]
                 await query.edit_message_caption(caption=fallback_text, reply_markup=ptypes.InlineKeyboardMarkup(buttons))
             except Exception as fallback_error:
                 print(f"Fallback error for {module_key}: {fallback_error}")
@@ -297,11 +297,11 @@ async def back_to_start_callback(client, query):
     data = query.data.split("_")
     
     if len(data) < 2 or not data[1].isdigit():
-        return await query.answer(font("❌ Invalid callback data!"), show_alert=True)
+        return await query.answer(font(" Invalid callback data!"), show_alert=True)
     
     user_id = int(data[1])
     if query.from_user.id != user_id:
-        return await query.answer("⚠️ You can't trigger others commands!", show_alert=True)
+        return await query.answer(" You can't trigger others commands!", show_alert=True)
     
     await query.answer(font("Here is the start menu..."))
     
@@ -315,12 +315,12 @@ async def back_to_start_callback(client, query):
     update_url = UPDATE_CHANNEL if UPDATE_CHANNEL.startswith("http") else f'https://t.me/{UPDATE_CHANNEL.lstrip("@")}'
     
     buttons = [
-        [ptypes.InlineKeyboardButton(font('🎧 Music'), callback_data="settings_back_helper", style=ButtonStyle.SUCCESS),
-         ptypes.InlineKeyboardButton(font('⚙ Help ⚙'), callback_data=f'help_{user_id}', style=ButtonStyle.PRIMARY),
-         ptypes.InlineKeyboardButton(font('Update 💬'), url=update_url, style=ButtonStyle.SUCCESS)],
-        [ptypes.InlineKeyboardButton(font("📝 Switch Too Inline 📝"), switch_inline_query_current_chat="", style=ButtonStyle.DANGER)],
-        [ptypes.InlineKeyboardButton(font('➕ Add Me Else Your Group ➕'), url=f'https://t.me/{bot_username}?startgroup=true', style=ButtonStyle.SUCCESS)]
-      #  [ptypes.InlineKeyboardButton(font('𓊈💥🔥𝔻eͥѵeͣlͫ𐍉קeℝ🔥💥𓊉'), user_id=config.ALONE_OWNER_ID, style=ButtonStyle.DANGER)]
+        [ptypes.InlineKeyboardButton(font(' Music'), callback_data="settings_back_helper", style=ButtonStyle.SUCCESS),
+         ptypes.InlineKeyboardButton(font(' Help '), callback_data=f'help_{user_id}', style=ButtonStyle.PRIMARY),
+         ptypes.InlineKeyboardButton(font('Update '), url=update_url, style=ButtonStyle.SUCCESS)],
+        [ptypes.InlineKeyboardButton(font(" Switch Too Inline "), switch_inline_query_current_chat="", style=ButtonStyle.DANGER)],
+        [ptypes.InlineKeyboardButton(font(' Add Me Else Your Group '), url=f'https://t.me/{bot_username}?startgroup=true', style=ButtonStyle.SUCCESS)]
+      #  [ptypes.InlineKeyboardButton(font('𓊈𝔻eͥѵeͣlͫ𐍉קeℝ𓊉'), user_id=config.ALONE_OWNER_ID, style=ButtonStyle.DANGER)]
     ]
     caption = (
         f"<blockquote><b>**⍣ 𝖧𝖾𝗒𝖺 {mention} {bot_mention} 𝖨'𝗆 𝖠𝗇 𝖠𝖽𝗏𝖺𝗇𝖼𝖾 𝖠𝖨 𝖨𝗇𝗍𝖾𝗀𝗋𝖺𝗍𝖾𝖽 𝖶𝗂𝗍𝗁 𝖱𝗈𝖻𝗈𝗍, 𝖨'𝗅𝗅 𝖬𝖺𝗇𝖺𝗀𝖾 𝖸𝗈𝗎𝗋 𝖦𝗋𝗈𝗎𝗉 𝖤𝖺𝗌𝗂𝗅𝗒.**</b></blockquote>\n"

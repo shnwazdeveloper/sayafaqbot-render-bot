@@ -104,15 +104,15 @@ def get_font_keyboard(page: int, text: str) -> InlineKeyboardMarkup:
         # Back and Next buttons in one row
         nav_row = []
         if page > 0:
-            nav_row.append(InlineKeyboardButton("⬅️ Back", callback_data=f"font_nav+{page - 1}+{text}", style=ButtonStyle.PRIMARY))
+            nav_row.append(InlineKeyboardButton(" Back", callback_data=f"font_nav+{page - 1}+{text}", style=ButtonStyle.PRIMARY))
         if page < total_pages - 1:
-            nav_row.append(InlineKeyboardButton("➡️ Next", callback_data=f"font_nav+{page + 1}+{text}", style=ButtonStyle.PRIMARY))
+            nav_row.append(InlineKeyboardButton(" Next", callback_data=f"font_nav+{page + 1}+{text}", style=ButtonStyle.PRIMARY))
         
         if nav_row:
             nav_buttons.append(nav_row)
     
     # Close button in separate row below navigation
-    nav_buttons.append([InlineKeyboardButton("❌ Close", callback_data="font_close", style=ButtonStyle.DANGER)])
+    nav_buttons.append([InlineKeyboardButton(" Close", callback_data="font_close", style=ButtonStyle.DANGER)])
     
     style_buttons.extend(nav_buttons)
     return InlineKeyboardMarkup(style_buttons)

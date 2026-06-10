@@ -8,12 +8,12 @@ from AloneX import pbot, font
 from AloneX.helpers.scripts import anime_quote
 from AloneX.helpers.decorator import spam_control
 from pyrogram import filters
-from pyrogram.enums import ParseMode  # ✅ Needed for parse_mode
+from pyrogram.enums import ParseMode  #  Needed for parse_mode
 
-__module__ = "𝐀ɴɪ-𝐐ᴜᴏᴛᴇ📝"
+__module__ = "𝐀ɴɪ-𝐐ᴜᴏᴛᴇ"
 
 __help__ = """
-*𝐀ɴɪ-𝐐ᴜᴏᴛᴇ📝*
+*𝐀ɴɪ-𝐐ᴜᴏᴛᴇ*
 
 *Description:*  
 Search anime quotes by character or get random quotes, including optional audio playback.
@@ -49,12 +49,12 @@ async def AniQuote(_, message):
     quote_data = await anime_quote(search=search, random=random, page=page)
 
     if not quote_data:
-        return await m.reply_text(font('❌ **No results found.**'))
+        return await m.reply_text(font(' **No results found.**'))
 
     if isinstance(quote_data, dict) and "error" in quote_data:
-        return await m.reply_text(f'❌ **ERROR**: `{quote_data["error"]}`')
+        return await m.reply_text(f' **ERROR**: `{quote_data["error"]}`')
 
-    msg = await m.reply_text(font('🎧 **Uploading Quotes...**'))
+    msg = await m.reply_text(font(' **Uploading Quotes...**'))
 
     async with aiohttp.ClientSession() as session:
         for data in quote_data:
@@ -72,15 +72,15 @@ async def AniQuote(_, message):
                 caption = f"""
 <blockquote><b>Quote:</b><br>{html.escape(data['quote'])}</blockquote>
 <b>Character:</b> <code>{html.escape(data['character'])}</code>
-<a href="{data['image_url']}">🔗 Character Image</a>
+<a href="{data['image_url']}"> Character Image</a>
 """.strip()
 
                 await m.reply_audio(audio_path, caption=caption, parse_mode=ParseMode.HTML)
 
             except Exception as e:
-                await m.reply_text(f"❌ Error processing quote:\n`{e}`")
+                await m.reply_text(f" Error processing quote:\n`{e}`")
             finally:
                 if os.path.exists(audio_path):
                     os.remove(audio_path)
 
-    await msg.edit_text(f'✅ **Uploaded by {config.BOT_USERNAME}**')
+    await msg.edit_text(f' **Uploaded by {config.BOT_USERNAME}**')

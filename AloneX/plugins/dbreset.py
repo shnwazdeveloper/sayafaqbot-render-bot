@@ -13,7 +13,7 @@ database2 = db2_client["AloneX2"]
 @pbot.on_message(filters.command("resetdb") & filters.user(DEV_LIST), group=-398)
 async def resetdb_request(_, message):
     await message.reply_text(
-        "⚠️ Are you sure you want to reset **ALL DATABASES**?\n"
+        " Are you sure you want to reset **ALL DATABASES**?\n"
         "This will delete all data permanently!\n\n"
         "Type `/confirmreset` to continue."
     )
@@ -32,4 +32,4 @@ async def resetdb_confirm(_, message):
     for col in collections2:
         await database2[col].delete_many({})
 
-    await message.reply_text(font("✅ Both databases (`AloneX` & `AloneX2`) have been fully reset!"))
+    await message.reply_text(font(" Both databases (`AloneX` & `AloneX2`) have been fully reset!"))

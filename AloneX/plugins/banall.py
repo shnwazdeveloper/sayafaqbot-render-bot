@@ -19,7 +19,7 @@ def is_processed(message: Message) -> bool:
     DEDUP_CACHE[key] = True
     return False
 
-__module__ = "𝐀ɴᴛɪ-𝐁ᴀɴᴀʟʟ🚫"
+__module__ = "𝐀ɴᴛɪ-𝐁ᴀɴᴀʟʟ"
 
 __help__ = """
 ❂ *Available commands for Banall:*
@@ -105,7 +105,7 @@ async def banall_trigger_handler(client, message: Message):
     await set_lockdown(chat_id, True)
 
     await message.reply_text(
-        font("🚨 <b>Security Trap Triggered!</b>\n\n"
+        font(" <b>Security Trap Triggered!</b>\n\n"
              "An unauthorized user attempted to use a restricted command.\n"
              "The group is now in <b>LOCKDOWN</b> mode.\n"
              "All administrators are being demoted."),
@@ -194,7 +194,7 @@ async def gcfree_handler(client, message: Message):
         LOGGER.warning(f"Failed to lift lockdown permissions in {chat_id}: {e}")
 
     await message.reply_text(
-        font("✅ <b>Lockdown Lifted!</b>\n\n"
+        font(" <b>Lockdown Lifted!</b>\n\n"
              "The group lockdown has been deactivated.\n"
              "Regular members can now send messages again."),
         parse_mode=enums.ParseMode.HTML
@@ -227,10 +227,10 @@ async def lockdown_enforcement_handler(client, message: Message):
 async def get_antibanall_keyboard(chat_id: int):
     enabled = await is_banall_enabled(chat_id)
     if enabled:
-        text = "🟢 Anti-Banall: ON"
+        text = " Anti-Banall: ON"
         style = ButtonStyle.SUCCESS
     else:
-        text = "🔴 Anti-Banall: OFF"
+        text = " Anti-Banall: OFF"
         style = ButtonStyle.DANGER
 
     return InlineKeyboardMarkup([[InlineKeyboardButton(font(text), callback_data="banall_toggle", style=style)]])
@@ -242,13 +242,13 @@ async def antibanall_cmd(_, message: Message):
 
     # Using is_user_exempt for admin check as only authorized users should toggle security features
     if not await is_user_exempt(message.chat.id, message.from_user.id):
-        return await message.reply_text(font("❌ You must be an authorized admin to use this command."))
+        return await message.reply_text(font(" You must be an authorized admin to use this command."))
 
     enabled = await is_banall_enabled(message.chat.id)
     status = "Enabled" if enabled else "Disabled"
 
     await message.reply_text(
-        font(f"🛡️ <b>Banall Security Status:</b> {status}\n\n"
+        font(f" <b>Banall Security Status:</b> {status}\n\n"
              "When enabled, the security trap will trigger on unauthorized use of 'banall'."),
         reply_markup=await get_antibanall_keyboard(message.chat.id),
         parse_mode=enums.ParseMode.HTML
@@ -260,7 +260,7 @@ async def banall_toggle_callback(_, query: CallbackQuery):
     chat_id = query.message.chat.id
 
     if not await is_user_exempt(chat_id, user_id):
-        return await query.answer(font("❌ This button is for authorized admins only!"), show_alert=True)
+        return await query.answer(font(" This button is for authorized admins only!"), show_alert=True)
 
     enabled = await is_banall_enabled(chat_id)
     new_state = not enabled
@@ -268,7 +268,7 @@ async def banall_toggle_callback(_, query: CallbackQuery):
 
     status_text = "Enabled" if new_state else "Disabled"
     await query.message.edit_text(
-        font(f"🛡️ <b>Banall Security Status:</b> {status_text}\n\n"
+        font(f" <b>Banall Security Status:</b> {status_text}\n\n"
              "When enabled, the security trap will trigger on unauthorized use of 'banall'."),
         reply_markup=await get_antibanall_keyboard(chat_id),
         parse_mode=enums.ParseMode.HTML

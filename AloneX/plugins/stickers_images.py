@@ -17,10 +17,10 @@ from telegram import Update, InlineKeyboardMarkup, InlineKeyboardButton, InputSt
 from telegram.ext import ContextTypes
 
 
-__module__ = "𝐒ᴛɪᴄᴋᴇʀ-𝐈ᴍᴀɢᴇ🎨"
+__module__ = "𝐒ᴛɪᴄᴋᴇʀ-𝐈ᴍᴀɢᴇ"
 
 __help__ = """
-*Sticker/Image🎨*
+*Sticker/Image*
 
 *Description:*  
 Manage, create, and edit stickers or images directly from your chat. Convert images, apply effects, and more.
@@ -64,7 +64,7 @@ async def CreatOrAddSticker(update: Update, context: ContextTypes.DEFAULT_TYPE):
             pass
     
     if not message.reply_to_message:
-        return await message.reply_text(font("🤷 Reply to an image/sticker/gif for kang."))
+        return await message.reply_text(font(" Reply to an image/sticker/gif for kang."))
     
     replied = message.reply_to_message
     is_valid = False
@@ -95,7 +95,7 @@ async def CreatOrAddSticker(update: Update, context: ContextTypes.DEFAULT_TYPE):
         sticker_format = constants.StickerFormat.VIDEO
     
     if not is_valid:
-        return await message.reply_text(font("🤷 Reply to a valid image/sticker/gif for kang."))
+        return await message.reply_text(font(" Reply to a valid image/sticker/gif for kang."))
     
     if emoji_arg:
         import unicodedata
@@ -118,7 +118,7 @@ async def CreatOrAddSticker(update: Update, context: ContextTypes.DEFAULT_TYPE):
     try:
         file_id = get_media_id(replied)
         if not file_id[1]:
-            return await message.reply_text(font("❌ Cannot get media file."))
+            return await message.reply_text(font(" Cannot get media file."))
         
         file = await bot.get_file(file_id[1])
         
@@ -132,7 +132,7 @@ async def CreatOrAddSticker(update: Update, context: ContextTypes.DEFAULT_TYPE):
         
         sticker_file = file_path
     except Exception as e:
-        return await message.reply_text(f"❌ Error downloading media: {str(e)}")
+        return await message.reply_text(f" Error downloading media: {str(e)}")
     
     if emoji_arg:
         sticker_emoji = emoji_arg
@@ -140,10 +140,10 @@ async def CreatOrAddSticker(update: Update, context: ContextTypes.DEFAULT_TYPE):
         sticker_emoji = replied.sticker.emoji
     else:
         import random
-        emoji_list = ["😀", "😁", "😂", "🤣", "😃", "😄", "😅", "😆", "😉", "😊", "😋", "😎", "😍", "😘", "🥰", "😗", "😙", "😚", "🙂", "🤗", "🤩", "🤔", "🤨", "😐", "😑", "😶", "🙄", "😏", "😣", "😥", "😮", "🤐", "😯", "😪", "😫", "😴", "😌", "😛", "😜", "😝", "🤤", "😒", "😓", "😔", "😕", "🙃", "🤑", "😲", "☹️", "🙁", "😖", "😞", "😟", "😤", "😢", "😭", "😦", "😧", "😨", "😩", "🤯", "😬", "😰", "😱", "🥵", "🥶", "😳", "🤪", "😵", "😡", "😠", "🤬", "😷", "🤒", "🤕", "🤢", "🤮", "🤧", "😇", "🤠", "🤡", "🥳", "🥴", "🥺", "🤥", "🤫", "🤭", "🧐", "🤓", "😈", "👿", "👹", "👺", "💀", "👻", "👽", "🤖", "💩", "😺", "😸", "😹", "😻", "😼", "😽", "🙀", "😿", "😾"]
+        emoji_list = ["", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""]
         sticker_emoji = random.choice(emoji_list)
     
-    msg = await message.reply_text(font("✨ *Kanging the sticker....*"), parse_mode=constants.ParseMode.MARKDOWN)
+    msg = await message.reply_text(font(" *Kanging the sticker....*"), parse_mode=constants.ParseMode.MARKDOWN)
     
     pack_exists = False
     try:
@@ -155,11 +155,11 @@ async def CreatOrAddSticker(update: Update, context: ContextTypes.DEFAULT_TYPE):
         else:
             if sticker_file and os.path.exists(sticker_file):
                 os.remove(sticker_file)
-            return await msg.edit_text(f"❌ Error: {str(e)}")
+            return await msg.edit_text(f" Error: {str(e)}")
     except Exception as e:
         if sticker_file and os.path.exists(sticker_file):
             os.remove(sticker_file)
-        return await msg.edit_text(f"❌ Error: {str(e)}")
+        return await msg.edit_text(f" Error: {str(e)}")
     
     if not pack_exists:
         try:
@@ -180,16 +180,16 @@ async def CreatOrAddSticker(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 os.remove(sticker_file)
             if done:
                 return await msg.edit_text(
-                    text=f"⚡ *Successfully Created New Sticker Pack!*\n\n🎭 Emoji: {sticker_emoji}",
+                    text=f" *Successfully Created New Sticker Pack!*\n\n Emoji: {sticker_emoji}",
                     parse_mode=constants.ParseMode.MARKDOWN,
                     reply_markup=InlineKeyboardMarkup([[
-                        InlineKeyboardButton(font('🧏 Sticker Pack'), url=pack_link)
+                        InlineKeyboardButton(font(' Sticker Pack'), url=pack_link)
                     ]])
                 )
         except Exception as e:
             if sticker_file and os.path.exists(sticker_file):
                 os.remove(sticker_file)
-            return await msg.edit_text(text=f"❌ Error while creating new pack: {str(e)}")
+            return await msg.edit_text(text=f" Error while creating new pack: {str(e)}")
     
     try:
         with open(sticker_file, 'rb') as sticker_data:
@@ -206,16 +206,16 @@ async def CreatOrAddSticker(update: Update, context: ContextTypes.DEFAULT_TYPE):
             os.remove(sticker_file)
         if done:
             await msg.edit_text(
-                text=f"⚡ *Successfully Added Sticker to Pack!*\n\n🎭 Emoji: {sticker_emoji}",
+                text=f" *Successfully Added Sticker to Pack!*\n\n Emoji: {sticker_emoji}",
                 parse_mode=constants.ParseMode.MARKDOWN,
                 reply_markup=InlineKeyboardMarkup([[
-                    InlineKeyboardButton(font('🧏 Sticker Pack'), url=pack_link)
+                    InlineKeyboardButton(font(' Sticker Pack'), url=pack_link)
                 ]])
             )
     except Exception as e:
         if sticker_file and os.path.exists(sticker_file):
             os.remove(sticker_file)
-        return await msg.edit_text(text=f"❌ Error while adding sticker to pack: {str(e)}")
+        return await msg.edit_text(text=f" Error while adding sticker to pack: {str(e)}")
 
 
 async def get_stickers(query: str, limit: int = 15):
@@ -236,7 +236,7 @@ async def get_stickers(query: str, limit: int = 15):
         try:
             async with session.post(url, json=data, headers=headers) as response:
                 data = await response.json()
-                return {'stickers': data['result']['stickerSets']} if data['ok'] == True else {'error': '🤷 Stickers not found'}
+                return {'stickers': data['result']['stickerSets']} if data['ok'] == True else {'error': ' Stickers not found'}
         except Exception as e:
             return {'error': str(e)}
 
@@ -246,19 +246,19 @@ async def emoji_mix_func(update, context):
     m = update.effective_message
     if len(m.text.split(maxsplit=1)) != 2:
         return await m.reply_text(
-            "<b>Incorrect! Example</b>: <code>/emix 😉+😀</code>",
+            "<b>Incorrect! Example</b>: <code>/emix +</code>",
             parse_mode=constants.ParseMode.HTML
         )
     args = m.text.split(maxsplit=1)[1]
     if '+' not in args:
         return await m.reply_text(
-            "<b>Incorrect! Example</b>: <code>/emix 😉+😀</code>",
+            "<b>Incorrect! Example</b>: <code>/emix +</code>",
             parse_mode=constants.ParseMode.HTML
         )
     parts = args.split('+', maxsplit=1)
     if len(parts) != 2:
         return await m.reply_text(
-            "<b>Incorrect! Example</b>: <code>/emix 😉+😀</code>",
+            "<b>Incorrect! Example</b>: <code>/emix +</code>",
             parse_mode=constants.ParseMode.HTML
         )
     emoji_1, emoji_2 = parts[0].strip(), parts[1].strip()
@@ -268,7 +268,7 @@ async def emoji_mix_func(update, context):
             try:
                 if response.status != 200:
                     return await m.reply_text(
-                        f"*❌ ERROR*: API returned status code {response.status}",
+                        f"* ERROR*: API returned status code {response.status}",
                         parse_mode=constants.ParseMode.MARKDOWN
                     )
                 image_content = await response.read()
@@ -280,7 +280,7 @@ async def emoji_mix_func(update, context):
                 await m.reply_document(path, f"*By {config.BOT_USERNAME}*", parse_mode=constants.ParseMode.MARKDOWN)
             except Exception as e:
                 return await m.reply_text(
-                    f"*❌ ERROR*: `{str(e)}`",
+                    f"* ERROR*: `{str(e)}`",
                     parse_mode=constants.ParseMode.MARKDOWN
                 )
             finally:
@@ -296,17 +296,17 @@ async def reverse(update, context):
     valid = (r.sticker or (r.photo[-1] if r.photo else r.photo)) if r and (r.sticker or r.photo) else None
     if not valid:
         return await m.reply_text(
-          text='❌ *Reply to sticker or photo ...*',
+          text=' *Reply to sticker or photo ...*',
           parse_mode=constants.ParseMode.MARKDOWN
         )
     elif r and r.sticker:
         return await m.reply_text(
-          text="ℹ️ *Convert the sticker to jpeg using our /getsticker then try /reverse.*", 
+          text=" *Convert the sticker to jpeg using our /getsticker then try /reverse.*", 
           parse_mode=constants.ParseMode.MARKDOWN
         )
     media = await bot.get_file(valid.file_id)
     image_url = media['file_path']
-    msg = await m.reply_text(font('🔎 *Uploading to Google ...*'), parse_mode=constants.ParseMode.MARKDOWN)
+    msg = await m.reply_text(font(' *Uploading to Google ...*'), parse_mode=constants.ParseMode.MARKDOWN)
     url = 'https://www.google.com/searchbyimage?sbisrc=4chanx&image_url={}&safe=off'.format(quote_plus(image_url))
     headers = {
          'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
@@ -328,10 +328,10 @@ async def reverse(update, context):
                         soup = BeautifulSoup(content, 'html.parser')
                         title = soup.find('div', class_='r5a77d')
                         results = soup.find_all('div', class_='v7jaNc')
-                        text = f"✨ *Results for image:*\n\n"
+                        text = f" *Results for image:*\n\n"
                         if title:
                             title_text = escape_markdown(title.text)
-                            text += f"🟢 *{title_text}*\n"
+                            text += f" *{title_text}*\n"
                         if results:
                             for idx, src in enumerate(results, start=1):
                                  src_text = escape_markdown(src.text)
@@ -339,7 +339,7 @@ async def reverse(update, context):
                         text += f"\n\n*By {config.BOT_USERNAME}*"
                         button = InlineKeyboardMarkup(
                           [[
-                            InlineKeyboardButton(font('🔎 Google Search'), url=str(response.url))
+                            InlineKeyboardButton(font(' Google Search'), url=str(response.url))
                           ]]
                         )
                         await msg.edit_text(
@@ -348,7 +348,7 @@ async def reverse(update, context):
                           reply_markup=button
                         )     
     except Exception as e:
-        await msg.edit_text(f'❌ ERROR: {str(e)}')
+        await msg.edit_text(f' ERROR: {str(e)}')
 
 
 @Command('watermark')
@@ -360,10 +360,10 @@ async def watermark(update, context):
     mark = m.text.split(':')[0].replace(cmd, '').strip() if ':' in m.text else None
     size = int(m.text.split(':', 1)[1].strip()) if ':' in m.text and m.text.split(':', 1)[1].strip().isdigit() else None
     if not (mark and size):
-        return await m.reply_text(font('*❌ Your given pattern is incorrect*.\n\nUsage: `/watermark YourText:50`'), parse_mode=constants.ParseMode.MARKDOWN)
+        return await m.reply_text(font('* Your given pattern is incorrect*.\n\nUsage: `/watermark YourText:50`'), parse_mode=constants.ParseMode.MARKDOWN)
     valid = (r.sticker or (r.photo[-1] if r.photo else r.photo)) if r and (r.sticker or r.photo) else None
     if not valid:
-        return await m.reply_text(font('❌ *Reply to sticker or photo ...*'), parse_mode=constants.ParseMode.MARKDOWN)
+        return await m.reply_text(font(' *Reply to sticker or photo ...*'), parse_mode=constants.ParseMode.MARKDOWN)
     media = await bot.get_file(valid.file_id)
     path = await media.download_to_drive(f'ImageWaterMark_{m.id}.jpeg')
     photo = Image.open(path)
@@ -377,7 +377,7 @@ async def watermark(update, context):
     y = height - textheight - margin
     draw.text((x, y), mark, font=font, fill="white")
     photo.save(path)
-    txt = f"🖼️ *WaterMark Size*: {size}%\n\n" + f"*By {config.BOT_USERNAME}*"
+    txt = f" *WaterMark Size*: {size}%\n\n" + f"*By {config.BOT_USERNAME}*"
     await m.reply_photo(path, caption=txt, parse_mode=constants.ParseMode.MARKDOWN)
     await m.reply_document(path, caption=txt, parse_mode=constants.ParseMode.MARKDOWN)
     os.remove(path)
@@ -397,12 +397,12 @@ async def aniStickerToGif(update, context):
         requests_path = f"user_{user.full_name}_stg.mp4"
         clip.write_videofile(requests_path, codec="libx264")
         await message.chat.send_animation(
-               requests_path, caption=f"⚡* By @{bot.username}*", parse_mode=constants.ParseMode.MARKDOWN
+               requests_path, caption=f"* By @{bot.username}*", parse_mode=constants.ParseMode.MARKDOWN
         )
         os.remove(requests_path)
         os.remove(path)
      except Exception as e:
-         return await message.reply_text(f"❌ Error: {e}")
+         return await message.reply_text(f" Error: {e}")
 
 
 @Command('blur')
@@ -413,13 +413,13 @@ async def blur(update, context):
      args = context.args
      blur_radious = int(args[0]) if args and args[0].isdigit() and (int(args[0]) <= 100 and int(args[0]) >= 1) else 60
      valid = (r.sticker or (r.photo[-1] if r.photo else r.photo)) if r and (r.sticker or r.photo) else None
-     if not valid: return await m.reply_text(font('❌ *Reply to sticker or photo ...*'), parse_mode=constants.ParseMode.MARKDOWN)
+     if not valid: return await m.reply_text(font(' *Reply to sticker or photo ...*'), parse_mode=constants.ParseMode.MARKDOWN)
      media = await bot.get_file(valid.file_id)
      path = await media.download_to_drive(f'imageblur_{m.id}.jpeg')
      Photo = Image.open(path)
      photo = Photo.filter(ImageFilter.GaussianBlur(radius=blur_radious))
      photo.save(path)
-     txt = f"🖼️ *Blur radious*: {blur_radious}%\n\n" + f"*By {config.BOT_USERNAME}*"
+     txt = f" *Blur radious*: {blur_radious}%\n\n" + f"*By {config.BOT_USERNAME}*"
      await m.reply_photo(path, caption=txt, parse_mode=constants.ParseMode.MARKDOWN)
      await m.reply_document(path, caption=txt, parse_mode=constants.ParseMode.MARKDOWN)
      os.remove(path)
@@ -438,7 +438,7 @@ async def JpegToSticker(update, context):
     ]
           )
      ):
-         return await message.reply_text(font("🤷 Reply to the photo for convert photo/docu to sticker."))
+         return await message.reply_text(font(" Reply to the photo for convert photo/docu to sticker."))
      photo = message.reply_to_message.photo
      file = await bot.get_file(photo[-1].file_id)
      media = await file.download_to_drive('sticker.png')
@@ -457,7 +457,7 @@ async def StickerToJpeg(update, context):
           and not message.reply_to_message.sticker 
           or message.reply_to_message.sticker.is_animated
      ):
-         return await message.reply_text(font("🤷 Reply to the sticker for convert to jpeg."))
+         return await message.reply_text(font(" Reply to the sticker for convert to jpeg."))
      sticker= message.reply_to_message.sticker
      file = await bot.get_file(sticker.file_id)
      media = await file.download_to_drive('photo.png')
@@ -475,13 +475,13 @@ async def DeleteStickerFromPack(update, context):
           not message.reply_to_message or message.reply_to_message
           and not message.reply_to_message.sticker 
      ):
-         return await message.reply_text(font("🤷 Reply to the sticker for delete from pack."))
+         return await message.reply_text(font(" Reply to the sticker for delete from pack."))
      sticker = message.reply_to_message.sticker
      try:
          if await bot.delete_sticker_from_set(sticker.file_id):
-              return await message.reply_text(font("⚡ *Sticker Removed from Pack!*"), parse_mode=constants.ParseMode.MARKDOWN)
+              return await message.reply_text(font(" *Sticker Removed from Pack!*"), parse_mode=constants.ParseMode.MARKDOWN)
      except Exception as e:
-          return await message.reply_text(text=f"❌ Error while deleting sticker from pack: {str(e)}")
+          return await message.reply_text(text=f" Error while deleting sticker from pack: {str(e)}")
 
 
 @Command('stickers')
@@ -490,11 +490,11 @@ async def search_stickers(update, context):
     try:
         query = message.text.split(maxsplit=1)[1]
     except IndexError:
-        return await message.reply_text(font("❌ Please provide a search query!"))
+        return await message.reply_text(font(" Please provide a search query!"))
     if not query.strip():
-        return await message.reply_text(font("❌ Search query cannot be empty!"))
+        return await message.reply_text(font(" Search query cannot be empty!"))
     msg = await message.chat.send_message(
-      text="🔎 *Searching Stickers ...*",
+      text=" *Searching Stickers ...*",
       parse_mode=constants.ParseMode.MARKDOWN
     )
     try:
@@ -502,10 +502,10 @@ async def search_stickers(update, context):
         error = data.get('error')
         stickers = data.get('stickers', [])
         if error or len(stickers) == 0:
-            return await msg.edit_text(f"🔍 No sticker packs found for '{query}'")     
+            return await msg.edit_text(f" No sticker packs found for '{query}'")     
         response_lines = [f"<b>Stickers found for {query}</b>:\n"]
         for idx, sticker in enumerate(stickers, start=1):
-            safety_icon = '✅' if sticker.get('safe', False) else '❌'
+            safety_icon = '' if sticker.get('safe', False) else ''
             sticker_title = sticker.get('title', 'Unnamed Sticker Pack')
             sticker_link = f"https://t.me/addstickers/{sticker['name']}"
             response_lines.append(
@@ -519,4 +519,4 @@ async def search_stickers(update, context):
             disable_web_page_preview=True
         )
     except Exception as e:
-        await msg.edit_text(f"❌ An error occurred: {str(e)}")
+        await msg.edit_text(f" An error occurred: {str(e)}")

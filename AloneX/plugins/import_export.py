@@ -70,10 +70,10 @@ async def export_chat_data(client, message: Message):
         chat_id = await connection_db.get_connected_chat(user_id) or chat_id
 
     if not await is_admin(chat_id, user_id):
-        return await message.reply_text(font("❌ You must be an administrator to export chat settings."))
+        return await message.reply_text(font(" You must be an administrator to export chat settings."))
 
     if chat_id in rate_limit:
-        return await message.reply_text(font("⏳ This command is rate limited. Please try again later."))
+        return await message.reply_text(font(" This command is rate limited. Please try again later."))
 
     args = message.text.split()[1:]
     categories = [cat.lower() for cat in args] if args else list(SUPPORTED_CATEGORIES.keys())
@@ -81,9 +81,9 @@ async def export_chat_data(client, message: Message):
     # Filter valid categories
     categories = [cat for cat in categories if cat in SUPPORTED_CATEGORIES]
     if not categories:
-        return await message.reply_text(font(f"❌ No valid categories specified. Supported: {', '.join(SUPPORTED_CATEGORIES.keys())}"))
+        return await message.reply_text(font(f" No valid categories specified. Supported: {', '.join(SUPPORTED_CATEGORIES.keys())}"))
 
-    m = await message.reply_text(font("🔄 Exporting chat data..."))
+    m = await message.reply_text(font(" Exporting chat data..."))
     data = {"chat_id": chat_id, "exported_at": str(datetime.now()), "categories": {}}
 
     try:
@@ -238,7 +238,7 @@ async def export_chat_data(client, message: Message):
 
         await message.reply_document(
             document=file_name,
-            caption=font(f"✅ Chat configuration exported.\n\nCategories: {', '.join(categories)}")
+            caption=font(f" Chat configuration exported.\n\nCategories: {', '.join(categories)}")
         )
         await m.delete()
         os.remove(file_name)
@@ -246,7 +246,7 @@ async def export_chat_data(client, message: Message):
 
     except Exception as e:
         LOGGER.error(f"Export error: {e}")
-        await m.edit_text(font(f"❌ An error occurred during export: {e}"))
+        await m.edit_text(font(f" An error occurred during export: {e}"))
 
 @pbot.on_message(filters.command("import") & ~filters.forwarded)
 @only_groups
@@ -258,21 +258,21 @@ async def import_chat_data(client, message: Message):
 
     creator_id = await get_chat_creator(chat_id)
     if user_id != creator_id and user_id not in [config.OWNER_ID]:
-        return await message.reply_text(font("❌ Only the group creator can import chat settings for security reasons."))
+        return await message.reply_text(font(" Only the group creator can import chat settings for security reasons."))
 
     if chat_id in rate_limit:
-        return await message.reply_text(font("⏳ This command is rate limited. Please try again later."))
+        return await message.reply_text(font(" This command is rate limited. Please try again later."))
 
     if not message.reply_to_message or not message.reply_to_message.document:
-        return await message.reply_text(font("❌ Please reply to an export JSON file to import settings."))
+        return await message.reply_text(font(" Please reply to an export JSON file to import settings."))
 
     if not message.reply_to_message.document.file_name.endswith(".json"):
-        return await message.reply_text(font("❌ Invalid file format. Please reply to a .json export file."))
+        return await message.reply_text(font(" Invalid file format. Please reply to a .json export file."))
 
     args = message.text.split()[1:]
     target_categories = [cat.lower() for cat in args] if args else []
 
-    m = await message.reply_text(font("🔄 Downloading and importing chat data..."))
+    m = await message.reply_text(font(" Downloading and importing chat data..."))
 
     try:
         file_path = await message.reply_to_message.download()
@@ -281,7 +281,7 @@ async def import_chat_data(client, message: Message):
         os.remove(file_path)
 
         if "categories" not in data:
-            return await m.edit_text(font("❌ Invalid export file structure."))
+            return await m.edit_text(font(" Invalid export file structure."))
 
         imported = []
         cats = data["categories"]
@@ -426,12 +426,12 @@ async def import_chat_data(client, message: Message):
             except Exception as ie:
                 LOGGER.error(f"Error importing {cat_name}: {ie}")
 
-        await m.edit_text(font(f"✅ Successfully imported settings for: {', '.join(imported)}"))
+        await m.edit_text(font(f" Successfully imported settings for: {', '.join(imported)}"))
         rate_limit[chat_id] = True
 
     except Exception as e:
         LOGGER.error(f"Import error: {e}")
-        await m.edit_text(font(f"❌ An error occurred during import: {e}"))
+        await m.edit_text(font(f" An error occurred during import: {e}"))
 
 @pbot.on_message(filters.command("reset") & ~filters.forwarded)
 @only_groups
@@ -443,9 +443,9 @@ async def reset_chat_data(client, message: Message):
 
     creator_id = await get_chat_creator(chat_id)
     if user_id != creator_id and user_id not in [config.OWNER_ID]:
-        return await message.reply_text(font("❌ Only the group creator can reset chat settings."))
+        return await message.reply_text(font(" Only the group creator can reset chat settings."))
 
-    m = await message.reply_text(font("🔄 Resetting all chat settings..."))
+    m = await message.reply_text(font(" Resetting all chat settings..."))
 
     try:
         from AloneX.db import (
@@ -485,13 +485,13 @@ async def reset_chat_data(client, message: Message):
         await riddle.reset_chat_riddle(chat_id)
         await couple.reset_chat_couple(chat_id)
 
-        await m.edit_text(font("✅ All chat settings have been reset to default."))
+        await m.edit_text(font(" All chat settings have been reset to default."))
 
     except Exception as e:
         LOGGER.error(f"Reset error: {e}")
-        await m.edit_text(font(f"❌ An error occurred during reset: {e}"))
+        await m.edit_text(font(f" An error occurred during reset: {e}"))
 
-__mod_name__ = "𝐈ᴍᴘᴏʀᴛ/𝐄xᴘᴏʀᴛ🛠"
+__mod_name__ = "𝐈ᴍᴘᴏʀᴛ/𝐄xᴘᴏʀᴛ"
 __help__ = """
 **Import/Export Settings**
 

@@ -1,7 +1,7 @@
-__module__ = "𝐀ᴘᴘʀᴏᴠᴀʟs✅"
+__module__ = "𝐀ᴘᴘʀᴏᴠᴀʟs"
 
 __help__ = """
-*Approvals✅*
+*Approvals*
 
 *Description:*  
 Approve trusted users/channels to bypass locks, blocklists, and anti-flood actions.
@@ -72,51 +72,51 @@ async def approve_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
             user_link = await get_user_mention(bot, message.chat.id, user_id)
             if await is_user_approved_cached(message.chat.id, user_id):
                 return await message.reply_text(
-                    f"ℹ️ {user_link} is already approved!",
+                    f" {user_link} is already approved!",
                     parse_mode=constants.ParseMode.HTML,
                     disable_web_page_preview=True
                 )
             await approve_user(message.chat.id, user_id)
             is_user_approved_cached.clear_cache()
             await message.reply_text(
-                f"✅ Channel {user_link} has been approved in <b>{html.escape(message.chat.title)}</b>!\n"
-                f"🛡️ They will now be ignored by automated admin actions like locks, blocklists, and antiflood.",
+                f" Channel {user_link} has been approved in <b>{html.escape(message.chat.title)}</b>!\n"
+                f" They will now be ignored by automated admin actions like locks, blocklists, and antiflood.",
                 parse_mode=constants.ParseMode.HTML,
                 disable_web_page_preview=True
             )
             return
         except Exception as e:
             return await message.reply_text(
-                text=f"❌ Error approving channel: {html.escape(str(e))}",
+                text=f" Error approving channel: {html.escape(str(e))}",
                 parse_mode=constants.ParseMode.HTML,
                 disable_web_page_preview=True
             )
     user_id = await extract_user(message, False)
     if not user_id:
         return await message.reply_text(
-            text="🙋 *Reply to a user/channel message or give their ID/username!*\n\n"
-                 "💡 *To approve channels:* Reply to a message sent by the channel",
+            text=" *Reply to a user/channel message or give their ID/username!*\n\n"
+                 " *To approve channels:* Reply to a message sent by the channel",
             parse_mode=constants.ParseMode.MARKDOWN
         )
     if user_id == message.from_user.id:
-        return await message.reply_text("🙃 You can't approve yourself!")
+        return await message.reply_text(" You can't approve yourself!")
     if user_id in DEV_LIST:
-        return await message.reply_text("👑 Devs don't need approval!")
+        return await message.reply_text(" Devs don't need approval!")
     try:
         is_channel = user_id < 0
         if is_channel:
             user_link = await get_user_mention(bot, message.chat.id, user_id)
             if await is_user_approved_cached(message.chat.id, user_id):
                 return await message.reply_text(
-                    f"ℹ️ {user_link} is already approved!",
+                    f" {user_link} is already approved!",
                     parse_mode=constants.ParseMode.HTML,
                     disable_web_page_preview=True
                 )
             await approve_user(message.chat.id, user_id)
             is_user_approved_cached.clear_cache()
             await message.reply_text(
-                f"✅ Channel {user_link} has been approved in <b>{html.escape(message.chat.title)}</b>!\n"
-                f"🛡️ They will now be ignored by automated admin actions like locks, blocklists, and antiflood.",
+                f" Channel {user_link} has been approved in <b>{html.escape(message.chat.title)}</b>!\n"
+                f" They will now be ignored by automated admin actions like locks, blocklists, and antiflood.",
                 parse_mode=constants.ParseMode.HTML,
                 disable_web_page_preview=True
             )
@@ -124,18 +124,18 @@ async def approve_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
             member = await message.chat.get_member(user_id)
             user_link = await get_user_mention(bot, message.chat.id, user_id)
             if member.status in [ChatMemberStatus.ADMINISTRATOR, ChatMemberStatus.OWNER]:
-                return await message.reply_text(font("👮 Already admin, no need to approve!"))
+                return await message.reply_text(font(" Already admin, no need to approve!"))
             if await is_user_approved_cached(message.chat.id, user_id):
                 return await message.reply_text(
-                    f"ℹ️ {user_link} is already approved!",
+                    f" {user_link} is already approved!",
                     parse_mode=constants.ParseMode.HTML,
                     disable_web_page_preview=True
                 )
             await approve_user(message.chat.id, user_id)
             is_user_approved_cached.clear_cache()
             await message.reply_text(
-                f"✅ {user_link} has been approved in <b>{html.escape(message.chat.title)}</b>!\n"
-                f"🛡️ They will now be ignored by automated admin actions like locks, blocklists, and antiflood.",
+                f" {user_link} has been approved in <b>{html.escape(message.chat.title)}</b>!\n"
+                f" They will now be ignored by automated admin actions like locks, blocklists, and antiflood.",
                 parse_mode=constants.ParseMode.HTML,
                 disable_web_page_preview=True
             )
@@ -144,7 +144,7 @@ async def approve_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
         if "User_not_mutual_contact" in error_msg:
             error_msg = "Cannot approve user because they haven't interacted with the bot yet."
         return await message.reply_text(
-            text=f"❌ Error: {html.escape(error_msg)}",
+            text=f" Error: {html.escape(error_msg)}",
             parse_mode=constants.ParseMode.HTML,
             disable_web_page_preview=True
         )
@@ -162,49 +162,49 @@ async def unapprove_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
             user_link = await get_user_mention(bot, message.chat.id, user_id)
             if not await is_user_approved_cached(message.chat.id, user_id):
                 return await message.reply_text(
-                    f"ℹ️ {user_link} is not approved.",
+                    f" {user_link} is not approved.",
                     parse_mode=constants.ParseMode.HTML,
                     disable_web_page_preview=True
                 )
             await unapprove_user(message.chat.id, user_id)
             is_user_approved_cached.clear_cache()
             await message.reply_text(
-                f"🚫 Approval removed from channel {user_link}",
+                f" Approval removed from channel {user_link}",
                 parse_mode=constants.ParseMode.HTML,
                 disable_web_page_preview=True
             )
             return
         except Exception as e:
             return await message.reply_text(
-                text=f"❌ Error unapproving channel: {html.escape(str(e))}",
+                text=f" Error unapproving channel: {html.escape(str(e))}",
                 parse_mode=constants.ParseMode.HTML,
                 disable_web_page_preview=True
             )
     user_id = await extract_user(message, False)
     if not user_id:
         return await message.reply_text(
-            text="🙋 *Reply to a user/channel message or give their ID/username!*\n\n"
-                 "💡 *To unapprove channels:* Reply to a message sent by the channel",
+            text=" *Reply to a user/channel message or give their ID/username!*\n\n"
+                 " *To unapprove channels:* Reply to a message sent by the channel",
             parse_mode=constants.ParseMode.MARKDOWN
         )
     try:
         user_link = await get_user_mention(bot, message.chat.id, user_id)
         if not await is_user_approved_cached(message.chat.id, user_id):
             return await message.reply_text(
-                f"ℹ️ {user_link} is not approved.",
+                f" {user_link} is not approved.",
                 parse_mode=constants.ParseMode.HTML,
                 disable_web_page_preview=True
             )
         await unapprove_user(message.chat.id, user_id)
         is_user_approved_cached.clear_cache()
         await message.reply_text(
-            f"🚫 Approval removed from {user_link}",
+            f" Approval removed from {user_link}",
             parse_mode=constants.ParseMode.HTML,
             disable_web_page_preview=True
         )
     except Exception as e:
         return await message.reply_text(
-            text=f"❌ Error: {html.escape(str(e))}",
+            text=f" Error: {html.escape(str(e))}",
             parse_mode=constants.ParseMode.HTML,
             disable_web_page_preview=True
         )
@@ -223,15 +223,15 @@ async def approval_status(update: Update, context: ContextTypes.DEFAULT_TYPE):
     try:
         user_link = await get_user_mention(bot, message.chat.id, user_id)
         is_approved = await is_user_approved_cached(message.chat.id, user_id)
-        status = "✅ APPROVED" if is_approved else "🚫 NOT APPROVED"
-        entity_type = "📢 Channel" if user_id < 0 else "👤 User"
-        msg = f"{entity_type}: {user_link}\n📊 Status: {status}"
+        status = " APPROVED" if is_approved else " NOT APPROVED"
+        entity_type = " Channel" if user_id < 0 else " User"
+        msg = f"{entity_type}: {user_link}\n Status: {status}"
         if is_approved:
-            msg += "\n✨ Bypasses locks, blocklists & antiflood"
+            msg += "\n Bypasses locks, blocklists & antiflood"
         await message.reply_text(msg, parse_mode=constants.ParseMode.HTML, disable_web_page_preview=True)
     except Exception as e:
         return await message.reply_text(
-            text=f"❌ Error: {html.escape(str(e))}",
+            text=f" Error: {html.escape(str(e))}",
             parse_mode=constants.ParseMode.HTML,
             disable_web_page_preview=True
         )
@@ -245,19 +245,19 @@ async def list_approved(update: Update, context: ContextTypes.DEFAULT_TYPE):
     users = await get_all_approved_users_cached(message.chat.id)
     if not users:
         return await message.reply_text(
-            "📝 No approved users/channels.",
+            " No approved users/channels.",
             parse_mode=constants.ParseMode.HTML
         )
-    text = f"✅ <b>Approved Users/Channels in {html.escape(message.chat.title)}</b>\n\n"
+    text = f" <b>Approved Users/Channels in {html.escape(message.chat.title)}</b>\n\n"
     for i, user_id in enumerate(users, start=1):
         try:
             user_link = await get_user_mention(bot, message.chat.id, user_id)
-            entity_type = "📢" if user_id < 0 else "👤"
+            entity_type = "" if user_id < 0 else ""
             text += f"{i}. {entity_type} {user_link}\n"
         except:
-            entity_type = "📢" if user_id < 0 else "👤"
+            entity_type = "" if user_id < 0 else ""
             text += f"{i}. {entity_type} <code>{user_id}</code> (Deleted/Inaccessible)\n"
-    text += f"\n📊 Total: {len(users)}"
+    text += f"\n Total: {len(users)}"
     await message.reply_text(text, parse_mode=constants.ParseMode.HTML, disable_web_page_preview=True)
 
 @Command("unapproveall")
@@ -268,17 +268,17 @@ async def unapprove_all_confirm(update: Update, context: ContextTypes.DEFAULT_TY
     users = await get_all_approved_users_cached(message.chat.id)
     if not users:
         return await message.reply_text(
-            "📝 No approved users/channels to remove.",
+            " No approved users/channels to remove.",
             parse_mode=constants.ParseMode.HTML
         )
     keyboard = InlineKeyboardMarkup([
         [
-            InlineKeyboardButton(font("✅ Confirm"), callback_data=f"clr_app#{message.chat.id}"),
-            InlineKeyboardButton(font("❌ Cancel"), callback_data="clr_app#cancel")
+            InlineKeyboardButton(font(" Confirm"), callback_data=f"clr_app#{message.chat.id}"),
+            InlineKeyboardButton(font(" Cancel"), callback_data="clr_app#cancel")
         ]
     ])
     await message.reply_text(
-        f"⚠️ <b>Warning!</b>\n\n"
+        f" <b>Warning!</b>\n\n"
         f"Remove approval from <b>{len(users)}</b> users/channels?\n"
         f"This action cannot be undone.",
         reply_markup=keyboard,
@@ -293,11 +293,11 @@ async def handle_clear_approval_cb(update: Update, context: ContextTypes.DEFAULT
     bot = context.bot
     member = await bot.get_chat_member(chat.id, user.id)
     if member.status != ChatMemberStatus.OWNER:
-        return await query.answer(font("🚫 Only the group owner can do this!"), show_alert=True)
+        return await query.answer(font(" Only the group owner can do this!"), show_alert=True)
     await query.answer()
     action = query.data.split("#")[1]
     if action == "cancel":
-        return await query.edit_message_text(font("❌ Cancelled."), parse_mode=constants.ParseMode.HTML)
+        return await query.edit_message_text(font(" Cancelled."), parse_mode=constants.ParseMode.HTML)
     chat_id = int(action)
     users = await get_all_approved_users_cached(chat_id)
     count = len(users)
@@ -305,6 +305,6 @@ async def handle_clear_approval_cb(update: Update, context: ContextTypes.DEFAULT
     is_user_approved_cached.clear_cache()
     get_all_approved_users_cached.clear_cache()
     await query.edit_message_text(
-        f"✅ Removed approval from <b>{count}</b> users/channels.",
+        f" Removed approval from <b>{count}</b> users/channels.",
         parse_mode=constants.ParseMode.HTML
             )

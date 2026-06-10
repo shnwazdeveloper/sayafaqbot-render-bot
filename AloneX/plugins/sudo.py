@@ -24,7 +24,7 @@ async def get_user_info(context, uid):
 @sudos_only
 async def sudolist(update, context):
     msg = update.effective_message
-    parts = ["💥 <b>Current Superusers :</b>\n\n"]
+    parts = [" <b>Current Superusers :</b>\n\n"]
     owner_ids = []
     if hasattr(config, 'OWNER_ID') and config.OWNER_ID:
         owner_ids = config.OWNER_ID if isinstance(config.OWNER_ID, list) else [config.OWNER_ID]
@@ -35,27 +35,27 @@ async def sudolist(update, context):
     supports = await get_all_support_users()
     wls = await get_all_whitelist_users()
     if owner_ids:
-        parts.append(" 🔱 <b>Owner:</b>\n\n")
+        parts.append("  <b>Owner:</b>\n\n")
         for owner in owner_ids:
             parts.append(f"• {await get_user_info(context, owner)}\n")
         parts.append("\n")
     if dev_ids:
-        parts.append(" 👨‍💻 <b>Developers:</b>\n\n")
+        parts.append("  <b>Developers:</b>\n\n")
         for dev in dev_ids:
             parts.append(f"• {await get_user_info(context, dev)}\n")
         parts.append("\n")
     if sudos:
-        parts.append(" 🔰 <b>Sudoers:</b>\n\n")
+        parts.append("  <b>Sudoers:</b>\n\n")
         for sudo in sudos:
             parts.append(f"• {await get_user_info(context, sudo)}\n")
         parts.append("\n")
     if supports:
-        parts.append(" 🛡 <b>Support:</b>\n\n")
+        parts.append("  <b>Support:</b>\n\n")
         for sup in supports:
             parts.append(f"• {await get_user_info(context, sup)}\n")
         parts.append("\n")
     if wls:
-        parts.append(" ✅ <b>Whitelisted:</b>\n\n")
+        parts.append("  <b>Whitelisted:</b>\n\n")
         for wl in wls:
             parts.append(f"• {await get_user_info(context, wl)}\n")
     text = "".join(parts)
@@ -81,8 +81,8 @@ async def manage_support(update, context):
 async def whitelist_list(update, context):
     users = await get_all_whitelist_users()
     if not users:
-        return await update.message.reply_text(font("⚡ No whitelisted users found."), parse_mode=constants.ParseMode.HTML)
-    parts = ["📝 <b>AloneX's Whitelisted Users</b>:\n\n"]
+        return await update.message.reply_text(font(" No whitelisted users found."), parse_mode=constants.ParseMode.HTML)
+    parts = [" <b>AloneX's Whitelisted Users</b>:\n\n"]
     for user_id in users:
         parts.append(f"• {await get_user_info(context, user_id)}\n")
     await update.message.reply_text("".join(parts), parse_mode=constants.ParseMode.HTML)
@@ -92,8 +92,8 @@ async def whitelist_list(update, context):
 async def support_list(update, context):
     users = await get_all_support_users()
     if not users:
-        return await update.message.reply_text(font("⚡ No support users found."), parse_mode=constants.ParseMode.HTML)
-    parts = ["🙋 <b>AloneX's Support Users</b>:\n\n"]
+        return await update.message.reply_text(font(" No support users found."), parse_mode=constants.ParseMode.HTML)
+    parts = [" <b>AloneX's Support Users</b>:\n\n"]
     for user_id in users:
         parts.append(f"• {await get_user_info(context, user_id)}\n")
     await update.message.reply_text("".join(parts), parse_mode=constants.ParseMode.HTML)
@@ -102,10 +102,10 @@ async def _manage_list(update, context, list_type: str):
     msg = update.effective_message
     args = msg.text.split()
     if len(args) != 3:
-        return await msg.reply_text(f"❌ Usage: `/{list_type.lower()} <user_id> <-add/-rm>`", parse_mode=constants.ParseMode.MARKDOWN)
+        return await msg.reply_text(f" Usage: `/{list_type.lower()} <user_id> <-add/-rm>`", parse_mode=constants.ParseMode.MARKDOWN)
     _, user_id, action = args
     if not user_id.isdigit() or action.lower() not in ["-add", "-rm"]:
-        return await msg.reply_text(f"❌ Invalid input!\nUsage: `/{list_type.lower()} <user_id> <-add/-rm>`", parse_mode=constants.ParseMode.MARKDOWN)
+        return await msg.reply_text(f" Invalid input!\nUsage: `/{list_type.lower()} <user_id> <-add/-rm>`", parse_mode=constants.ParseMode.MARKDOWN)
     user_id = int(user_id)
     db_add, db_remove = None, None
     if list_type == "Sudo":
@@ -121,11 +121,11 @@ async def _manage_list(update, context, list_type: str):
             try:
                 user = await context.bot.get_chat(user_id)
                 name = html.escape(user.full_name)
-                text = f"✅ <b>{name}</b> (<code>{user_id}</code>) added to {list_type}."
+                text = f" <b>{name}</b> (<code>{user_id}</code>) added to {list_type}."
             except:
-                text = f"✅ <code>{user_id}</code> added to {list_type}."
+                text = f" <code>{user_id}</code> added to {list_type}."
         else:
-            text = f"🧐 <code>{user_id}</code> is already in {list_type} or is a config user."
+            text = f" <code>{user_id}</code> is already in {list_type} or is a config user."
     elif action == "-rm":
         success = await db_remove(user_id)
         _user_cache.pop(user_id, None)
@@ -133,9 +133,9 @@ async def _manage_list(update, context, list_type: str):
             try:
                 user = await context.bot.get_chat(user_id)
                 name = html.escape(user.full_name)
-                text = f"❌ <b>{name}</b> (<code>{user_id}</code>) removed from {list_type}."
+                text = f" <b>{name}</b> (<code>{user_id}</code>) removed from {list_type}."
             except:
-                text = f"❌ <code>{user_id}</code> removed from {list_type}."
+                text = f" <code>{user_id}</code> removed from {list_type}."
         else:
-            text = f"🧐 <code>{user_id}</code> is not in {list_type} or is a protected config user."
+            text = f" <code>{user_id}</code> is not in {list_type} or is a protected config user."
     await msg.reply_text(text, parse_mode=constants.ParseMode.HTML)

@@ -43,9 +43,9 @@ def start_admin_cache_cleanup():
     if _cache_cleanup_task is None:
         _cache_cleanup_task = asyncio.create_task(_periodic_cache_cleanup())
 
-__module__ = "𝐀ᴅᴍɪɴ🛠️"
+__module__ = "𝐀ᴅᴍɪɴ"
 __help__ = """
-*Admin 🛠️ — Group management made simple*
+*Admin  — Group management made simple*
 
 *Member & moderation*
 • `/kick <reply|user>` — Remove a member.  
@@ -171,7 +171,7 @@ async def PurgeMsg(update: Update, context: ContextTypes.DEFAULT_TYPE):
     message_ids = list(range(reply.message_id, message.message_id + 1))
     
     if len(message_ids) > 300:
-        return await message.reply_text(font("*You cannot delete more than 300 messages at once! but try 299 🧏*"), parse_mode=constants.ParseMode.MARKDOWN)
+        return await message.reply_text(font("*You cannot delete more than 300 messages at once! but try 299 *"), parse_mode=constants.ParseMode.MARKDOWN)
     
     start = time.perf_counter()
     
@@ -201,7 +201,7 @@ async def PurgeMsg(update: Update, context: ContextTypes.DEFAULT_TYPE):
         except:
             title = str(chat_id)
 
-    log_text = f"🧹 <b>Purge</b>\n" \
+    log_text = f" <b>Purge</b>\n" \
                f"<b>Group:</b> {html.escape(title)}\n" \
                f"<b>Messages Deleted:</b> {deleted_count}\n" \
                f"<b>By:</b> {update.effective_user.mention_html()}\n" \
@@ -224,13 +224,13 @@ async def setChatDescription(update: Update, context: ContextTypes.DEFAULT_TYPE)
     
     description = ' '.join(context.args) if context.args else ''
     if not description:
-        return await m.reply_text(font('✋ *Provide some text to set it as chat description*. e.g: `/setcdes Support Chat`'), parse_mode=constants.ParseMode.MARKDOWN)
+        return await m.reply_text(font(' *Provide some text to set it as chat description*. e.g: `/setcdes Support Chat`'), parse_mode=constants.ParseMode.MARKDOWN)
     
     try:
         await bot.set_chat_description(chat_id, description[:254])
         clear_chat_cache(chat_id)
         await get_chat_cached(bot, chat_id, force_refresh=True)
-        await m.reply_text(font('✨ *Chat Description Updated!*'), parse_mode=constants.ParseMode.MARKDOWN)
+        await m.reply_text(font(' *Chat Description Updated!*'), parse_mode=constants.ParseMode.MARKDOWN)
 
         title = update.effective_chat.title
         if chat_id != update.effective_chat.id:
@@ -240,13 +240,13 @@ async def setChatDescription(update: Update, context: ContextTypes.DEFAULT_TYPE)
             except:
                 title = str(chat_id)
 
-        log_text = f"🛠️ <b>Chat Description Updated</b>\n" \
+        log_text = f" <b>Chat Description Updated</b>\n" \
                    f"<b>Group:</b> {html.escape(title)}\n" \
                    f"<b>By:</b> {update.effective_user.mention_html()}\n" \
                    f"<b>New Description:</b> {html.escape(description[:100])}..."
         asyncio.create_task(log_action(context.bot, chat_id, "admin", log_text))
     except Exception as e:
-        return await m.reply_text(f'❌ Error: {html.escape(str(e))}', parse_mode=constants.ParseMode.HTML)
+        return await m.reply_text(f' Error: {html.escape(str(e))}', parse_mode=constants.ParseMode.HTML)
 
 @Command(['setct', 'setchattitle'])
 @admin_check("can_change_info", protect_target=False)
@@ -257,13 +257,13 @@ async def setChatTitle(update: Update, context: ContextTypes.DEFAULT_TYPE):
     
     title_text = ' '.join(context.args) if context.args else ''
     if not title_text:
-        return await m.reply_text(font('✋ *Provide some text to set it as chat title*. e.g: `/setct Support Chat`'), parse_mode=constants.ParseMode.MARKDOWN)
+        return await m.reply_text(font(' *Provide some text to set it as chat title*. e.g: `/setct Support Chat`'), parse_mode=constants.ParseMode.MARKDOWN)
     
     try:
         await bot.set_chat_title(chat_id, title_text[:127])
         clear_chat_cache(chat_id)
         await get_chat_cached(bot, chat_id, force_refresh=True)
-        await m.reply_text(font('✨ *Chat title Updated!*'), parse_mode=constants.ParseMode.MARKDOWN)
+        await m.reply_text(font(' *Chat title Updated!*'), parse_mode=constants.ParseMode.MARKDOWN)
 
         title = update.effective_chat.title
         if chat_id != update.effective_chat.id:
@@ -273,13 +273,13 @@ async def setChatTitle(update: Update, context: ContextTypes.DEFAULT_TYPE):
             except:
                 title = str(chat_id)
 
-        log_text = f"🛠️ <b>Chat Title Updated</b>\n" \
+        log_text = f" <b>Chat Title Updated</b>\n" \
                    f"<b>Group:</b> {html.escape(title)}\n" \
                    f"<b>By:</b> {update.effective_user.mention_html()}\n" \
                    f"<b>New Title:</b> {html.escape(title_text)}"
         asyncio.create_task(log_action(context.bot, chat_id, "admin", log_text))
     except Exception as e:
-        return await m.reply_text(f'❌ Error: {html.escape(str(e))}', parse_mode=constants.ParseMode.HTML)
+        return await m.reply_text(f' Error: {html.escape(str(e))}', parse_mode=constants.ParseMode.HTML)
 
 @Command(['rmcp', 'rmchatphoto'])
 @admin_check("can_change_info", protect_target=False)
@@ -292,7 +292,7 @@ async def removeChatPhoto(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await bot.delete_chat_photo(chat_id)
         clear_chat_cache(chat_id)
         await get_chat_cached(bot, chat_id, force_refresh=True)
-        await m.reply_text(font('*✨ Chat Photo Removed!*'), parse_mode=constants.ParseMode.MARKDOWN)
+        await m.reply_text(font('* Chat Photo Removed!*'), parse_mode=constants.ParseMode.MARKDOWN)
 
         title = update.effective_chat.title
         if chat_id != update.effective_chat.id:
@@ -302,12 +302,12 @@ async def removeChatPhoto(update: Update, context: ContextTypes.DEFAULT_TYPE):
             except:
                 title = str(chat_id)
 
-        log_text = f"🖼️ <b>Chat Photo Removed</b>\n" \
+        log_text = f" <b>Chat Photo Removed</b>\n" \
                    f"<b>Group:</b> {html.escape(title)}\n" \
                    f"<b>By:</b> {update.effective_user.mention_html()}"
         asyncio.create_task(log_action(context.bot, chat_id, "admin", log_text))
     except Exception as e:
-        return await m.reply_text(f'❌ Error: {html.escape(str(e))}', parse_mode=constants.ParseMode.HTML)
+        return await m.reply_text(f' Error: {html.escape(str(e))}', parse_mode=constants.ParseMode.HTML)
 
 @Command(['setcp', 'setchatphoto'])
 @admin_check("can_change_info", protect_target=False)
@@ -317,7 +317,7 @@ async def setChatPhoto(update: Update, context: ContextTypes.DEFAULT_TYPE):
     chat_id = await get_effective_chat_id(update)
     
     if not m.reply_to_message or not m.reply_to_message.photo:
-        return await m.reply_text(font('✋ Reply to photo!'))
+        return await m.reply_text(font(' Reply to photo!'))
     
     if m.reply_to_message and m.reply_to_message.photo:
         file = await bot.get_file(m.reply_to_message.photo[-1])
@@ -326,7 +326,7 @@ async def setChatPhoto(update: Update, context: ContextTypes.DEFAULT_TYPE):
             await bot.set_chat_photo(chat_id, photo=photo_path)
             clear_chat_cache(chat_id)
             await get_chat_cached(bot, chat_id, force_refresh=True)
-            await m.reply_text(font('*✨ New photo has been updated!*'), parse_mode=constants.ParseMode.MARKDOWN)
+            await m.reply_text(font('* New photo has been updated!*'), parse_mode=constants.ParseMode.MARKDOWN)
 
             title = update.effective_chat.title
             if chat_id != update.effective_chat.id:
@@ -336,12 +336,12 @@ async def setChatPhoto(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 except:
                     title = str(chat_id)
 
-            log_text = f"🖼️ <b>Chat Photo Updated</b>\n" \
+            log_text = f" <b>Chat Photo Updated</b>\n" \
                        f"<b>Group:</b> {html.escape(title)}\n" \
                        f"<b>By:</b> {update.effective_user.mention_html()}"
             asyncio.create_task(log_action(context.bot, chat_id, "admin", log_text))
         except Exception as e:
-            return await m.reply_text(f'❌ Error: {html.escape(str(e))}', parse_mode=constants.ParseMode.HTML)
+            return await m.reply_text(f' Error: {html.escape(str(e))}', parse_mode=constants.ParseMode.HTML)
         finally:
             if os.path.exists(photo_path):
                 os.remove(photo_path)
@@ -356,16 +356,16 @@ async def demoteChatMember(update: Update, context: ContextTypes.DEFAULT_TYPE):
     
     user_id = await extract_user(message, self=False)
     if not user_id:
-        return await message.reply_text(text="🙋 *Reply to a user or give their telegram ID!*", parse_mode=constants.ParseMode.MARKDOWN)
+        return await message.reply_text(text=" *Reply to a user or give their telegram ID!*", parse_mode=constants.ParseMode.MARKDOWN)
     
     try:
         member = await get_member_cached(bot, chat_id, user_id, force_refresh=True)
         if member.status not in [constants.ChatMemberStatus.ADMINISTRATOR]:
-            return await message.reply_text(text="❌ *User is not an admin!*", parse_mode=constants.ParseMode.MARKDOWN)
+            return await message.reply_text(text=" *User is not an admin!*", parse_mode=constants.ParseMode.MARKDOWN)
         if member.status == constants.ChatMemberStatus.OWNER:
-            return await message.reply_text(text="❌ *Cannot demote the group owner!*", parse_mode=constants.ParseMode.MARKDOWN)
+            return await message.reply_text(text=" *Cannot demote the group owner!*", parse_mode=constants.ParseMode.MARKDOWN)
     except Exception:
-        return await message.reply_text(text="❌ *User not found or error fetching member info!*", parse_mode=constants.ParseMode.MARKDOWN)
+        return await message.reply_text(text=" *User not found or error fetching member info!*", parse_mode=constants.ParseMode.MARKDOWN)
     
     try:
         await bot.promote_chat_member(
@@ -387,7 +387,7 @@ async def demoteChatMember(update: Update, context: ContextTypes.DEFAULT_TYPE):
             except:
                 title = str(chat_id)
 
-        log_text = f"👮 <b>Demoted</b>\n" \
+        log_text = f" <b>Demoted</b>\n" \
                    f"<b>Group:</b> {html.escape(title)}\n" \
                    f"<b>User:</b> {mention} (<code>{user_id}</code>)\n" \
                    f"<b>By:</b> {update.effective_user.mention_html()}"
@@ -400,7 +400,7 @@ async def demoteChatMember(update: Update, context: ContextTypes.DEFAULT_TYPE):
             error_msg = "Bot needs admin rights with 'Add Admins' permission."
         elif "USER_NOT_PARTICIPANT" in error_msg:
             error_msg = "User is not in the group."
-        return await message.reply_text(text=f"❌ Error: {html.escape(error_msg)}", parse_mode=constants.ParseMode.HTML)
+        return await message.reply_text(text=f" Error: {html.escape(error_msg)}", parse_mode=constants.ParseMode.HTML)
 
 @Command(('pin', 'unpin'))
 @only_groups
@@ -412,7 +412,7 @@ async def PinChatMsg(update: Update, context: ContextTypes.DEFAULT_TYPE):
     reply = message.reply_to_message
     
     if not reply:
-        return await message.reply_text(font("🤷 Reply to a message to pin or unpin it."))
+        return await message.reply_text(font(" Reply to a message to pin or unpin it."))
     
     command = message.text.split()[0][1:]
     
@@ -440,13 +440,13 @@ async def PinChatMsg(update: Update, context: ContextTypes.DEFAULT_TYPE):
             except:
                 title = str(chat_id)
 
-        log_text = f"📌 <b>{command.capitalize()}</b>\n" \
+        log_text = f" <b>{command.capitalize()}</b>\n" \
                    f"<b>Group:</b> {html.escape(title)}\n" \
                    f"<b>Message:</b> <a href='{link}'>Link</a>\n" \
                    f"<b>By:</b> {update.effective_user.mention_html()}"
         asyncio.create_task(log_action(context.bot, chat_id, "admin", log_text))
     except Exception as e:
-        await message.reply_text(f"❌ Error: {html.escape(str(e))}", parse_mode=constants.ParseMode.HTML)
+        await message.reply_text(f" Error: {html.escape(str(e))}", parse_mode=constants.ParseMode.HTML)
 
 @Command('del')
 @only_groups
@@ -472,12 +472,12 @@ async def delete_msg(update: Update, context: ContextTypes.DEFAULT_TYPE):
             except:
                 title = str(chat_id)
 
-        log_text = f"🗑️ <b>Message Deleted</b>\n" \
+        log_text = f" <b>Message Deleted</b>\n" \
                    f"<b>Group:</b> {html.escape(title)}\n" \
                    f"<b>By:</b> {update.effective_user.mention_html()}"
         asyncio.create_task(log_action(context.bot, chat_id, "cleans", log_text))
     except error.TelegramError as e:
-        return await message.reply_text(f"❌ Error: {html.escape(str(e))}", parse_mode=constants.ParseMode.HTML)
+        return await message.reply_text(f" Error: {html.escape(str(e))}", parse_mode=constants.ParseMode.HTML)
 
 @Command(['reload', 'reloadadmin'])
 @admin_check()
@@ -498,13 +498,13 @@ async def reload_admin_command(update: Update, context: ContextTypes.DEFAULT_TYP
             mins = int(time_left // 60)
             secs = int(time_left % 60)
             return await message.reply_text(
-                f"⏱️ ᴄᴏᴏʟᴅᴏᴡɴ ᴀᴄᴛɪᴠᴇ\n"
+                f" ᴄᴏᴏʟᴅᴏᴡɴ ᴀᴄᴛɪᴠᴇ\n"
                 f"ᴡᴀɪᴛ <code>{mins}ᴍ {secs}ꜱ</code>",
                 parse_mode=constants.ParseMode.HTML
             )
     
     msg = await message.reply_text(
-        "🔄 ʀᴇꜰʀᴇꜱʜɪɴɢ ᴄᴀᴄʜᴇ...", 
+        " ʀᴇꜰʀᴇꜱʜɪɴɢ ᴄᴀᴄʜᴇ...", 
         parse_mode=constants.ParseMode.HTML
     )
     
@@ -515,14 +515,14 @@ async def reload_admin_command(update: Update, context: ContextTypes.DEFAULT_TYP
         await smart_cache_refresh(bot, chat_id, user_id, client=pbot)
         
         await msg.edit_text(
-            "✅ ᴀᴅᴍɪɴ ᴄᴀᴄʜᴇ ʀᴇꜰʀᴇꜱʜᴇᴅ ꜱᴜᴄᴄᴇꜱꜱꜰᴜʟʟʏ",
+            " ᴀᴅᴍɪɴ ᴄᴀᴄʜᴇ ʀᴇꜰʀᴇꜱʜᴇᴅ ꜱᴜᴄᴄᴇꜱꜱꜰᴜʟʟʏ",
             parse_mode=constants.ParseMode.HTML
         )
         context.bot_data[cooldown_key] = current_time
         
     except Exception as e:
         await msg.edit_text(
-            f"❌ ᴇʀʀᴏʀ: <code>{html.escape(str(e)[:50])}</code>", 
+            f" ᴇʀʀᴏʀ: <code>{html.escape(str(e)[:50])}</code>", 
             parse_mode=constants.ParseMode.HTML
         )
 
@@ -539,9 +539,9 @@ async def GetInvite(update: Update, context: ContextTypes.DEFAULT_TYPE):
         link = chat.invite_link
         if not link:
             link = await bot.export_chat_invite_link(chat_id)
-        await message.reply_text(text=f"<b>✨ {html.escape(chat.title)} Invite Link</b>:\n{link}", parse_mode=constants.ParseMode.HTML)
+        await message.reply_text(text=f"<b> {html.escape(chat.title)} Invite Link</b>:\n{link}", parse_mode=constants.ParseMode.HTML)
     except Exception as e:
-        await message.reply_text(f"❌ Error: {html.escape(str(e))}", parse_mode=constants.ParseMode.HTML)
+        await message.reply_text(f" Error: {html.escape(str(e))}", parse_mode=constants.ParseMode.HTML)
 
 async def get_bot_permissions(bot, chat_id):
     try:
@@ -622,7 +622,7 @@ async def promoteChatMember(update: Update, context: ContextTypes.DEFAULT_TYPE):
     
     if not user_id:
         return await message.reply_text(
-            text="🙋 *Reply to a user or give their telegram ID/username!*",
+            text=" *Reply to a user or give their telegram ID/username!*",
             parse_mode=constants.ParseMode.MARKDOWN
         )
     
@@ -631,14 +631,14 @@ async def promoteChatMember(update: Update, context: ContextTypes.DEFAULT_TYPE):
         member = await get_member_cached(bot, chat_id, user_id, force_refresh=True)
         if member.status == constants.ChatMemberStatus.OWNER:
             return await message.reply_text(
-                text="❌ *Cannot modify the group owner!*",
+                text=" *Cannot modify the group owner!*",
                 parse_mode=constants.ParseMode.MARKDOWN
             )
         if member.status == constants.ChatMemberStatus.ADMINISTRATOR:
             is_already_admin = True
             if command == 'promote':
                 return await message.reply_text(
-                    text="❌ *User is already an admin! Use /fullpromote or /lowpromote to change permissions.*",
+                    text=" *User is already an admin! Use /fullpromote or /lowpromote to change permissions.*",
                     parse_mode=constants.ParseMode.MARKDOWN
                 )
     except Exception:
@@ -648,7 +648,7 @@ async def promoteChatMember(update: Update, context: ContextTypes.DEFAULT_TYPE):
     
     if not bot_perms:
         return await message.reply_text(
-            text="❌ Bot is not an admin or cannot check permissions!",
+            text=" Bot is not an admin or cannot check permissions!",
             parse_mode=constants.ParseMode.HTML
         )
     
@@ -723,18 +723,18 @@ async def promoteChatMember(update: Update, context: ContextTypes.DEFAULT_TYPE):
             except Exception as title_error:
                 title_err_msg = str(title_error)
                 if "User_not_mutual_contact" in title_err_msg or "CHAT_ADMIN_REQUIRED" in title_err_msg:
-                    title_info = "\n\n<i>⚠️ Title not set: User needs to send a message first.</i>"
+                    title_info = "\n\n<i> Title not set: User needs to send a message first.</i>"
                 else:
-                    title_info = f"\n\n<i>⚠️ Title error: {html.escape(title_err_msg[:60])}</i>"
+                    title_info = f"\n\n<i> Title error: {html.escape(title_err_msg[:60])}</i>"
         
         action_word = "upgraded" if is_already_admin else f"{command}d"
-        success_text = f"<b>✅ Successfully {action_word} {user_link}{title_info}</b>"
+        success_text = f"<b> Successfully {action_word} {user_link}{title_info}</b>"
         
         if granted_perms:
             success_text += f"\n\n<b>Granted permissions:</b>\n• " + "\n• ".join(granted_perms)
         
         if denied_perms:
-            success_text += f"\n\n<b>⚠️ Bot lacks these permissions:</b>\n• " + "\n• ".join(denied_perms)
+            success_text += f"\n\n<b> Bot lacks these permissions:</b>\n• " + "\n• ".join(denied_perms)
             success_text += "\n\n<i>Give bot more admin rights to grant full permissions.</i>"
         
         await message.reply_text(text=success_text, parse_mode=constants.ParseMode.HTML)
@@ -747,7 +747,7 @@ async def promoteChatMember(update: Update, context: ContextTypes.DEFAULT_TYPE):
             except:
                 title = str(chat_id)
 
-        log_text = f"👮 <b>{action_word.capitalize()}</b>\n" \
+        log_text = f" <b>{action_word.capitalize()}</b>\n" \
                    f"<b>Group:</b> {html.escape(title)}\n" \
                    f"<b>User:</b> {user_link} (<code>{user_id}</code>)\n" \
                    f"<b>By:</b> {update.effective_user.mention_html()}"
@@ -767,7 +767,7 @@ async def promoteChatMember(update: Update, context: ContextTypes.DEFAULT_TYPE):
             error_msg = "Bot doesn't have sufficient admin rights."
         
         return await message.reply_text(
-            text=f"❌ <b>Error:</b> {html.escape(error_msg)}",
+            text=f" <b>Error:</b> {html.escape(error_msg)}",
             parse_mode=constants.ParseMode.HTML
         )        
 
@@ -818,23 +818,23 @@ async def setAdminTitle(update: Update, context: ContextTypes.DEFAULT_TYPE):
                     admin_title = ' '.join(context.args[1:]).strip()[:16]
     
     if not user_id:
-        return await message.reply_text(text="🙋 *Reply to a user or give their telegram ID!*", parse_mode=constants.ParseMode.MARKDOWN)
+        return await message.reply_text(text=" *Reply to a user or give their telegram ID!*", parse_mode=constants.ParseMode.MARKDOWN)
     
     if not admin_title:
-        return await message.reply_text(text="✋ *Provide a title to set!*\n\nUsage: `/settitle @username Custom Title`", parse_mode=constants.ParseMode.MARKDOWN)
+        return await message.reply_text(text=" *Provide a title to set!*\n\nUsage: `/settitle @username Custom Title`", parse_mode=constants.ParseMode.MARKDOWN)
     
     try:
         invalidate_member_cache(chat_id, user_id)
         member = await bot.get_chat_member(chat_id, user_id)
         
         if member.status not in [constants.ChatMemberStatus.ADMINISTRATOR, constants.ChatMemberStatus.OWNER]:
-            return await message.reply_text(text="❌ *User must be an admin first!*", parse_mode=constants.ParseMode.MARKDOWN)
+            return await message.reply_text(text=" *User must be an admin first!*", parse_mode=constants.ParseMode.MARKDOWN)
         
         user_link = f'<a href="tg://user?id={member.user.id}">{html.escape(member.user.first_name)}</a>'
         await bot.set_chat_administrator_custom_title(chat_id, member.user.id, admin_title)
         invalidate_member_cache(chat_id, user_id)
         
-        await message.reply_text(text=f"✨ <b>Successfully set admin title for {user_link}:</b> {html.escape(admin_title)}", parse_mode=constants.ParseMode.HTML)
+        await message.reply_text(text=f" <b>Successfully set admin title for {user_link}:</b> {html.escape(admin_title)}", parse_mode=constants.ParseMode.HTML)
 
         title = update.effective_chat.title
         if chat_id != update.effective_chat.id:
@@ -844,7 +844,7 @@ async def setAdminTitle(update: Update, context: ContextTypes.DEFAULT_TYPE):
             except:
                 title = str(chat_id)
 
-        log_text = f"🏷️ <b>Admin Title Set</b>\n" \
+        log_text = f" <b>Admin Title Set</b>\n" \
                    f"<b>Group:</b> {html.escape(title)}\n" \
                    f"<b>User:</b> {user_link} (<code>{user_id}</code>)\n" \
                    f"<b>New Title:</b> {html.escape(admin_title)}\n" \
@@ -858,7 +858,7 @@ async def setAdminTitle(update: Update, context: ContextTypes.DEFAULT_TYPE):
             error_msg = "Bot needs 'Add Admins' permission."
         elif "USER_CREATOR" in error_msg:
             error_msg = "Cannot set title for group creator from API."
-        return await message.reply_text(text=f"❌ Error: {html.escape(error_msg)}", parse_mode=constants.ParseMode.HTML)
+        return await message.reply_text(text=f" Error: {html.escape(error_msg)}", parse_mode=constants.ParseMode.HTML)
 
 @Command('zombies')
 @disableable("zombies")
@@ -882,7 +882,7 @@ async def zombiesFire(update: Update, context: ContextTypes.DEFAULT_TYPE):
             parse_mode=constants.ParseMode.HTML
         )
     elif not users:
-        return await msg.edit_text(font("😉 <b>No Zombies in the chat.</b>"), parse_mode=constants.ParseMode.HTML)
+        return await msg.edit_text(font(" <b>No Zombies in the chat.</b>"), parse_mode=constants.ParseMode.HTML)
     else:
         pattern = m.text.split()[1].lower()
         if pattern != "clean":
@@ -904,7 +904,7 @@ async def zombiesFire(update: Update, context: ContextTypes.DEFAULT_TYPE):
                     title = target_chat.title
                 except:
                     title = str(chat_id)
-            text = f"⚔️ <b>Killed {done} Zombies in {html.escape(title)}</b> "
+            text = f" <b>Killed {done} Zombies in {html.escape(title)}</b> "
             if fail != 0:
                 text += f"<b>and {fail} Zombies are escaped!</b>"
             return await msg.edit_text(text, parse_mode=constants.ParseMode.HTML)
@@ -917,10 +917,10 @@ async def adminlist_command(client: Client, message: Message):
         from AloneX.db.connection_db import get_connected_chat
         chat_id = await get_connected_chat(user_id) or chat_id
         if chat_id == message.chat.id:
-            return await message.reply_text(font("❌ This command only works in groups or via connections!"))
+            return await message.reply_text(font(" This command only works in groups or via connections!"))
 
     chat = await client.get_chat(chat_id)
-    msg = await message.reply_text(font("⚡ Fetching Staff List..."))
+    msg = await message.reply_text(font(" Fetching Staff List..."))
     current_admin_ids = []
     owner = None
     regular = []
@@ -936,20 +936,20 @@ async def adminlist_command(client: Client, message: Message):
     else:
         cached = False
         await save_admins(chat.id, current_admin_ids)
-    text = f"🧑‍✈️ <b>Staff's in {html.escape(chat.title)}</b>:\n\n"
+    text = f" <b>Staff's in {html.escape(chat.title)}</b>:\n\n"
     if cached:
-        text += "⚠️ <i>Note: These are cached values</i>\n\n"
+        text += " <i>Note: These are cached values</i>\n\n"
     else:
-        text += "✅ <i>Note: These are up-to-date values</i>\n\n"
+        text += " <i>Note: These are up-to-date values</i>\n\n"
     if owner:
-        text += "👑 <b>Owner</b>:\n"
+        text += " <b>Owner</b>:\n"
         name = html.escape(owner.user.first_name)
         if owner.custom_title:
             text += f"➣ <a href='tg://user?id={owner.user.id}'>{name}</a> - <i>{html.escape(owner.custom_title)}</i>\n\n"
         else:
             text += f"➣ <a href='tg://user?id={owner.user.id}'>{name}</a>\n\n"
     if regular:
-        text += "👮 <b>Admins</b>:\n"
+        text += " <b>Admins</b>:\n"
         for a in regular:
             name = html.escape(a.user.first_name)
             if a.custom_title:
@@ -966,10 +966,10 @@ async def adminlist_command(client: Client, message: Message):
             mod_group[r] = []
         mod_group[r].append(u)
     names = {
-        "mod": "🛡️ Moderators",
-        "warner": "⚠️ Warners",
-        "muter": "🔇 Muters",
-        "cleaner": "🧹 Cleaners"
+        "mod": " Moderators",
+        "warner": " Warners",
+        "muter": " Muters",
+        "cleaner": " Cleaners"
     }
     for r in ["mod", "muter", "warner", "cleaner"]:
         if r in mod_group:
@@ -997,5 +997,5 @@ async def adminlist_command(client: Client, message: Message):
         buf = io.BytesIO(clean.encode())
         buf.name = f"adminlist_{chat.id}.txt"
         await msg.delete()
-        return await message.reply_document(buf, caption="📋 Full Adminlist")
+        return await message.reply_document(buf, caption=" Full Adminlist")
     await msg.edit_text(text, parse_mode=ParseMode.HTML)

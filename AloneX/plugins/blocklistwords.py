@@ -15,7 +15,7 @@ from AloneX.db.approval_db import is_user_approved
 from AloneX.helpers.log_helper import log_action
 import html
 
-# ✅ Setup Logger
+#  Setup Logger
 logger = logging.getLogger(__name__)
 logging.basicConfig(
     level=logging.WARNING,
@@ -24,7 +24,7 @@ logging.basicConfig(
 
 CHATS = []
 
-__module__ = "𝐁ʟᴏᴄᴋʟɪsᴛ🚫"
+__module__ = "𝐁ʟᴏᴄᴋʟɪsᴛ"
 
 __help__ = """
 *Blocklist*
@@ -40,7 +40,7 @@ Manage words that are blocked in the chat to prevent unwanted messages.
 """
 
 
-# ✅ Safe word-boundary match
+#  Safe word-boundary match
 def search_text(words, text):
     if not text:
         return False
@@ -48,7 +48,7 @@ def search_text(words, text):
     return bool(re.search(rf"\b({pattern})\b", text, re.IGNORECASE))
 
 
-# ✅ Filter to find and delete blacklisted words
+#  Filter to find and delete blacklisted words
 @Messages(filters=((filters.TEXT | filters.CAPTION) & filters.ChatType.GROUPS), group=3)
 async def _findAndDelete(update, context):
     m = update.effective_message
@@ -87,13 +87,13 @@ async def _addBlockListWord(update, context):
     chat_id = await get_effective_chat_id(update)
     if len(m.text.split(maxsplit=1)) < 2:
         return await m.reply_text(
-            "🚫 You need to specify words to block.\n\nExamples:\n"
+            " You need to specify words to block.\n\nExamples:\n"
             "`/addblword porn child abuse`\n"
             "`/addblword\nporn\nchild\nabuse`",
             parse_mode=constants.ParseMode.MARKDOWN
         )
 
-    # ✅ Extract words (multi-line OR space separated)
+    #  Extract words (multi-line OR space separated)
     raw_text = m.text.split(maxsplit=1)[1]
     # split by both spaces and newlines
     words = list(set(w.strip().lower() for w in raw_text.replace("\n", " ").split() if w.strip()))
@@ -101,9 +101,9 @@ async def _addBlockListWord(update, context):
     bl_words = await get_words(chat_id)
     added, skipped = [], []
 
-    # ✅ 50 limit check
+    #  50 limit check
     if len(bl_words) >= 50:
-        return await m.reply_text("❌ You can't add more than 50 words in blocklist.")
+        return await m.reply_text(" You can't add more than 50 words in blocklist.")
 
     for word in words:
         if word in bl_words or word in added:
@@ -123,7 +123,7 @@ async def _addBlockListWord(update, context):
         except:
             title = str(chat_id)
 
-    log_text = f"🚫 <b>Blocklist Word Added</b>\n" \
+    log_text = f" <b>Blocklist Word Added</b>\n" \
                f"<b>Group:</b> {html.escape(title)}\n" \
                f"<b>Words:</b> {', '.join(added)}\n" \
                f"<b>By:</b> {update.effective_user.mention_html()}"
@@ -134,10 +134,10 @@ async def _addBlockListWord(update, context):
 
     msg = ""
     if added:
-        msg += f"✅ Added: `{', '.join(added)}`\n"
+        msg += f" Added: `{', '.join(added)}`\n"
     if skipped:
-        msg += f"⚠️ Skipped (duplicate/already exists): `{', '.join(skipped)}`\n"
-    msg += f"📌 Blocklist is currently *{mode}*."
+        msg += f" Skipped (duplicate/already exists): `{', '.join(skipped)}`\n"
+    msg += f" Blocklist is currently *{mode}*."
 
     return await m.reply_text(msg, parse_mode=constants.ParseMode.MARKDOWN)
 
@@ -150,13 +150,13 @@ async def _removeBlockListWord(update, context):
     chat_id = await get_effective_chat_id(update)
     if len(m.text.split(maxsplit=1)) < 2:
         return await m.reply_text(
-            "⚠️ Please specify words to remove from blocklist.\n\nExamples:\n"
+            " Please specify words to remove from blocklist.\n\nExamples:\n"
             "`/rmblword porn child abuse`\n"
             "`/rmblword\nporn\nchild\nabuse`",
             parse_mode=constants.ParseMode.MARKDOWN
         )
 
-    # ✅ Extract words (multi-line OR space separated)
+    #  Extract words (multi-line OR space separated)
     raw_text = m.text.split(maxsplit=1)[1]
     words = list(set(w.strip().lower() for w in raw_text.replace("\n", " ").split() if w.strip()))
 
@@ -181,7 +181,7 @@ async def _removeBlockListWord(update, context):
         except:
             title = str(chat_id)
 
-    log_text = f"🗑️ <b>Blocklist Word Removed</b>\n" \
+    log_text = f" <b>Blocklist Word Removed</b>\n" \
                f"<b>Group:</b> {html.escape(title)}\n" \
                f"<b>Words:</b> {', '.join(removed)}\n" \
                f"<b>By:</b> {update.effective_user.mention_html()}"
@@ -192,10 +192,10 @@ async def _removeBlockListWord(update, context):
 
     msg = ""
     if removed:
-        msg += f"✅ Removed: `{', '.join(removed)}`\n"
+        msg += f" Removed: `{', '.join(removed)}`\n"
     if skipped:
-        msg += f"⚠️ Not found in blocklist: `{', '.join(skipped)}`\n"
-    msg += f"📌 Blocklist is currently *{mode}*."
+        msg += f" Not found in blocklist: `{', '.join(skipped)}`\n"
+    msg += f" Blocklist is currently *{mode}*."
 
     return await m.reply_text(msg, parse_mode=constants.ParseMode.MARKDOWN)
 
@@ -211,20 +211,20 @@ async def _toggleBlocklist(update, context):
 
     if len(m.text.split()) < 2:
         return await m.reply_text(
-            f"⚙️ Usage: `/blwords on` or `/blwords off`\nCurrent status: *{current}*",
+            f" Usage: `/blwords on` or `/blwords off`\nCurrent status: *{current}*",
             parse_mode=constants.ParseMode.MARKDOWN
         )
 
     q = m.text.split()[1].lower()
     if q not in ['on', 'off']:
-        return await m.reply_text(font("❌ Only `on` or `off` allowed!"), parse_mode=constants.ParseMode.MARKDOWN)
+        return await m.reply_text(font(" Only `on` or `off` allowed!"), parse_mode=constants.ParseMode.MARKDOWN)
 
     await update_mode(chat_id, q == 'on')
     if q == 'on' and chat_id not in CHATS:
         CHATS.append(chat_id)
 
     return await m.reply_text(
-        "🛡️ *Blocklist enabled.*" if q == 'on' else "🚫 *Blocklist disabled.*",
+        " *Blocklist enabled.*" if q == 'on' else " *Blocklist disabled.*",
         parse_mode=constants.ParseMode.MARKDOWN
     )
 
@@ -240,7 +240,7 @@ async def _showBlockWords(update, context):
 
     words = await get_words(chat_id)
     if not words:
-        return await m.reply_text(font("❌ No words currently blocked!"))
+        return await m.reply_text(font(" No words currently blocked!"))
 
     if chat_id != chat.id:
         try:

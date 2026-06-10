@@ -68,6 +68,6 @@ async def initialize_chats():
             log_id = doc.get("log_channel_id")
             if chat_id and log_id:
                 LOG_CHANNELS[int(chat_id)] = int(log_id)
-        print(f"✅ Initialized {len(LOG_CHANNELS)} log channels")
+        print(f" Initialized {len(LOG_CHANNELS)} log channels")
     except Exception as e:
         print(f"Error initializing log channels: {e}")

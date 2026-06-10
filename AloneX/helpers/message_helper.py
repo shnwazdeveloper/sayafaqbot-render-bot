@@ -581,10 +581,10 @@ class MessageHelper:
         
         return InlineKeyboardMarkup([
             [
-                InlineKeyboardButton(font('👀 Preview'), callback_data=f'{prefix}_chk#{chat_id}'),
-                InlineKeyboardButton(font('✅ Confirm'), callback_data=f'{prefix}_verify#{chat_id}')
+                InlineKeyboardButton(font(' Preview'), callback_data=f'{prefix}_chk#{chat_id}'),
+                InlineKeyboardButton(font(' Confirm'), callback_data=f'{prefix}_verify#{chat_id}')
             ],
-            [InlineKeyboardButton(font('❌ Cancel'), callback_data=f'{prefix}_cancel#{chat_id}')]
+            [InlineKeyboardButton(font(' Cancel'), callback_data=f'{prefix}_cancel#{chat_id}')]
         ])
     
     @staticmethod

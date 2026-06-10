@@ -11,7 +11,7 @@ from pyrogram.types import Message, CallbackQuery, InlineKeyboardMarkup, InlineK
 from AloneX import pbot, GROQ_API_KEY, prefix_cmds
 from AloneX.helpers.decorator import spam_control
 
-__module__ = "𝐀ᴅᴠᴀɴᴄᴇ-𝐆ᴘᴛ⛔"
+__module__ = "𝐀ᴅᴠᴀɴᴄᴇ-𝐆ᴘᴛ"
 __help__ = """
 *Advance-GPT*
 
@@ -148,24 +148,24 @@ async def vgpt_voice(_, message: Message):
             replied = await pbot.get_messages(message.chat.id, message.reply_to_message_id)
             query = (replied.text or replied.caption or "").strip()
         if not query or len(query) < 2:
-            await message.reply_text("❌ **Usage:** `/vgpt your question`\n\n**Example:** `/vgpt tell me about India`")
+            await message.reply_text(" **Usage:** `/vgpt your question`\n\n**Example:** `/vgpt tell me about India`")
             return
-        msg = await message.reply_text("🎧 **Generating voice...**")
+        msg = await message.reply_text(" **Generating voice...**")
         await pbot.send_chat_action(message.chat.id, ChatAction.RECORD_AUDIO)
         reply, voice_path, mp3_path, is_hindi_lang = await generate_voice(query)
         REGEN_DATA[message.id] = (query, message.chat.id, is_hindi_lang)
-        caption = f"🎧 **AloneX Voice** (`{'Hindi' if is_hindi_lang else 'English'}`)\n\n🗨️ {reply[:300]}"
+        caption = f" **AloneX Voice** (`{'Hindi' if is_hindi_lang else 'English'}`)\n\n {reply[:300]}"
         is_ogg = voice_path.endswith('.ogg')
         try:
             if is_ogg:
-                await pbot.send_voice(chat_id=message.chat.id, voice=voice_path, caption=caption, parse_mode=ParseMode.MARKDOWN, reply_to_message_id=message.id, reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("🔁 Translate", callback_data=f"regen_{message.id}", style=ButtonStyle.PRIMARY)]]))
+                await pbot.send_voice(chat_id=message.chat.id, voice=voice_path, caption=caption, parse_mode=ParseMode.MARKDOWN, reply_to_message_id=message.id, reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton(" Translate", callback_data=f"regen_{message.id}", style=ButtonStyle.PRIMARY)]]))
             else:
-                await pbot.send_audio(chat_id=message.chat.id, audio=voice_path, caption=caption, title="AloneX Voice", performer="AloneX AI", parse_mode=ParseMode.MARKDOWN, reply_to_message_id=message.id, reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("🔁 Translate", callback_data=f"regen_{message.id}", style=ButtonStyle.PRIMARY)]]))
+                await pbot.send_audio(chat_id=message.chat.id, audio=voice_path, caption=caption, title="AloneX Voice", performer="AloneX AI", parse_mode=ParseMode.MARKDOWN, reply_to_message_id=message.id, reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton(" Translate", callback_data=f"regen_{message.id}", style=ButtonStyle.PRIMARY)]]))
         except VoiceMessagesForbidden:
-            await pbot.send_audio(chat_id=message.chat.id, audio=voice_path, caption=caption, title="AloneX Voice", performer="AloneX AI", parse_mode=ParseMode.MARKDOWN, reply_to_message_id=message.id, reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("🔁 Translate", callback_data=f"regen_{message.id}", style=ButtonStyle.PRIMARY)]]))
+            await pbot.send_audio(chat_id=message.chat.id, audio=voice_path, caption=caption, title="AloneX Voice", performer="AloneX AI", parse_mode=ParseMode.MARKDOWN, reply_to_message_id=message.id, reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton(" Translate", callback_data=f"regen_{message.id}", style=ButtonStyle.PRIMARY)]]))
         await msg.delete()
     except Exception as e:
-        await message.reply_text(f"❌ **Error:** `{str(e)[:200]}`", parse_mode=ParseMode.MARKDOWN)
+        await message.reply_text(f" **Error:** `{str(e)[:200]}`", parse_mode=ParseMode.MARKDOWN)
         print(f"[VGPT] Error: {e}")
     finally:
         for f in [mp3_path, ogg_path]:
@@ -180,15 +180,15 @@ async def vgpt_voice(_, message: Message):
 async def regen_voice(_, query: CallbackQuery):
     msg_id = int(query.data.split("_")[1])
     if msg_id not in REGEN_DATA:
-        return await query.answer("⚠️ Session expired", show_alert=True)
+        return await query.answer(" Session expired", show_alert=True)
     prompt, chat_id, was_hindi = REGEN_DATA[msg_id]
     force_lang = "en" if was_hindi else "hi"
-    await query.answer("🔁 Translating...")
+    await query.answer(" Translating...")
     mp3_path = ogg_path = None
     try:
         await pbot.send_chat_action(chat_id, ChatAction.RECORD_AUDIO)
         reply, voice_path, mp3_path, is_hindi_lang = await generate_voice(prompt, force_lang=force_lang)
-        caption = f"🔁 **Translated** (`{'Hindi' if is_hindi_lang else 'English'}`)\n\n🗨️ {reply[:300]}"
+        caption = f" **Translated** (`{'Hindi' if is_hindi_lang else 'English'}`)\n\n {reply[:300]}"
         is_ogg = voice_path.endswith('.ogg')
         try:
             if is_ogg:
@@ -198,7 +198,7 @@ async def regen_voice(_, query: CallbackQuery):
         except VoiceMessagesForbidden:
             await pbot.send_audio(chat_id=chat_id, audio=voice_path, caption=caption, title="AloneX Voice", parse_mode=ParseMode.MARKDOWN)
     except Exception as e:
-        await query.message.reply_text(f"❌ **Translation failed:** `{str(e)[:150]}`", parse_mode=ParseMode.MARKDOWN)
+        await query.message.reply_text(f" **Translation failed:** `{str(e)[:150]}`", parse_mode=ParseMode.MARKDOWN)
         print(f"[Regen] Error: {e}")
     finally:
         for f in [mp3_path, ogg_path]:

@@ -13,9 +13,9 @@ import asyncio
 import html
 from asyncio import gather
 
-__module__ = "𝐖ᴀʀɴs⚠️"
+__module__ = "𝐖ᴀʀɴs"
 __help__ = """
-*Warns⚠️*
+*Warns*
 
 *Description:*  
 A warning system to manage and moderate users in your chat.
@@ -100,16 +100,16 @@ async def apply_warn_punishment(chat, user_id, user_mention, limit):
 
     if action == "ban":
         await chat.ban_member(user_id)
-        return f"🚫 {user_mention} has been banned after reaching {limit} warnings."
+        return f" {user_mention} has been banned after reaching {limit} warnings."
     elif action == "kick":
         await gather(
             chat.ban_member(user_id),
             chat.unban_member(user_id)
         )
-        return f"👋 {user_mention} has been removed after reaching {limit} warnings."
+        return f" {user_mention} has been removed after reaching {limit} warnings."
     elif action == "mute":
         await chat.restrict_member(user_id, ChatPermissions(can_send_messages=False))
-        return f"🔇 {user_mention} has been muted after reaching {limit} warnings."
+        return f" {user_mention} has been muted after reaching {limit} warnings."
     return None
 
 def get_warn_keyboard(user_id):
@@ -118,7 +118,7 @@ def get_warn_keyboard(user_id):
             InlineKeyboardButton("- 𝟏", callback_data=f"warn_decrease_{user_id}"),
             InlineKeyboardButton("+ 𝟏", callback_data=f"warn_increase_{user_id}")
         ],
-        [InlineKeyboardButton("❌ 𝐂ʟᴇᴀʀ 𝐀ʟʟ 𝐖ᴀʀɴɪɴɢs", callback_data=f"warn_delete_{user_id}")]
+        [InlineKeyboardButton(" 𝐂ʟᴇᴀʀ 𝐀ʟʟ 𝐖ᴀʀɴɪɴɢs", callback_data=f"warn_delete_{user_id}")]
     ])
 
 @Command(["warn", "dwarn"])
@@ -157,12 +157,12 @@ async def warn_user(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 except:
                     pass
             await m.reply_html(
-                f"⚠️ Channel <b>{readable_name}</b> has been banned from this chat.\n"
-                f"📝 <b>Reason:</b> {helpers.escape(reason)}"
+                f" Channel <b>{readable_name}</b> has been banned from this chat.\n"
+                f" <b>Reason:</b> {helpers.escape(reason)}"
             )
             return
         except Exception as e:
-            return await m.reply_text(f"❌ Error: {str(e)}")
+            return await m.reply_text(f" Error: {str(e)}")
     
     user_id = await extract_user(m, self=False)
     if not user_id:
@@ -177,12 +177,12 @@ async def warn_user(update: Update, context: ContextTypes.DEFAULT_TYPE):
     try:
         target_member = await m.chat.get_member(user_id)
         if target_member.status in (ChatMemberStatus.ADMINISTRATOR, ChatMemberStatus.OWNER):
-            return await m.reply_text(font("**❌ Cannot warn administrators!**"))
+            return await m.reply_text(font("** Cannot warn administrators!**"))
     except:
         pass
     
     if user_id in DEV_LIST:
-        return await m.reply_text(font("**❌ Cannot warn bot developers!**"))
+        return await m.reply_text(font("** Cannot warn bot developers!**"))
     
     reason = "No reason provided"
     if context.args:
@@ -206,7 +206,7 @@ async def warn_user(update: Update, context: ContextTypes.DEFAULT_TYPE):
             get_warn_limit(chat_id)
         )
     except Exception as e:
-        return await m.reply_text(f"❌ Database error: {str(e)}")
+        return await m.reply_text(f" Database error: {str(e)}")
     
     if len(warns) >= limit:
         try:
@@ -218,14 +218,14 @@ async def warn_user(update: Update, context: ContextTypes.DEFAULT_TYPE):
             if punish_text:
                 return await m.reply_html(punish_text)
         except Exception as e:
-            await m.reply_text(f"⚠️ Warning applied but unable to apply punishment: {str(e)}")
+            await m.reply_text(f" Warning applied but unable to apply punishment: {str(e)}")
     
     user_mention = await get_user_mention_fast(context.bot, chat_id, user_id)
     escaped_reason = helpers.escape(reason)
     await m.reply_html(
-        f"⚠️ {user_mention} has received a warning\n"
-        f"📝 <b>Reason:</b> {escaped_reason}\n"
-        f"📊 <b>Warnings:</b> {len(warns)}/{limit}",
+        f" {user_mention} has received a warning\n"
+        f" <b>Reason:</b> {escaped_reason}\n"
+        f" <b>Warnings:</b> {len(warns)}/{limit}",
         reply_markup=get_warn_keyboard(user_id)
     )
 
@@ -237,7 +237,7 @@ async def warn_user(update: Update, context: ContextTypes.DEFAULT_TYPE):
         except:
             title = str(chat_id)
 
-    log_text = f"⚠️ <b>Warned</b>\n" \
+    log_text = f" <b>Warned</b>\n" \
                f"<b>Group:</b> {html.escape(title)}\n" \
                f"<b>User:</b> {user_mention} (<code>{user_id}</code>)\n" \
                f"<b>By:</b> {update.effective_user.mention_html()}\n" \
@@ -257,9 +257,9 @@ async def unwarn_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
         try:
             readable_name = await get_chat_name(context.bot, sender_chat.id)
             await context.bot.unban_chat_sender_chat(chat_id=chat_id, sender_chat_id=sender_chat.id)
-            return await m.reply_html(f"✅ Channel <b>{readable_name}</b> has been unbanned.")
+            return await m.reply_html(f" Channel <b>{readable_name}</b> has been unbanned.")
         except Exception as e:
-            return await m.reply_text(f"❌ Error: {str(e)}")
+            return await m.reply_text(f" Error: {str(e)}")
     
     user_id = await extract_user(m, self=False)
     if not user_id:
@@ -267,7 +267,7 @@ async def unwarn_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
     
     try:
         await remove_last_warn(chat_id, user_id)
-        await m.reply_text(font("✅ Latest warning has been removed successfully."))
+        await m.reply_text(font(" Latest warning has been removed successfully."))
 
         title = update.effective_chat.title
         if chat_id != update.effective_chat.id:
@@ -278,13 +278,13 @@ async def unwarn_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 title = str(chat_id)
 
         user_mention = await get_user_mention_fast(context.bot, chat_id, user_id)
-        log_text = f"💙 <b>Unwarned</b>\n" \
+        log_text = f" <b>Unwarned</b>\n" \
                    f"<b>Group:</b> {html.escape(title)}\n" \
                    f"<b>User:</b> {user_mention} (<code>{user_id}</code>)\n" \
                    f"<b>By:</b> {update.effective_user.mention_html()}"
         asyncio.create_task(log_action(context.bot, chat_id, "warns", log_text))
     except Exception as e:
-        await m.reply_text(f"❌ Error removing warning: {str(e)}")
+        await m.reply_text(f" Error removing warning: {str(e)}")
 @Command("warns")
 @no_self_action
 @disableable("warns")
@@ -300,7 +300,7 @@ async def warns_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
         limit = await get_warn_limit(chat_id)
         
         if not warns:
-            return await update.effective_message.reply_text(font("✅ This user has no warnings."))
+            return await update.effective_message.reply_text(font(" This user has no warnings."))
         
         user_mention = await get_user_mention_fast(context.bot, chat_id, user_id)
         
@@ -317,7 +317,7 @@ async def warns_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
         
         await update.effective_message.reply_html(text.rstrip(), reply_markup=get_warn_keyboard(user_id))
     except Exception as e:
-        await update.effective_message.reply_text(f"❌ Error fetching warnings: {str(e)}")
+        await update.effective_message.reply_text(f" Error fetching warnings: {str(e)}")
 @Command("addwarn")
 @admin_check("can_restrict_members")
 @disableable("addwarn")
@@ -340,7 +340,7 @@ async def addwarn(update: Update, context: ContextTypes.DEFAULT_TYPE):
         parsed_args = shlex.split(full_text)
     except ValueError as e:
         return await m.reply_text(
-            f"❌ Error parsing command: {e}\n\n"
+            f" Error parsing command: {e}\n\n"
             "Make sure to use proper quotes for multi-word triggers.\n"
             "Example: `/addwarn \"bad word\" This is not allowed`",
             parse_mode=constants.ParseMode.MARKDOWN
@@ -348,7 +348,7 @@ async def addwarn(update: Update, context: ContextTypes.DEFAULT_TYPE):
     
     if len(parsed_args) < 2:
         return await m.reply_text(
-            "❌ **Insufficient arguments!**\n\n"
+            " **Insufficient arguments!**\n\n"
             "**Usage:** `/addwarn <trigger> <warning_message>`\n\n"
             "**Examples:**\n"
             "• `/addwarn spam Don't spam here`\n"
@@ -362,7 +362,7 @@ async def addwarn(update: Update, context: ContextTypes.DEFAULT_TYPE):
     
     if not keyword or not reply:
         return await m.reply_text(
-            "❌ Both trigger and warning message must be provided!\n\n"
+            " Both trigger and warning message must be provided!\n\n"
             "**Usage:** `/addwarn <trigger> <warning_message>`",
             parse_mode=constants.ParseMode.MARKDOWN
         )
@@ -372,7 +372,7 @@ async def addwarn(update: Update, context: ContextTypes.DEFAULT_TYPE):
         for filter_data in existing_filters:
             if filter_data['keyword'] == keyword:
                 return await m.reply_text(
-                    f"❌ Warning filter `{keyword}` already exists!\n"
+                    f" Warning filter `{keyword}` already exists!\n"
                     f"Use `/nowarn {keyword}` to remove it first.",
                     parse_mode=constants.ParseMode.MARKDOWN
                 )
@@ -380,14 +380,14 @@ async def addwarn(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await add_warn_filter(chat_id, keyword, reply)
         invalidate_filter_cache(chat_id)
         await m.reply_text(
-            f"✅ **Warning filter added successfully!**\n\n"
+            f" **Warning filter added successfully!**\n\n"
             f"**Trigger:** `{keyword}`\n"
             f"**Response:** {helpers.escape(reply)}\n\n"
             f"Now when someone uses `{keyword}`, they will receive a warning.",
             parse_mode=constants.ParseMode.MARKDOWN
         )
     except Exception as e:
-        await m.reply_text(f"❌ Failed to add warning filter: {str(e)}")
+        await m.reply_text(f" Failed to add warning filter: {str(e)}")
 @Command("nowarn")
 @disableable("nowarn")
 @admin_check("can_restrict_members", protect_target=False)
@@ -404,18 +404,18 @@ async def nowarn(update: Update, context: ContextTypes.DEFAULT_TYPE):
         
         if not filter_exists:
             return await update.effective_message.reply_text(
-                f"❌ Warning filter `{keyword}` does not exist.",
+                f" Warning filter `{keyword}` does not exist.",
                 parse_mode=constants.ParseMode.MARKDOWN
             )
         
         await remove_warn_filter(chat_id, keyword)
         invalidate_filter_cache(chat_id)
         await update.effective_message.reply_text(
-            f"✅ Warning filter `{keyword}` has been removed.",
+            f" Warning filter `{keyword}` has been removed.",
             parse_mode=constants.ParseMode.MARKDOWN
         )
     except Exception as e:
-        await update.effective_message.reply_text(f"❌ Error removing filter: {str(e)}")
+        await update.effective_message.reply_text(f" Error removing filter: {str(e)}")
 
 @Command("warnlist")
 @disableable("warnlist")
@@ -424,9 +424,9 @@ async def warnlist(update: Update, context: ContextTypes.DEFAULT_TYPE):
     try:
         filters = await get_filters_cached(chat_id)
         if not filters:
-            return await update.effective_message.reply_text(font("❌ No warning filters are currently set."))
+            return await update.effective_message.reply_text(font(" No warning filters are currently set."))
         
-        msg = "⚠️ **Active Warning Filters:**\n\n"
+        msg = " **Active Warning Filters:**\n\n"
         for i, f in enumerate(filters, 1):
             msg += f"{i}. `{f['keyword']}` → {helpers.escape(f['reply'])}\n"
         
@@ -439,10 +439,10 @@ async def warnlist(update: Update, context: ContextTypes.DEFAULT_TYPE):
             await update.effective_message.reply_document(
                 document=output,
                 filename=output.name,
-                caption="⚠️ Too many warn filters, here's the full list."
+                caption=" Too many warn filters, here's the full list."
             )
     except Exception as e:
-        await update.effective_message.reply_text(f"❌ Error fetching warn filters: {str(e)}")
+        await update.effective_message.reply_text(f" Error fetching warn filters: {str(e)}")
 
 @Command("warnlimit")
 @disableable("warnlimit")
@@ -461,12 +461,12 @@ async def warn_limit(update: Update, context: ContextTypes.DEFAULT_TYPE):
         
         new_limit = int(context.args[0])
         if new_limit < 1 or new_limit > 20:
-            return await update.effective_message.reply_text(font("❌ Warning limit must be between 1 and 20."))
+            return await update.effective_message.reply_text(font(" Warning limit must be between 1 and 20."))
         
         await set_warn_limit(chat_id, new_limit)
-        await update.effective_message.reply_text(f"✅ Warning limit updated to {new_limit}.")
+        await update.effective_message.reply_text(f" Warning limit updated to {new_limit}.")
     except Exception as e:
-        await update.effective_message.reply_text(f"❌ Error setting warn limit: {str(e)}")
+        await update.effective_message.reply_text(f" Error setting warn limit: {str(e)}")
 
 @Command("strongwarn")
 @disableable("strongwarn")
@@ -484,9 +484,9 @@ async def strongwarn(update: Update, context: ContextTypes.DEFAULT_TYPE):
         
         state = context.args[0].lower() in ["on", "yes", "true", "enable"]
         await set_strong_warn(chat_id, state)
-        await update.effective_message.reply_text(f"✅ Strong warning mode {'enabled' if state else 'disabled'}.")
+        await update.effective_message.reply_text(f" Strong warning mode {'enabled' if state else 'disabled'}.")
     except Exception as e:
-        await update.effective_message.reply_text(f"❌ Error setting strong warn: {str(e)}")
+        await update.effective_message.reply_text(f" Error setting strong warn: {str(e)}")
 
 @Command("setwarnaction")
 @disableable("setwarnaction")
@@ -505,14 +505,14 @@ async def setwarn_action(update: Update, context: ContextTypes.DEFAULT_TYPE):
         action = context.args[0].lower()
         if action not in ["ban", "kick", "mute"]:
             return await update.effective_message.reply_text(
-                "❌ Invalid action! Use: `ban`, `kick`, or `mute`",
+                " Invalid action! Use: `ban`, `kick`, or `mute`",
                 parse_mode=constants.ParseMode.MARKDOWN
             )
         
         await set_warn_action(chat_id, action)
-        await update.effective_message.reply_text(f"✅ Warning action updated to **{action}**.", parse_mode=constants.ParseMode.MARKDOWN)
+        await update.effective_message.reply_text(f" Warning action updated to **{action}**.", parse_mode=constants.ParseMode.MARKDOWN)
     except Exception as e:
-        await update.effective_message.reply_text(f"❌ Error setting warn action: {str(e)}")
+        await update.effective_message.reply_text(f" Error setting warn action: {str(e)}")
 
 @Command("warnsall")
 @disableable("warnsall")
@@ -522,7 +522,7 @@ async def warns_all(update: Update, context: ContextTypes.DEFAULT_TYPE):
     try:
         users = await get_all_warned_users(chat_id)
         if not users:
-            return await update.effective_message.reply_text(font("✅ No users currently have warnings."))
+            return await update.effective_message.reply_text(font(" No users currently have warnings."))
         
         text = "<b>Users with Warnings:</b>\n\n"
         for user in users:
@@ -531,11 +531,11 @@ async def warns_all(update: Update, context: ContextTypes.DEFAULT_TYPE):
             text += f"• {mention} — <b>{len(user['reasons'])}</b> warning(s)\n"
         
         buttons = InlineKeyboardMarkup([
-            [InlineKeyboardButton(font("🧹 Clear All Warnings"), callback_data=f"clearwarns#{chat_id}")]
+            [InlineKeyboardButton(font(" Clear All Warnings"), callback_data=f"clearwarns#{chat_id}")]
         ])
         await update.effective_message.reply_html(text, reply_markup=buttons)
     except Exception as e:
-        await update.effective_message.reply_text(f"❌ Error fetching warned users: {str(e)}")
+        await update.effective_message.reply_text(f" Error fetching warned users: {str(e)}")
 
 @Callbacks("^warn_decrease_")
 @mod_permission("warn", protect_target=False)
@@ -552,22 +552,22 @@ async def warn_decrease_btn(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
         if not warns:
             await gather(
-                query.answer("✅ All warnings removed."),
-                query.edit_message_text(f"✅ All warnings have been removed for {user_mention}.", parse_mode=constants.ParseMode.HTML)
+                query.answer(" All warnings removed."),
+                query.edit_message_text(f" All warnings have been removed for {user_mention}.", parse_mode=constants.ParseMode.HTML)
             )
         else:
             await gather(
-                query.answer("✅ Warning decreased."),
+                query.answer(" Warning decreased."),
                 query.edit_message_text(
-                    f"⚠️ {user_mention} has received a warning\n"
-                    f"📊 <b>Warnings:</b> {len(warns)}/{limit}",
+                    f" {user_mention} has received a warning\n"
+                    f" <b>Warnings:</b> {len(warns)}/{limit}",
                     reply_markup=get_warn_keyboard(user_id),
                     parse_mode=constants.ParseMode.HTML
                 )
             )
 
         chat_obj = await context.bot.get_chat(chat_id)
-        log_text = f"💙 <b>Warn Decreased</b>\n" \
+        log_text = f" <b>Warn Decreased</b>\n" \
                    f"<b>Group:</b> {html.escape(chat_obj.title)}\n" \
                    f"<b>User:</b> {user_mention} (<code>{user_id}</code>)\n" \
                    f"<b>By:</b> {query.from_user.mention_html()}"
@@ -593,24 +593,24 @@ async def warn_increase_btn(update: Update, context: ContextTypes.DEFAULT_TYPE):
             punish_text = await apply_warn_punishment(chat_obj, user_id, user_mention, limit)
             if punish_text:
                 await gather(
-                    query.answer("🚫 Limit reached! Punishment applied."),
+                    query.answer(" Limit reached! Punishment applied."),
                     query.edit_message_text(punish_text, parse_mode=constants.ParseMode.HTML)
                 )
             else:
-                await query.answer("⚠️ Limit reached but no action taken.")
+                await query.answer(" Limit reached but no action taken.")
         else:
             await gather(
-                query.answer("⚠️ Warning increased."),
+                query.answer(" Warning increased."),
                 query.edit_message_text(
-                    f"⚠️ {user_mention} has received a warning\n"
-                    f"📊 <b>Warnings:</b> {len(warns)}/{limit}",
+                    f" {user_mention} has received a warning\n"
+                    f" <b>Warnings:</b> {len(warns)}/{limit}",
                     reply_markup=get_warn_keyboard(user_id),
                     parse_mode=constants.ParseMode.HTML
                 )
             )
 
         chat_obj = await context.bot.get_chat(chat_id)
-        log_text = f"⚠️ <b>Warn Increased</b>\n" \
+        log_text = f" <b>Warn Increased</b>\n" \
                    f"<b>Group:</b> {html.escape(chat_obj.title)}\n" \
                    f"<b>User:</b> {user_mention} (<code>{user_id}</code>)\n" \
                    f"<b>By:</b> {query.from_user.mention_html()}\n" \
@@ -631,12 +631,12 @@ async def warn_delete_btn(update: Update, context: ContextTypes.DEFAULT_TYPE):
         user_mention = await get_user_mention_fast(context.bot, chat_id, user_id)
 
         await gather(
-            query.answer("🧹 Warnings cleared."),
-            query.edit_message_text(f"🧹 All warnings have been cleared for {user_mention}.", parse_mode=constants.ParseMode.HTML)
+            query.answer(" Warnings cleared."),
+            query.edit_message_text(f" All warnings have been cleared for {user_mention}.", parse_mode=constants.ParseMode.HTML)
         )
 
         chat_obj = await context.bot.get_chat(chat_id)
-        log_text = f"🧹 <b>Warnings Cleared</b>\n" \
+        log_text = f" <b>Warnings Cleared</b>\n" \
                    f"<b>Group:</b> {html.escape(chat_obj.title)}\n" \
                    f"<b>User:</b> {user_mention} (<code>{user_id}</code>)\n" \
                    f"<b>By:</b> {query.from_user.mention_html()}"
@@ -656,9 +656,9 @@ async def unwarn_button(update: Update, context: ContextTypes.DEFAULT_TYPE):
         mention = await get_user_mention_fast(context.bot, chat_id, user_id)
         await remove_last_warn(chat_id, user_id)
         await gather(
-            query.answer(font("✅ Warning removed successfully.")),
+            query.answer(font(" Warning removed successfully.")),
             query.edit_message_text(
-                f"✅ Latest warning has been removed for {mention}.",
+                f" Latest warning has been removed for {mention}.",
                 parse_mode=constants.ParseMode.HTML
             )
         )
@@ -675,12 +675,12 @@ async def clearwarns_btn(update: Update, context: ContextTypes.DEFAULT_TYPE):
         tasks = [reset_warns(chat_id, user["user_id"]) for user in users]
         await gather(*tasks)
         await gather(
-            query.answer(font("✅ All warnings cleared successfully.")),
-            query.edit_message_text(font("🧹 All warnings have been cleared from this group."))
+            query.answer(font(" All warnings cleared successfully.")),
+            query.edit_message_text(font(" All warnings have been cleared from this group."))
         )
 
         chat_obj = await context.bot.get_chat(chat_id)
-        log_text = f"🧹 <b>All Warnings Cleared</b>\n" \
+        log_text = f" <b>All Warnings Cleared</b>\n" \
                    f"<b>Group:</b> {html.escape(chat_obj.title)}\n" \
                    f"<b>By:</b> {query.from_user.mention_html()}"
         asyncio.create_task(log_action(context.bot, chat_id, "warns", log_text))
@@ -741,8 +741,8 @@ async def auto_warn_trigger(update: Update, context: ContextTypes.DEFAULT_TYPE):
             readable_name = await get_chat_name(context.bot, sender_chat.id)
             await context.bot.ban_chat_sender_chat(chat_id=msg.chat.id, sender_chat_id=sender_chat.id)
             await msg.reply_html(
-                f"⚠️ Channel <b>{readable_name}</b> has been banned for using: {helpers.escape(matched_filter['keyword'])}\n"
-                f"📝 <b>Reason:</b> {helpers.escape(matched_filter['reply'])}"
+                f" Channel <b>{readable_name}</b> has been banned for using: {helpers.escape(matched_filter['keyword'])}\n"
+                f" <b>Reason:</b> {helpers.escape(matched_filter['reply'])}"
             )
         except:
             pass
@@ -819,8 +819,8 @@ async def auto_warn_trigger(update: Update, context: ContextTypes.DEFAULT_TYPE):
         
         user_mention = await get_user_mention_fast(context.bot, msg.chat.id, user.id)
         await msg.reply_html(
-            f"⚠️ {user_mention} {helpers.escape(matched_filter['reply'])}\n"
-            f"📊 <b>Warnings:</b> {len(warns)}/{limit}",
+            f" {user_mention} {helpers.escape(matched_filter['reply'])}\n"
+            f" <b>Warnings:</b> {len(warns)}/{limit}",
             reply_markup=get_warn_keyboard(user.id)
         )
     except:

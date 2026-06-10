@@ -14,9 +14,9 @@ from AloneX.db.bio_filter import (
 )
 from AloneX.helpers.decorator import protected_ids
 
-__module__ = "𝐀ɴᴛɪ-𝐁ɪᴏʟɪɴᴋ🔗"
+__module__ = "𝐀ɴᴛɪ-𝐁ɪᴏʟɪɴᴋ"
 __help__ = """
-*Bio Link Filter 🔗 — Protect your group from bio spammers*
+*Bio Link Filter  — Protect your group from bio spammers*
 
 • `/biolink` — Toggle bio link filter or check status.
 • `/bauth <reply|user>` — Authorize a user to have links in bio.
@@ -68,9 +68,9 @@ async def is_user_admin(chat_id: int, user_id: int):
 async def get_biolink_keyboard(chat_id: int):
     is_enabled = await is_bio_filter_enabled(chat_id)
     if is_enabled:
-        text = "🟢 Bio Link Filter: ON"
+        text = " Bio Link Filter: ON"
     else:
-        text = "🔴 Bio Link Filter: OFF"
+        text = " Bio Link Filter: OFF"
 
     # We use style attribute because the project uses a custom Pyrogram (kurigram)
     # that supports ButtonStyle. SUCCESS and DANGER enums are imported from pyrogram.enums
@@ -80,21 +80,21 @@ async def get_biolink_keyboard(chat_id: int):
 @pbot.on_message(filters.command("biolink", prefixes=prefix_cmds) & filters.group)
 async def bl_cmd(_, message: Message):
     if not await is_user_admin(message.chat.id, message.from_user.id):
-        return await message.reply_text(font("❌ You must be an admin to use this command."))
+        return await message.reply_text(font(" You must be an admin to use this command."))
 
     if len(message.command) > 1:
         state = message.command[1].lower()
         if state == "on":
             await set_bio_filter_status(message.chat.id, True)
-            return await message.reply_text(font("✅ Bio Link Filter <b>Enabled</b>."), reply_markup=await get_biolink_keyboard(message.chat.id), parse_mode=enums.ParseMode.HTML)
+            return await message.reply_text(font(" Bio Link Filter <b>Enabled</b>."), reply_markup=await get_biolink_keyboard(message.chat.id), parse_mode=enums.ParseMode.HTML)
         elif state == "off":
             await set_bio_filter_status(message.chat.id, False)
-            return await message.reply_text(font("❌ Bio Link Filter <b>Disabled</b>."), reply_markup=await get_biolink_keyboard(message.chat.id), parse_mode=enums.ParseMode.HTML)
+            return await message.reply_text(font(" Bio Link Filter <b>Disabled</b>."), reply_markup=await get_biolink_keyboard(message.chat.id), parse_mode=enums.ParseMode.HTML)
 
     is_enabled = await is_bio_filter_enabled(message.chat.id)
     status_text = "Enabled" if is_enabled else "Disabled"
     await message.reply_text(
-        font(f"🔗 <b>Bio Link Filter Status:</b> {status_text}\n\nClick the button below to toggle."),
+        font(f" <b>Bio Link Filter Status:</b> {status_text}\n\nClick the button below to toggle."),
         reply_markup=await get_biolink_keyboard(message.chat.id),
         parse_mode=enums.ParseMode.HTML
     )
@@ -105,7 +105,7 @@ async def bl_toggle_callback(_, query: CallbackQuery):
     chat_id = query.message.chat.id
 
     if not await is_user_admin(chat_id, user_id):
-        return await query.answer(font("❌ This button is for admins only!"), show_alert=True)
+        return await query.answer(font(" This button is for admins only!"), show_alert=True)
 
     is_enabled = await is_bio_filter_enabled(chat_id)
     new_state = not is_enabled
@@ -113,7 +113,7 @@ async def bl_toggle_callback(_, query: CallbackQuery):
 
     status_text = "Enabled" if new_state else "Disabled"
     await query.message.edit_text(
-        font(f"🔗 <b>Bio Link Filter Status:</b> {status_text}\n\nClick the button below to toggle."),
+        font(f" <b>Bio Link Filter Status:</b> {status_text}\n\nClick the button below to toggle."),
         reply_markup=await get_biolink_keyboard(chat_id),
         parse_mode=enums.ParseMode.HTML
     )
@@ -123,37 +123,37 @@ async def bl_toggle_callback(_, query: CallbackQuery):
 @pbot.on_message(filters.command("bauth", prefixes=prefix_cmds) & filters.group)
 async def add_auth_command(_, message: Message):
     if not await is_user_admin(message.chat.id, message.from_user.id):
-        return await message.reply_text(font("❌ Admin privilege required!"))
+        return await message.reply_text(font(" Admin privilege required!"))
 
     user = await get_target_user(message)
     if not user:
         return await message.reply_text(font("Reply to a user or give a valid username/user ID!"))
 
     await add_auth(message.chat.id, user.id)
-    await message.reply_text(f"{font('✅ User has been <b>authorized</b>.')}\n\n{format_user(user)}", parse_mode=enums.ParseMode.HTML)
+    await message.reply_text(f"{font(' User has been <b>authorized</b>.')}\n\n{format_user(user)}", parse_mode=enums.ParseMode.HTML)
 
 @pbot.on_message(filters.command("rmbauth", prefixes=prefix_cmds) & filters.group)
 async def remove_auth_command(_, message: Message):
     if not await is_user_admin(message.chat.id, message.from_user.id):
-        return await message.reply_text(font("❌ Admin privilege required!"))
+        return await message.reply_text(font(" Admin privilege required!"))
 
     user = await get_target_user(message)
     if not user:
         return await message.reply_text(font("Reply to a user or give a valid username/user ID!"))
 
     await remove_auth(message.chat.id, user.id)
-    await message.reply_text(f"{font('❌ User has been <b>unauthorized</b>.')}\n\n{format_user(user)}", parse_mode=enums.ParseMode.HTML)
+    await message.reply_text(f"{font(' User has been <b>unauthorized</b>.')}\n\n{format_user(user)}", parse_mode=enums.ParseMode.HTML)
 
 @pbot.on_message(filters.command("bauthlist", prefixes=prefix_cmds) & filters.group)
 async def authlist_handler(_, message: Message):
     if not await is_user_admin(message.chat.id, message.from_user.id):
-        return await message.reply_text(font("❌ Admin privilege required!"))
+        return await message.reply_text(font(" Admin privilege required!"))
 
     chat_id = message.chat.id
     users = await get_auth_users(chat_id)
 
     if not users:
-        return await message.reply_text(font("⚠️ No users have been authorized in this group."))
+        return await message.reply_text(font(" No users have been authorized in this group."))
 
     text = font("<b>Authorized users in this group:</b>\n\n")
     for i, user_id in enumerate(users, start=1):
@@ -219,7 +219,7 @@ async def bio_filter_handler(client, message):
     # ----------------- Warn User -----------------
     try:
         warn = await message.reply_text(
-            f"⚠️ {mention}, {font('<b>bio me link/username allowed nahi hai!</b>')}",
+            f" {mention}, {font('<b>bio me link/username allowed nahi hai!</b>')}",
             parse_mode=enums.ParseMode.HTML
         )
         await asyncio.sleep(10)
@@ -229,7 +229,7 @@ async def bio_filter_handler(client, message):
 
     # ----------------- Send Log -----------------
     log_text = f"""
-<b>🚨 Bio Filter Alert</b>
+<b> Bio Filter Alert</b>
 <b>User:</b> {mention}
 <b>Username:</b> {html.escape(username)}
 <b>User ID:</b> <code>{user.id}</code>

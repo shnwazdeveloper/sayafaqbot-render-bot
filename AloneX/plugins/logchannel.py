@@ -11,9 +11,9 @@ import config
 import html
 from telegram.helpers import escape_markdown
 
-__module__ = "𝐋ᴏɢ-𝐂ʜᴀɴɴᴇʟ📜"
+__module__ = "𝐋ᴏɢ-𝐂ʜᴀɴɴᴇʟ"
 __help__ = """
-*Log Channels📜*
+*Log Channels*
 
 *Admins only:*
 ❂ /logchannel*:* get log channel info
@@ -107,9 +107,9 @@ async def logging(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
         res = f"This group has all it's logs sent to: {escape_markdown(title)} (`{log_channel}`)"
 
-        res += f"\n\n📊 **Category Status:**\n"
+        res += f"\n\n **Category Status:**\n"
         for cat, desc in LOG_CATEGORIES.items():
-            status = "✅" if await is_category_enabled(chat_id, cat) else "❌"
+            status = "" if await is_category_enabled(chat_id, cat) else ""
             res += f"• {status} `{cat}`: {desc}\n"
 
         await message.reply_text(res, parse_mode=constants.ParseMode.MARKDOWN)
@@ -141,32 +141,32 @@ async def unsetlog(update: Update, context: ContextTypes.DEFAULT_TYPE):
 async def log_toggle_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
     chat_id = await get_effective_chat_id(update)
     if not context.args:
-        return await update.effective_message.reply_text(font("🙋‍♂️ Specify a category to enable. Use `/logcategories` to see them."))
+        return await update.effective_message.reply_text(font(" Specify a category to enable. Use `/logcategories` to see them."))
 
     cat = context.args[0].lower()
     if cat not in LOG_CATEGORIES:
-        return await update.effective_message.reply_text(font("❌ Invalid category."))
+        return await update.effective_message.reply_text(font(" Invalid category."))
 
     await enable_log_category(chat_id, cat)
-    await update.effective_message.reply_text(f"✅ Category `{cat}` will now be logged.")
+    await update.effective_message.reply_text(f" Category `{cat}` will now be logged.")
 
 @Command("nolog")
 @admin_check("can_change_info")
 async def nolog_toggle_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
     chat_id = await get_effective_chat_id(update)
     if not context.args:
-        return await update.effective_message.reply_text(font("🙋‍♂️ Specify a category to disable."))
+        return await update.effective_message.reply_text(font(" Specify a category to disable."))
 
     cat = context.args[0].lower()
     if cat not in LOG_CATEGORIES:
-        return await update.effective_message.reply_text(font("❌ Invalid category."))
+        return await update.effective_message.reply_text(font(" Invalid category."))
 
     await disable_log_category(chat_id, cat)
-    await update.effective_message.reply_text(f"🚫 Category `{cat}` will no longer be logged.")
+    await update.effective_message.reply_text(f" Category `{cat}` will no longer be logged.")
 
 @Command("logcategories")
 async def logcats_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    res = "📋 **Available Log Categories:**\n"
+    res = " **Available Log Categories:**\n"
     for cat, desc in LOG_CATEGORIES.items():
         res += f"• `{cat}`: {desc}\n"
     await update.effective_message.reply_text(res)

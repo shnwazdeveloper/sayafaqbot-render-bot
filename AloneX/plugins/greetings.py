@@ -37,21 +37,21 @@ WEL_STRING = [
 ]
 
 OWNER_WEL_STRING = [
-    "👑 <b>ᴍʏ ᴏᴡɴᴇʀ ʜᴀs ᴀʀʀɪᴠᴇᴅ!</b> {mention} ᴊᴏɪɴᴇᴅ <b>{chatname}</b>. ᴛʜᴇ ʙᴏss ɪs ʜᴇʀᴇ!",
-    "⭐ <b>ᴛʜᴇ ᴏᴡɴᴇʀ ɪs ʜᴇʀᴇ!</b> ᴡᴇʟᴄᴏᴍᴇ ʙᴀᴄᴋ {mention}! <b>{chatname}</b> ɪs ʜᴏɴᴏʀᴇᴅ ʙʏ ʏᴏᴜʀ ᴘʀᴇsᴇɴᴄᴇ!",
-    "🎯 <b>ᴏᴡɴᴇʀ ᴅᴇᴛᴇᴄᴛᴇᴅ!</b> {mention} ʜᴀs ᴇɴᴛᴇʀᴇᴅ <b>{chatname}</b>. ᴀʟʟ ʜᴀɪʟ ᴛʜᴇ ᴍᴀsᴛᴇʀ!",
-    "💎 <b>ᴛʜᴇ ʙᴏss ʜᴀs ᴀʀʀɪᴠᴇᴅ!</b> {mention} ᴊᴏɪɴᴇᴅ <b>{chatname}</b>. ᴍʏ ᴏᴡɴᴇʀ ɪs ʜᴇʀᴇ!"
+    " <b>ᴍʏ ᴏᴡɴᴇʀ ʜᴀs ᴀʀʀɪᴠᴇᴅ!</b> {mention} ᴊᴏɪɴᴇᴅ <b>{chatname}</b>. ᴛʜᴇ ʙᴏss ɪs ʜᴇʀᴇ!",
+    " <b>ᴛʜᴇ ᴏᴡɴᴇʀ ɪs ʜᴇʀᴇ!</b> ᴡᴇʟᴄᴏᴍᴇ ʙᴀᴄᴋ {mention}! <b>{chatname}</b> ɪs ʜᴏɴᴏʀᴇᴅ ʙʏ ʏᴏᴜʀ ᴘʀᴇsᴇɴᴄᴇ!",
+    " <b>ᴏᴡɴᴇʀ ᴅᴇᴛᴇᴄᴛᴇᴅ!</b> {mention} ʜᴀs ᴇɴᴛᴇʀᴇᴅ <b>{chatname}</b>. ᴀʟʟ ʜᴀɪʟ ᴛʜᴇ ᴍᴀsᴛᴇʀ!",
+    " <b>ᴛʜᴇ ʙᴏss ʜᴀs ᴀʀʀɪᴠᴇᴅ!</b> {mention} ᴊᴏɪɴᴇᴅ <b>{chatname}</b>. ᴍʏ ᴏᴡɴᴇʀ ɪs ʜᴇʀᴇ!"
 ]
 
 LEFT_STRING = [
-    "👋 {mention} ᴅᴇᴘᴀʀᴛᴇᴅ ғʀᴏᴍ <b>{chatname}</b>. ᴜɴᴛɪʟ ᴡᴇ ᴍᴇᴇᴛ ᴀɢᴀɪɴ!",
-    "💫 <b>ғᴀʀᴇᴡᴇʟʟ</b> {mention}! <b>{chatname}</b> ᴡɪʟʟ ᴍɪss ʏᴏᴜ!",
-    "🚪 {mention} ʜᴀs ʟᴇғᴛ! sᴀғᴇ ᴛʀᴀᴠᴇʟs!",
-    "📖 ᴀɴᴏᴛʜᴇʀ ᴄʜᴀᴘᴛᴇʀ ᴇɴᴅs... {mention} ʟᴇғᴛ <b>{chatname}</b>",
-    "✨ {mention} ᴠᴀɴɪsʜᴇᴅ! ɢᴏᴏᴅʙʏᴇ ғʀᴏᴍ <b>{chatname}</b>!"
+    " {mention} ᴅᴇᴘᴀʀᴛᴇᴅ ғʀᴏᴍ <b>{chatname}</b>. ᴜɴᴛɪʟ ᴡᴇ ᴍᴇᴇᴛ ᴀɢᴀɪɴ!",
+    " <b>ғᴀʀᴇᴡᴇʟʟ</b> {mention}! <b>{chatname}</b> ᴡɪʟʟ ᴍɪss ʏᴏᴜ!",
+    " {mention} ʜᴀs ʟᴇғᴛ! sᴀғᴇ ᴛʀᴀᴠᴇʟs!",
+    " ᴀɴᴏᴛʜᴇʀ ᴄʜᴀᴘᴛᴇʀ ᴇɴᴅs... {mention} ʟᴇғᴛ <b>{chatname}</b>",
+    " {mention} ᴠᴀɴɪsʜᴇᴅ! ɢᴏᴏᴅʙʏᴇ ғʀᴏᴍ <b>{chatname}</b>!"
 ]
 
-BOT_ADDED_TEXT = "🤖 <b>ᴛʜᴀɴᴋs ғᴏʀ ᴀᴅᴅɪɴɢ ᴍᴇ ᴛᴏ ʏᴏᴜʀ ɢʀᴏᴜᴘ!</b>\n\nᴛᴀᴘ ʙᴇʟᴏᴡ ᴛᴏ sᴇᴇ ᴀʟʟ ᴀᴠᴀɪʟᴀʙʟᴇ ᴄᴏᴍᴍᴀɴᴅs ⚡"
+BOT_ADDED_TEXT = " <b>ᴛʜᴀɴᴋs ғᴏʀ ᴀᴅᴅɪɴɢ ᴍᴇ ᴛᴏ ʏᴏᴜʀ ɢʀᴏᴜᴘ!</b>\n\nᴛᴀᴘ ʙᴇʟᴏᴡ ᴛᴏ sᴇᴇ ᴀʟʟ ᴀᴠᴀɪʟᴀʙʟᴇ ᴄᴏᴍᴍᴀɴᴅs "
 
 DEFAULT_WELCOME_TIME = 3000
 DEFAULT_GOODBYE_TIME = 20
@@ -556,7 +556,7 @@ async def WelcomeMembers(update, context):
     try:
         if not was_member and is_member:
             # Log Join
-            log_text = f"📥 <b>User Joined</b>\n" \
+            log_text = f" <b>User Joined</b>\n" \
                        f"<b>Group:</b> {html.escape(chat.title)}\n" \
                        f"<b>User:</b> {member_name} (<code>{member.id}</code>)"
             asyncio.create_task(log_action(bot, chat_id, "joins", log_text))
@@ -569,10 +569,10 @@ async def WelcomeMembers(update, context):
                     try:
                         await chat.ban_member(member.id)
                         if not await is_quiet_fed(chat_id):
-                            await bot.send_message(chat_id, f"🚫 <b>Fed Ban Detected!</b>\n{member_name} has been banned from the chat because they are banned in the federation.\n<b>Reason:</b> {reason}", parse_mode='HTML')
+                            await bot.send_message(chat_id, f" <b>Fed Ban Detected!</b>\n{member_name} has been banned from the chat because they are banned in the federation.\n<b>Reason:</b> {reason}", parse_mode='HTML')
 
                         # Log to log channel
-                        log_text = f"🚫 <b>Fed Ban (on join)</b>\n" \
+                        log_text = f" <b>Fed Ban (on join)</b>\n" \
                                    f"<b>Group:</b> {html.escape(chat.title)}\n" \
                                    f"<b>User:</b> {member_name} (<code>{member.id}</code>)\n" \
                                    f"<b>Reason:</b> {reason}"
@@ -582,7 +582,7 @@ async def WelcomeMembers(update, context):
                         fed = await get_fed_info(fed_id)
                         if fed and fed.get('log_channel'):
                             try:
-                                await bot.send_message(fed['log_channel'], f"🚫 <b>Fed Ban Action</b>\n<b>User:</b> {member_name} (<code>{member.id}</code>)\n<b>Chat:</b> {chat.title}\n<b>Reason:</b> {reason}", parse_mode='HTML')
+                                await bot.send_message(fed['log_channel'], f" <b>Fed Ban Action</b>\n<b>User:</b> {member_name} (<code>{member.id}</code>)\n<b>Chat:</b> {chat.title}\n<b>Reason:</b> {reason}", parse_mode='HTML')
                             except: pass
                         return # Stop processing welcome
                     except Exception as e:
@@ -622,7 +622,7 @@ async def WelcomeMembers(update, context):
                 await send_custom_welcome(bot, chat_id, welcome_data, member, chat)
         elif was_member and not is_member:
             # Log Leave
-            log_text = f"📤 <b>User Left</b>\n" \
+            log_text = f" <b>User Left</b>\n" \
                        f"<b>Group:</b> {html.escape(chat.title)}\n" \
                        f"<b>User:</b> {member_name} (<code>{member.id}</code>)"
             asyncio.create_task(log_action(bot, chat_id, "leaves", log_text))

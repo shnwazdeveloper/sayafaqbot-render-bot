@@ -55,9 +55,9 @@ async def auto_refresh_all_caches(bot, chat_id: int, user_id: int = None, client
                 else:
                     await func()
             
-            results[module] = '✅'
+            results[module] = ''
         except Exception as e:
-            results[module] = f'❌ {str(e)[:20]}'
+            results[module] = f' {str(e)[:20]}'
     
     all_results = await _discover_and_refresh_modules(bot, chat_id, user_id)
     results.update(all_results)
@@ -91,7 +91,7 @@ async def _discover_and_refresh_modules(bot, chat_id: int, user_id: int = None) 
             module_refreshed = await _refresh_module_cache(module, bot, chat_id, user_id)
             if module_refreshed:
                 short_name = module_name.split('.')[-1]
-                results[short_name] = '✅'
+                results[short_name] = ''
         except Exception:
             continue
     

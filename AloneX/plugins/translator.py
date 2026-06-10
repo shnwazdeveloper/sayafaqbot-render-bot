@@ -11,7 +11,7 @@ from telegram.ext import filters
 
 
 
-__module__ = "𝐓ʀᴀɴsʟᴀᴛᴏʀ📶"
+__module__ = "𝐓ʀᴀɴsʟᴀᴛᴏʀ"
 
 __help__ = """
 *Commands*
@@ -40,7 +40,7 @@ async def GetLangs(update, context):
       text = [",".join(str(y) for y in langs[i:i+4]) for i in range(0, len(langs), 4)]
       text = "\n".join(text)
       return await m.reply_text(
-            f"🌐 *Language codes*:\n{text}", parse_mode=constants.ParseMode.MARKDOWN
+            f" *Language codes*:\n{text}", parse_mode=constants.ParseMode.MARKDOWN
       )
 
 @Command("tr")
@@ -81,9 +81,9 @@ async def Translate(update, context):
                 )
 
           text = (
-                   "🆎 *Original Lang*: {ol}\n"
-                   "🆎 *Translated Lang*: {dl}\n\n"
-                   "✨ *Translated Text*: {text}"
+                   " *Original Lang*: {ol}\n"
+                   " *Translated Lang*: {dl}\n\n"
+                   " *Translated Text*: {text}"
             )
           return await m.reply_text(
                   text.format(ol=tl.original_language, dl=tl.dest_language, text=tl.translated_text),
@@ -92,7 +92,7 @@ async def Translate(update, context):
                   
       except Exception as e:
               return await m.reply_text(
-                    text=f"❌ ERROR: `{e}`",
+                    text=f" ERROR: `{e}`",
                     parse_mode=constants.ParseMode.MARKDOWN
               )
           
@@ -123,8 +123,8 @@ async def sendTranslator(update, context) -> None:
               )
             
               text = (
-                f"*❓ (Detected)! Translated {translate.original_language} to {translate.dest_language}.*\n\n"
-                f"*⚡ Translate Text*:\n\n{translate.translated_text}"
+                f"* (Detected)! Translated {translate.original_language} to {translate.dest_language}.*\n\n"
+                f"* Translate Text*:\n\n{translate.translated_text}"
               )
               return await m.reply_text(
                   text=text, 
@@ -160,12 +160,12 @@ async def translatorCmd(update, context) -> None:
             if message.chat.id not in CHAT_IDS: CHAT_IDS.append(message.chat.id)
               
             return await m.reply_text(
-                 f"⚡ *Starting now i will translate {message.chat.title}'s every all other language into {langName} except the actual {lang_NativeName} language*.",
+                 f" *Starting now i will translate {message.chat.title}'s every all other language into {langName} except the actual {lang_NativeName} language*.",
                  parse_mode=constants.ParseMode.MARKDOWN
             )
             
       else:
-          return await m.reply_text(font("🙋 Query required! READ PM!!!"))
+          return await m.reply_text(font(" Query required! READ PM!!!"))
       
       
       

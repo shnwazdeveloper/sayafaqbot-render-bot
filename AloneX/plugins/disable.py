@@ -3,7 +3,7 @@ from AloneX.helpers.decorator import Command, only_groups, admin_check, DISABLEA
 from AloneX.db.disable import disable_cmd, enable_cmd, get_disabled
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 
-__module__ = "𝐃ɪsᴀʙʟᴇ🕳️"
+__module__ = "𝐃ɪsᴀʙʟᴇ"
 
 __help__ = """
 *Description*:  
@@ -25,15 +25,15 @@ async def disable_command(update, context):
     msg = update.effective_message
 
     if len(context.args) < 1:
-        return await msg.reply_text(font("⚠️ Usage: /disable <command>"))
+        return await msg.reply_text(font(" Usage: /disable <command>"))
 
     cmd = context.args[0].lower()
     if cmd not in DISABLEABLE_CMDS:
-        return await msg.reply_text(font("❌ Not in command disableable list! ।"))
+        return await msg.reply_text(font(" Not in command disableable list! ।"))
 
     await disable_cmd(update.effective_chat.id, cmd)
     await msg.reply_text(
-        f"🚫 Command <code>{cmd}</code> disabled!",
+        f" Command <code>{cmd}</code> disabled!",
         parse_mode="HTML"
     )
 
@@ -44,15 +44,15 @@ async def enable_command(update, context):
     msg = update.effective_message
 
     if len(context.args) < 1:
-        return await msg.reply_text(font("⚠️ Usage: /enable <command>"))
+        return await msg.reply_text(font(" Usage: /enable <command>"))
 
     cmd = context.args[0].lower()
     if cmd not in DISABLEABLE_CMDS:
-        return await msg.reply_text(font("❌ This command not in disableable list!"))
+        return await msg.reply_text(font(" This command not in disableable list!"))
 
     await enable_cmd(update.effective_chat.id, cmd)
     await msg.reply_text(
-        f"✅ Command <code>{cmd}</code> enabled!",
+        f" Command <code>{cmd}</code> enabled!",
         parse_mode="HTML"
     )
 
@@ -79,9 +79,9 @@ async def cmds_status(update, context):
     disabled = await get_disabled(chat_id)
 
     if not disabled:
-        return await msg.reply_text(font("✅ No command disabled!"))
+        return await msg.reply_text(font(" No command disabled!"))
 
-    text = "🚫 <b>Disabled Commands</b>:\n\n"
+    text = " <b>Disabled Commands</b>:\n\n"
     for cmd in disabled:
         text += f"• <code>{cmd}</code>\n"
 

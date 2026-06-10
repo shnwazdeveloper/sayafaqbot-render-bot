@@ -10,10 +10,10 @@ from AloneX.helpers.decorator import protected_ids
 
 LOGGER = logging.getLogger(__name__)
 
-__module__ = "𝐀ɴ𝐓ɪ-𝐋ɪ𝐍𝐊🔗"
+__module__ = "𝐀ɴ𝐓ɪ-𝐋ɪ𝐍𝐊"
 
 __help__ = """
-*Anti-Link Module* 🔗
+*Anti-Link Module* 
 
 • `/antilink` — Toggle anti-link feature.
 
@@ -36,7 +36,7 @@ async def is_user_admin(chat_id: int, user_id: int):
 
 async def get_antilink_keyboard(chat_id: int):
     enabled = await is_antilink_enabled(chat_id)
-    text = "🟢 Anti-Link: ON" if enabled else "🔴 Anti-Link: OFF"
+    text = " Anti-Link: ON" if enabled else " Anti-Link: OFF"
     return InlineKeyboardMarkup([[
         InlineKeyboardButton(
             font(text),
@@ -54,12 +54,12 @@ async def antilink_cmd(_, message: Message):
             return
 
     if not await is_user_admin(message.chat.id, message.from_user.id if message.from_user else 0):
-        return await message.reply_text(font("❌ You must be an admin to use this command."))
+        return await message.reply_text(font(" You must be an admin to use this command."))
 
     enabled = await is_antilink_enabled(message.chat.id)
     status = "Enabled" if enabled else "Disabled"
     await message.reply_text(
-        font(f"🔗 <b>Anti-Link Status:</b> {status}\n\nClick the button below to toggle."),
+        font(f" <b>Anti-Link Status:</b> {status}\n\nClick the button below to toggle."),
         reply_markup=await get_antilink_keyboard(message.chat.id),
         parse_mode=enums.ParseMode.HTML
     )
@@ -70,7 +70,7 @@ async def antilink_toggle_cb(_, query: CallbackQuery):
     chat_id = query.message.chat.id
 
     if not await is_user_admin(chat_id, user_id):
-        return await query.answer(font("❌ This button is for admins only!"), show_alert=True)
+        return await query.answer(font(" This button is for admins only!"), show_alert=True)
 
     enabled = await is_antilink_enabled(chat_id)
     new_state = not enabled
@@ -78,7 +78,7 @@ async def antilink_toggle_cb(_, query: CallbackQuery):
 
     status = "Enabled" if new_state else "Disabled"
     await query.message.edit_text(
-        font(f"🔗 <b>Anti-Link Status:</b> {status}\n\nClick the button below to toggle."),
+        font(f" <b>Anti-Link Status:</b> {status}\n\nClick the button below to toggle."),
         reply_markup=await get_antilink_keyboard(chat_id),
         parse_mode=enums.ParseMode.HTML
     )

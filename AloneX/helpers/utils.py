@@ -320,7 +320,7 @@ def owo_text(text):
     faces = [
         '(・`ω´・)', ';;w;;', 'owo', 'UwU', '>w<', '^w^', 
         r'\(^o\) (/o^)/', '( ^ _ ^)∠☆', '(ô_ô)', '~:o', 
-        ';____;', '(*^*)', '(>_', '(♥_♥)', '*(^O^)*', '((+_+))'
+        ';____;', '(*^*)', '(>_', '(_)', '*(^O^)*', '((+_+))'
     ]
     
     # Replace [rl] with w
@@ -348,9 +348,9 @@ def owo_text(text):
     return reply_text
   
 def copypasta_text(text: str):
-    emojis = ["😂", "😂", "👌", "✌", "💞", "👍", "👌", "💯", "🎶", "👀", "😂", "👓", "👏", "👐", "🍕", "💥", "🍴", "💦", "💦", "🍑", "🍆", "😩", "😏", "👉👌", "👀", "👅", "😩", "🚰"]
+    emojis = ["", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""]
     reply_text = random.choice(emojis)
-    b_char = random.choice(text).lower() # choose a random character in the message to be substituted with 🅱️
+    b_char = random.choice(text).lower() # choose a random character in the message to be substituted with 
     for c in text:
         if c == " ":
             reply_text += random.choice(emojis)
@@ -358,7 +358,7 @@ def copypasta_text(text: str):
             reply_text += c
             reply_text += random.choice(emojis)
         elif c.lower() == b_char:
-            reply_text += "🅱️"
+            reply_text += ""
         else:
             if bool(random.getrandbits(1)):
                 reply_text += c.upper()
@@ -454,11 +454,11 @@ async def autofilter_send_file(bot, text, chat_id, file):
         file_type = file['file_type']
         method = bot.send_video if file_type == 'video' else bot.send_document if file_type == "document" else bot.send_audio
         time = config.AF_FILE_DEL_TIME
-        text = "📛 <b>File Names</b>:\n" + "\n".join(f"<code>{name}</code>" for name in file['file_name']) + f"\n\n👥<b> Share link</b>: <code>https://t.me/{config.BOT_USERNAME[1:]}?start={text}</code>" + f"\n\n<b>By {config.BOT_USERNAME}</b>" + f"\n\n<blockquote>\nfile will be deleted in {time_formatter(time)}, so forward to somewhere else.</blockquote>" 
+        text = " <b>File Names</b>:\n" + "\n".join(f"<code>{name}</code>" for name in file['file_name']) + f"\n\n<b> Share link</b>: <code>https://t.me/{config.BOT_USERNAME[1:]}?start={text}</code>" + f"\n\n<b>By {config.BOT_USERNAME}</b>" + f"\n\n<blockquote>\nfile will be deleted in {time_formatter(time)}, so forward to somewhere else.</blockquote>" 
         try:
            buttons = InlineKeyboardMarkup(
            [[
-                    InlineKeyboardButton(font('📺 Stream Link'), callback_data=f"stream#{chat_id}")
+                    InlineKeyboardButton(font(' Stream Link'), callback_data=f"stream#{chat_id}")
            ]])
            file_message = await method(
               chat_id, 
@@ -470,12 +470,12 @@ async def autofilter_send_file(bot, text, chat_id, file):
            await auto_delete(file_message, time*60)
            return True
         except Exception as e:
-           return await bot.send_message(chat_id, f"❌ ERROR: {str(e)}")
+           return await bot.send_message(chat_id, f" ERROR: {str(e)}")
                 
                            
 def fixed_file_name(name:str, file_type:str, file_size:str):
      name = re.sub(r"_|\.|@|#|\(|\)|[|]", " ", name)
-     return f"[📁 {file_size}] {file_type} {name}"	
+     return f"[ {file_size}] {file_type} {name}"	
 
 def get_size(size):
     """Get size in readable format"""
@@ -670,7 +670,7 @@ async def extract_user(message, self: bool = True) -> int:
             user_id = message.from_user.id
 
     except Exception as e:
-        print(f"❌ [extract_user] Exception: {e}")
+        print(f" [extract_user] Exception: {e}")
         return None
 
     return user_id

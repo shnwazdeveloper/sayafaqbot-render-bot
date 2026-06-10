@@ -49,7 +49,7 @@ async def send_restart(application: Application) -> None:
         await application.bot.edit_message_text(
             chat_id=chat_id,
             message_id=message_id,
-            text="✅ Alone Bot Restarted Successfully! ✨"
+            text=" Alone Bot Restarted Successfully! "
         )
         os.remove("restart_data.txt")  
     except FileNotFoundError:
@@ -60,7 +60,7 @@ async def send_restart(application: Application) -> None:
         if LOGS_CHANNEL:
             await application.bot.send_message(
                 chat_id=LOGS_CHANNEL,
-                text=f"<b>Alone robot just restarted! ♥️</b>\n\n<b>Time:</b> <code>{time.ctime()}</code>",
+                text=f"<b>Alone robot just restarted! </b>\n\n<b>Time:</b> <code>{time.ctime()}</code>",
                 parse_mode=constants.ParseMode.HTML
             )
     except Exception as e:
@@ -112,7 +112,7 @@ async def start_all_clients():
     #    await pytgcalls.start()
     #    LOGGER.info("PyTgCalls Started!")
     #except Exception as e:
-    #    LOGGER.error(f'❌ ERROR when starting PyTgCalls: {e}')
+    #    LOGGER.error(f' ERROR when starting PyTgCalls: {e}')
     
     LOGGER.info("All Clients Started!")
 
@@ -174,7 +174,7 @@ async def initialize_database():
         try:
             await app.bot.send_message(
                 LOGS_CHANNEL,
-                f"<b>AloneX Robot has successfully initialized! 🚀</b>\n\n"
+                f"<b>AloneX Robot has successfully initialized! </b>\n\n"
                 f"<b>Modules:</b> <code>ALL</code>\n"
                 f"<b>Database:</b> <code>CONNECTED</code>\n"
                 f"<b>Time:</b> <code>{time.ctime()}</code>",

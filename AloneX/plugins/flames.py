@@ -3,7 +3,7 @@ from AloneX import pbot as bot
 from pyrogram.types import Message
 
 
-__module__ = "𝐅ʟᴀᴍᴇs🔥"
+__module__ = "𝐅ʟᴀᴍᴇs"
 
 __help__ = """
 ❂ *FLAMES Game Module* — Predict relationships in a fun way!  
@@ -79,6 +79,6 @@ async def flames_handler(bot, message: Message):
     info = "FLAMES is a childhood game that predicts your relationship status based on name letters."
 
     await message.reply_text(
-        f"💜 <b>{p1}</b> and ❤️ <b>{p2}</b> flames is: <b>{prediction}</b> ✨\n\n<code>{info}</code>",
+        f" <b>{p1}</b> and  <b>{p2}</b> flames is: <b>{prediction}</b> \n\n<code>{info}</code>",
         parse_mode=enums.ParseMode.HTML
     )

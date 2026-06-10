@@ -1,4 +1,4 @@
-__module__ = "𝐋ᴏɢᴏ⛔"
+__module__ = "𝐋ᴏɢᴏ"
 
 __help__ = """
 ❂ *Logo Commands*:
@@ -8,11 +8,11 @@ Generate a custom logo image from your text. Use a semicolon `;` to split upper 
 Example: `/logo AloneX ; Ackerman`
 
 ❂ *Inline Buttons* (after logo is generated):
-🎨 **Image 🔂** — Change the background image.  
-🔠 **Font 🔂** — Change the font.  
-🔁 **Change Logo 🔂** — Randomize both image and font.  
+ **Image ** — Change the background image.  
+ **Font ** — Change the font.  
+ **Change Logo ** — Randomize both image and font.  
 
-❂ *Notes:📝*  
+❂ *Notes:*  
 - Only the user who generated the logo can use the inline buttons.  
 - Session expires after some time, so act quickly!  
 - Powered by AloneX Bot.
@@ -90,16 +90,16 @@ def genlogo(text: str, image: str = None, tfont: str = None):
 @pbot.on_message(filters.command("logo"))
 async def logo_handler(client, message: Message):
     if not message.from_user:
-        return await message.reply(font("❌ Anonymous admin detected. Please use from a real account."))
+        return await message.reply(font(" Anonymous admin detected. Please use from a real account."))
 
     if len(message.command) < 2:
         return await message.reply(
-            "❌ Provide some text to generate logo.\n\n**Example:** `/logo AloneX ; Ackerman`",
+            " Provide some text to generate logo.\n\n**Example:** `/logo AloneX ; Ackerman`",
             parse_mode=ParseMode.MARKDOWN
         )
 
     name = message.text.split(None, 1)[1]
-    loading = await message.reply(font("🎨 Generating your logo..."))
+    loading = await message.reply(font(" Generating your logo..."))
 
     try:
         path, bg_file, font_file = genlogo(name)
@@ -116,10 +116,10 @@ async def logo_handler(client, message: Message):
 
         buttons = [
             [
-                InlineKeyboardButton(font("🎨 Image 🔂"), callback_data=f"flogo|{session_id}", style=ButtonStyle.PRIMARY),
-                InlineKeyboardButton(font("🔠 Font 🔂"), callback_data=f"ilogo|{session_id}", style=ButtonStyle.PRIMARY),
+                InlineKeyboardButton(font(" Image "), callback_data=f"flogo|{session_id}", style=ButtonStyle.PRIMARY),
+                InlineKeyboardButton(font(" Font "), callback_data=f"ilogo|{session_id}", style=ButtonStyle.PRIMARY),
             ],
-            [InlineKeyboardButton(font("🔁 Change Logo 🔂"), callback_data=f"slogo|{session_id}", style=ButtonStyle.SUCCESS)]
+            [InlineKeyboardButton(font(" Change Logo "), callback_data=f"slogo|{session_id}", style=ButtonStyle.SUCCESS)]
         ]
 
         await message.reply_photo(
@@ -132,29 +132,29 @@ async def logo_handler(client, message: Message):
         await loading.delete()
 
     except Exception as e:
-        await loading.edit(f"❌ Logo generation failed:\n<code>{e}</code>", parse_mode=ParseMode.HTML)
+        await loading.edit(f" Logo generation failed:\n<code>{e}</code>", parse_mode=ParseMode.HTML)
 
 
 @pbot.on_callback_query(filters.regex(r"^(flogo|ilogo|slogo)\|"))
 async def logo_callback(client, cb: CallbackQuery):
     if not cb.from_user:
-        return await cb.answer(font("❌ Anonymous admin not supported."), show_alert=True)
+        return await cb.answer(font(" Anonymous admin not supported."), show_alert=True)
 
     try:
         action, session_id = cb.data.split("|", 1)
         session = session_cache.get(session_id)
 
         if not session:
-            return await cb.answer(font("❌ Session expired."), show_alert=True)
+            return await cb.answer(font(" Session expired."), show_alert=True)
 
         if cb.from_user.id != session["owner"]:
-            return await cb.answer(font("❌ This session is not yours."), show_alert=True)
+            return await cb.answer(font(" This session is not yours."), show_alert=True)
 
         cooldown_key = (cb.message.chat.id, cb.message.id, action)
         now = datetime.now()
         if cooldown_key in cooldowns and cooldowns[cooldown_key] > now:
             wait = int((cooldowns[cooldown_key] - now).total_seconds())
-            return await cb.answer(f"⏳ Wait {wait}s before retrying.", show_alert=True)
+            return await cb.answer(f" Wait {wait}s before retrying.", show_alert=True)
 
         cooldowns[cooldown_key] = now + timedelta(seconds=5)
 
@@ -187,7 +187,7 @@ async def logo_callback(client, cb: CallbackQuery):
 
         if same:
             os.remove(path)
-            return await cb.answer(font("⚠️ Already showing this logo."), show_alert=True)
+            return await cb.answer(font(" Already showing this logo."), show_alert=True)
 
         session_cache[session_id] = {
             "name": name,
@@ -198,10 +198,10 @@ async def logo_callback(client, cb: CallbackQuery):
 
         buttons = [
             [
-                InlineKeyboardButton(font("🎨 Image 🔂"), callback_data=f"flogo|{session_id}", style=ButtonStyle.PRIMARY),
-                InlineKeyboardButton(font("🔠 Font 🔂"), callback_data=f"ilogo|{session_id}", style=ButtonStyle.PRIMARY),
+                InlineKeyboardButton(font(" Image "), callback_data=f"flogo|{session_id}", style=ButtonStyle.PRIMARY),
+                InlineKeyboardButton(font(" Font "), callback_data=f"ilogo|{session_id}", style=ButtonStyle.PRIMARY),
             ],
-            [InlineKeyboardButton(font("🔁 Change Logo 🔂"), callback_data=f"slogo|{session_id}", style=ButtonStyle.SUCCESS)]
+            [InlineKeyboardButton(font(" Change Logo "), callback_data=f"slogo|{session_id}", style=ButtonStyle.SUCCESS)]
         ]
 
         await cb.message.edit_media(
@@ -214,8 +214,8 @@ async def logo_callback(client, cb: CallbackQuery):
         )
 
         os.remove(path)
-        await cb.answer(font("✅ Logo updated!"))
+        await cb.answer(font(" Logo updated!"))
 
     except Exception as e:
         print(f"[LOGO CALLBACK ERROR] {e}")
-        await cb.answer(font("❌ Something went wrong."), show_alert=True)
+        await cb.answer(font(" Something went wrong."), show_alert=True)

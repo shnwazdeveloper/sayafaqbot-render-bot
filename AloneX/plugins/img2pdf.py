@@ -8,7 +8,7 @@ from telegram import constants
 user_temp = {}
     
 
-__module__ = "𝐏ᴅғ〽️"
+__module__ = "𝐏ᴅғ"
 
 
 __help__ = '''
@@ -44,12 +44,12 @@ async def img2pdf(update, context):
   
     if not user.id in user_temp:
         return await message.reply_text(
-            "🙋 It seems you haven't added any images to convert pdf please use /img2pdf for add images."
+            " It seems you haven't added any images to convert pdf please use /img2pdf for add images."
         )
     images = user_temp[user.id].get('images', [])
   
     if not images:
-       return await m.reply_text(font("🤔 No images found in data."))
+       return await m.reply_text(font(" No images found in data."))
       
     dpix = dpiy = 300
     layout_fun = get_fixed_dpi_layout_fun((dpix, dpiy))
@@ -59,11 +59,11 @@ async def img2pdf(update, context):
       
       with open(file_path,"wb") as f:
           f.write(convert(images, layout_fun=layout_fun))
-      if (await m.reply_document(file_path, caption=f"*By {context.bot.username} ⚡*", parse_mode=constants.ParseMode.MARKDOWN)):
+      if (await m.reply_document(file_path, caption=f"*By {context.bot.username} *", parse_mode=constants.ParseMode.MARKDOWN)):
            user_temp[user.id]['images'].clear()
       
     except Exception as e:
-        return await message.reply_text(f"❌ Error: {str(e)}")
+        return await message.reply_text(f" Error: {str(e)}")
       
 @Command('img2pdf')
 async def img2pdf(update, context):
@@ -79,7 +79,7 @@ async def img2pdf(update, context):
            user_temp[user.id]['images'].append(file)
            images = user_temp[user.id].get('images', [])
            await message.reply_text(
-               f"⚡ Successfully image {len(images)} added to convert but if you want to add multiply images please continue to use /img2pdf to add more. and after all done, use /getimg2pdf to get the pdf file."
+               f" Successfully image {len(images)} added to convert but if you want to add multiply images please continue to use /img2pdf to add more. and after all done, use /getimg2pdf to get the pdf file."
            )
     else:
         photo_id = reply.photo[-1].file_id
@@ -87,7 +87,7 @@ async def img2pdf(update, context):
         user_temp[user.id]['images'].append(file)
         images = user_temp[user.id]['images']
         await message.reply_text(
-               f"⚡ Successfully image {len(images)} added to convert but if you want to add multiple images please continue to use /img2pdf to add more. and after all done use /getimg2pdf to send the file"
+               f" Successfully image {len(images)} added to convert but if you want to add multiple images please continue to use /img2pdf to add more. and after all done use /getimg2pdf to send the file"
            )
     
     

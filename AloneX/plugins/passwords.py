@@ -4,7 +4,7 @@ from AloneX.helpers.utils import Password
 from pyrogram import filters, types
 from pyrogram.enums import ParseMode, ButtonStyle
 
-__module__ = "𝐏ᴀssᴡᴏʀᴅs🔑"
+__module__ = "𝐏ᴀssᴡᴏʀᴅs"
 
 __help__ = """
 ❂ *Commands*:
@@ -21,7 +21,7 @@ __help__ = """
 async def GenPasswordCmd(_, message):
     user = message.from_user
     text = (
-        "🔐 **Password Generator**\n"
+        " **Password Generator**\n"
         "Click a button below to generate a secure password.\n\n"
         f"_By {config.BOT_USERNAME}_"
     )
@@ -62,9 +62,9 @@ async def GenPasswordCq(_, query):
 
 # Helper: Edit message with new passwords and buttons
 async def edit_text(message, password_list, user_id):
-    text = "**🔐 New Passwords:**\n\n"
+    text = "** New Passwords:**\n\n"
     text += "\n".join(f"`{p}`" for p in password_list[:5])
-    text += "\n\n⚙️ **Choose more options below:**"
+    text += "\n\n **Choose more options below:**"
     text += f"\n_By {config.BOT_USERNAME}_"
 
     buttons = get_buttons(user_id)
@@ -75,19 +75,19 @@ async def edit_text(message, password_list, user_id):
 def get_buttons(user_id):
     return [
         [
-            types.InlineKeyboardButton(font("🔢 Digits"), callback_data=f"pw_random_digits#{user_id}", style=ButtonStyle.PRIMARY),
-            types.InlineKeyboardButton(font("🔤 Strings"), callback_data=f"pw_random_strings#{user_id}", style=ButtonStyle.PRIMARY),
-            types.InlineKeyboardButton(font("🎲 Random"), callback_data=f"pw_random#{user_id}", style=ButtonStyle.PRIMARY)
+            types.InlineKeyboardButton(font(" Digits"), callback_data=f"pw_random_digits#{user_id}", style=ButtonStyle.PRIMARY),
+            types.InlineKeyboardButton(font(" Strings"), callback_data=f"pw_random_strings#{user_id}", style=ButtonStyle.PRIMARY),
+            types.InlineKeyboardButton(font(" Random"), callback_data=f"pw_random#{user_id}", style=ButtonStyle.PRIMARY)
         ],
         [
-            types.InlineKeyboardButton(font("📘 Normal Noun"), callback_data=f"pw_normal_nouns#{user_id}", style=ButtonStyle.PRIMARY),
-            types.InlineKeyboardButton(font("📗 Normal Adjective"), callback_data=f"pw_normal_adjectives#{user_id}", style=ButtonStyle.PRIMARY)
+            types.InlineKeyboardButton(font(" Normal Noun"), callback_data=f"pw_normal_nouns#{user_id}", style=ButtonStyle.PRIMARY),
+            types.InlineKeyboardButton(font(" Normal Adjective"), callback_data=f"pw_normal_adjectives#{user_id}", style=ButtonStyle.PRIMARY)
         ],
         [
-            types.InlineKeyboardButton(font("📙 Easy Noun"), callback_data=f"pw_easy_nouns#{user_id}", style=ButtonStyle.PRIMARY),
-            types.InlineKeyboardButton(font("📕 Easy Adjective"), callback_data=f"pw_easy_adjectives#{user_id}", style=ButtonStyle.PRIMARY)
+            types.InlineKeyboardButton(font(" Easy Noun"), callback_data=f"pw_easy_nouns#{user_id}", style=ButtonStyle.PRIMARY),
+            types.InlineKeyboardButton(font(" Easy Adjective"), callback_data=f"pw_easy_adjectives#{user_id}", style=ButtonStyle.PRIMARY)
         ],
         [
-            types.InlineKeyboardButton(font("❌ Close"), callback_data=f"pyrodel#{user_id}", style=ButtonStyle.DANGER)
+            types.InlineKeyboardButton(font(" Close"), callback_data=f"pyrodel#{user_id}", style=ButtonStyle.DANGER)
         ]
     ]

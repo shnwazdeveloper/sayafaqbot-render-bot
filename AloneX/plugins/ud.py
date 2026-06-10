@@ -4,10 +4,10 @@ import aiohttp
 import config
 
 
-__module__ = "𝐔ᴅ📖"
+__module__ = "𝐔ᴅ"
 
 __help__ = """
-*UD📖*
+*UD*
 
 *Description:*  
 Get meanings of urban slang and abbreviations, including common internet terms.
@@ -36,7 +36,7 @@ async def urban(_, m):
     if 0 == len(mm):
         return await m.reply(font("=> No results Found!"))
     
-    string = f"🔍 **Ward**: {mm[0].get('word')}\n\n📝 **Definition**: {mm[0].get('definition')}\n\n✏️ **Example**: {mm[0].get('example')}\n\n**By {config.BOT_USERNAME}**"
+    string = f" **Ward**: {mm[0].get('word')}\n\n **Definition**: {mm[0].get('definition')}\n\n **Example**: {mm[0].get('example')}\n\n**By {config.BOT_USERNAME}**"
     
     if 1 == len(mm):
         return await m.reply(text=string, quote=True)
@@ -67,20 +67,20 @@ async def udnext(_, query):
     uwu = mm[num]
     
     if num == len(mm)-1:
-        string = f"🔍 **Ward**: {uwu.get('word')}\n\n📝 **Definition**: {uwu.get('definition')}\n\n✏️ **Example**: {uwu.get('example')}\n\n"
+        string = f" **Ward**: {uwu.get('word')}\n\n **Definition**: {uwu.get('definition')}\n\n **Example**: {uwu.get('example')}\n\n"
         string += f"Page: {num+1}/{len(mm)}\n\n**By {config.BOT_USERNAME}**"
         return await query.message.edit(
             text=string, 
             reply_markup=types.InlineKeyboardMarkup([
-                [types.InlineKeyboardButton(font('➡️ Back'), callback_data=f"udbck:{query.from_user.id}:{text}:{num}", style=enums.ButtonStyle.PRIMARY)]
+                [types.InlineKeyboardButton(font(' Back'), callback_data=f"udbck:{query.from_user.id}:{text}:{num}", style=enums.ButtonStyle.PRIMARY)]
             ])
         )
     else:
-        string = f"🔍 **Ward**: {uwu.get('word')}\n\n📝 **Definition**: {uwu.get('definition')}\n\n✏️ **Example**: {uwu.get('example')}\n\n"
+        string = f" **Ward**: {uwu.get('word')}\n\n **Definition**: {uwu.get('definition')}\n\n **Example**: {uwu.get('example')}\n\n"
         string += f"Page: {num+1}/{len(mm)}\n\n**By {config.BOT_USERNAME}**"
         buttons = [[
-            types.InlineKeyboardButton(font("Back ⏮️"), callback_data=f"udbck:{query.from_user.id}:{text}:{num}", style=enums.ButtonStyle.PRIMARY),
-            types.InlineKeyboardButton(font("Next ⏭️"), callback_data=f"udnxt:{query.from_user.id}:{text}:{num}", style=enums.ButtonStyle.PRIMARY)
+            types.InlineKeyboardButton(font("Back "), callback_data=f"udbck:{query.from_user.id}:{text}:{num}", style=enums.ButtonStyle.PRIMARY),
+            types.InlineKeyboardButton(font("Next "), callback_data=f"udnxt:{query.from_user.id}:{text}:{num}", style=enums.ButtonStyle.PRIMARY)
         ]]
         return await query.message.edit(
             text=string, 
@@ -104,20 +104,20 @@ async def udback(_, query):
     uwu = mm[num]
     
     if num == 0:
-        string = f"🔍 **Ward**: {uwu.get('word')}\n\n📝 **Definition**: {uwu.get('definition')}\n\n✏️ **Example**: {uwu.get('example')}\n\n"
+        string = f" **Ward**: {uwu.get('word')}\n\n **Definition**: {uwu.get('definition')}\n\n **Example**: {uwu.get('example')}\n\n"
         string += f"Page: {num+1}/{len(mm)}\n\n**By {config.BOT_USERNAME}**"
         return await query.message.edit(
             text=string, 
             reply_markup=types.InlineKeyboardMarkup([
-                [types.InlineKeyboardButton(font('➡️ Next'), callback_data=f"udnxt:{query.from_user.id}:{text}:{num}", style=enums.ButtonStyle.PRIMARY)]
+                [types.InlineKeyboardButton(font(' Next'), callback_data=f"udnxt:{query.from_user.id}:{text}:{num}", style=enums.ButtonStyle.PRIMARY)]
             ])
         )
     else:
-        string = f"🔍 **Ward**: {uwu.get('word')}\n\n📝 **Definition**: {uwu.get('definition')}\n\n✏️ **Example**: {uwu.get('example')}\n\n"
+        string = f" **Ward**: {uwu.get('word')}\n\n **Definition**: {uwu.get('definition')}\n\n **Example**: {uwu.get('example')}\n\n"
         string += f"Page: {num+1}/{len(mm)}\n\n**By {config.BOT_USERNAME}**"
         buttons = [[
-            types.InlineKeyboardButton(font("Back ⏮️"), callback_data=f"udbck:{query.from_user.id}:{text}:{num}", style=enums.ButtonStyle.PRIMARY),
-            types.InlineKeyboardButton(font("Next ⏭️"), callback_data=f"udnxt:{query.from_user.id}:{text}:{num}", style=enums.ButtonStyle.PRIMARY)
+            types.InlineKeyboardButton(font("Back "), callback_data=f"udbck:{query.from_user.id}:{text}:{num}", style=enums.ButtonStyle.PRIMARY),
+            types.InlineKeyboardButton(font("Next "), callback_data=f"udnxt:{query.from_user.id}:{text}:{num}", style=enums.ButtonStyle.PRIMARY)
         ]]
         return await query.message.edit(
             text=string, 

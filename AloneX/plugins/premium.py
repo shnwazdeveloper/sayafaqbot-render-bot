@@ -14,7 +14,7 @@ async def get_premium_users_func(update, context):
         if not users:
             return await update.message.reply_text(font("No premium users found."), parse_mode=constants.ParseMode.HTML)
         
-        text = "✨ <b>miaksa's Premium Users</b>:\n\n"
+        text = " <b>miaksa's Premium Users</b>:\n\n"
         text += "".join(f"<code>{user}</code>\n" for user in users)
         await update.message.reply_text(text, parse_mode=constants.ParseMode.HTML)
     except Exception as e:
@@ -30,24 +30,24 @@ async def update_premium_func(update, context):
 
         # Validate command format
         if len(args) != 3:
-            return await message.reply_text(font("❌ Incorrect format! Usage: /premium <user_id> <-add/-rm>"))
+            return await message.reply_text(font(" Incorrect format! Usage: /premium <user_id> <-add/-rm>"))
 
         _, user_id, action = args
         action = action.lower()
 
         # Validate user_id and action
         if not user_id.isdigit() or action not in ['-add', '-rm']:
-            return await message.reply_text(font("❌ Invalid input! Usage: /premium <user_id> <-add/-rm>"))
+            return await message.reply_text(font(" Invalid input! Usage: /premium <user_id> <-add/-rm>"))
 
         user_id = int(user_id)
         if action == "-add":
             success = await update_user_premium(user_id, True)
-            text = "✅ *AloneX's Premium successfully granted to the user.*" if success else "🧐 *User is already premium.*"
+            text = " *AloneX's Premium successfully granted to the user.*" if success else " *User is already premium.*"
             if success and user_id not in config.PREMIUM_USERS:
                 config.PREMIUM_USERS.append(user_id)
         elif action == "-rm":
             success = await update_user_premium(user_id, False)
-            text = "❌ *AloneX's Premium removed from the user.*" if success else "🧐 *User is not a premium user.*"
+            text = " *AloneX's Premium removed from the user.*" if success else " *User is not a premium user.*"
             if success and user_id in config.PREMIUM_USERS:
                 config.PREMIUM_USERS.remove(user_id)
 

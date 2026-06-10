@@ -17,7 +17,7 @@ __help__ = """
 `/ip 162.243.19.47`
 """
 
-__module__ = '𝐈ᴘ✨'
+__module__ = '𝐈ᴘ'
 
 
 async def lookup(ip: str):
@@ -34,7 +34,7 @@ async def lookup(ip: str):
                     return f"Error: {ip_info['message']}"
                 
                 info = (
-                    f"\n**ℹ️ IP Information Lookup Result**:\n\n"
+                    f"\n** IP Information Lookup Result**:\n\n"
                     f"**IP Address**: {ip_info.get('query', 'N/A')}\n"
                     f"**Country**: {ip_info.get('country', 'N/A')} ({ip_info.get('countryCode', 'N/A')})\n"
                     f"**Region**: {ip_info.get('regionName', 'N/A')} ({ip_info.get('region', 'N/A')})\n"

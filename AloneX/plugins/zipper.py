@@ -4,10 +4,10 @@ from AloneX.helpers.decorator import Command, spam_control, disableable
 from telegram import constants
 
 
-__module__ = "𝐙ɪᴘᴘᴇʀ🗜️"
+__module__ = "𝐙ɪᴘᴘᴇʀ"
 
 __help__ = """
-*Zipper🗜️*
+*Zipper*
 
 *Description:*  
 This module allows you to zip multiple media files into a single archive and unzip existing zip files directly in the chat.
@@ -64,12 +64,12 @@ async def unzipFile(update, context):
     user = update.effective_user
 
     if not reply or not (reply.document and reply.document.mime_type.endswith('zip')):
-        return await m.reply_text(font("🙋 <b>Please reply to a ZIP file!</b>"), parse_mode=constants.ParseMode.HTML)
+        return await m.reply_text(font(" <b>Please reply to a ZIP file!</b>"), parse_mode=constants.ParseMode.HTML)
 
     # File size check
     file_size = reply.document.file_size
     if (file_size / 1024**2) >= 19:
-        return await m.reply_text(font("❌ <b>File size too big! Please use ZIP files under 20MB.</b>"), parse_mode=constants.ParseMode.HTML)
+        return await m.reply_text(font(" <b>File size too big! Please use ZIP files under 20MB.</b>"), parse_mode=constants.ParseMode.HTML)
 
     try:
         # Create user-specific temporary directory
@@ -93,9 +93,9 @@ async def unzipFile(update, context):
                     files_to_send.append(os.path.join(root, file))
 
         if not files_to_send:
-            return await m.reply_text(font("❌ <b>The ZIP file is empty!</b>"), parse_mode=constants.ParseMode.HTML)
+            return await m.reply_text(font(" <b>The ZIP file is empty!</b>"), parse_mode=constants.ParseMode.HTML)
             
-        status_msg = await m.reply_text(font('⚡ <b>Sending files ...</b>'), parse_mode=constants.ParseMode.HTML)
+        status_msg = await m.reply_text(font(' <b>Sending files ...</b>'), parse_mode=constants.ParseMode.HTML)
 
         # Send files with proper cleanup
         failed_files = []
@@ -113,16 +113,16 @@ async def unzipFile(update, context):
 
         # Prepare status message
         success_count = len(files_to_send) - len(failed_files)
-        status_msg_text = f"✅ <b>Successfully sent {success_count} files unzipped!</b>"
+        status_msg_text = f" <b>Successfully sent {success_count} files unzipped!</b>"
         if failed_files:
-            status_msg_text += f"\n❌ <b>Failed to send {len(failed_files)} zipped files</b>:\n" + "\n".join(failed_files)
+            status_msg_text += f"\n <b>Failed to send {len(failed_files)} zipped files</b>:\n" + "\n".join(failed_files)
 
         await status_msg.edit_text(status_msg_text, parse_mode=constants.ParseMode.HTML)
 
     except zipfile.BadZipFile:
-        await status_msg.edit_text(font("❌ Invalid ZIP file format!"))
+        await status_msg.edit_text(font(" Invalid ZIP file format!"))
     except Exception as e:
-        await status_msg.edit_text(f"❌ Error: {str(e)}")
+        await status_msg.edit_text(f" Error: {str(e)}")
     finally:
         # Cleanup temporary files
         if os.path.exists(user_dir):
@@ -144,12 +144,12 @@ async def getZipFile(update, context):
   
     if not user.id in user_temp:
         return await message.reply_text(
-            "🙋 It seems you haven't added any media to zip please use /zip for add media."
+            " It seems you haven't added any media to zip please use /zip for add media."
         )
     medias = user_temp[user.id].get('files', [])
   
     if not medias:
-       return await m.reply_text(font("🤔 No medias found in data."))
+       return await m.reply_text(font(" No medias found in data."))
 
     zip_path = f"user_{user.full_name}_file.zip"
     try:
@@ -157,7 +157,7 @@ async def getZipFile(update, context):
            write = lambda file: zipf.write(file, os.path.basename(file))
            list(map(write, medias))
     except Exception as e:
-        return await m.reply_text(f"❌ Error: {e}")
+        return await m.reply_text(f" Error: {e}")
       
     if (await m.reply_document(zip_path)):
         remove_images(medias)
@@ -187,13 +187,13 @@ async def zipFile(update, context):
            user_temp[user.id]['files'].append(file)
            images = user_temp[user.id].get('files', [])
            await message.reply_text(
-               f"⚡ Successfully media {len(images)} added to zip but if you want to add multiply media please continue to use /zip to add more. and after all done, use /getzip to get the zip file."
+               f" Successfully media {len(images)} added to zip but if you want to add multiply media please continue to use /zip to add more. and after all done, use /getzip to get the zip file."
            )
     else:
         file = await (await context.bot.get_file(file_id)).download_to_drive()
         user_temp[user.id]['files'].append(file)
         images = user_temp[user.id]['files']
         await message.reply_text(
-               f"⚡ Successfully media {len(images)} added to zip but if you want to add multiple media please continue to use /zip to add more. and after all done use /getzip to get the zip file."
+               f" Successfully media {len(images)} added to zip but if you want to add multiple media please continue to use /zip to add more. and after all done use /getzip to get the zip file."
            )
       

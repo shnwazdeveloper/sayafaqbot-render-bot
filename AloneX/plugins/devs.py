@@ -33,7 +33,7 @@ from telegram.error import BadRequest
 from telegram.constants import ParseMode
 import datetime as dt
 
-__module__ = '𝐃ᴇᴠs-𝐓ᴏᴏʟ🤴'
+__module__ = '𝐃ᴇᴠs-𝐓ᴏᴏʟ'
 
 
 __help__ = '''
@@ -76,7 +76,7 @@ async def MongoDBInfo(update, context):
       IS = round(result['indexSize']/(1024*1024), 2)
       TCC = result['collections']
       text = (
-         "📊 <b>MONGO-DATABASE Status</b>:\n\n"
+         " <b>MONGO-DATABASE Status</b>:\n\n"
          f"<b>✰ Logical Data Size</b>: <code>{LDS} MB</code>\n"
          f"<b>✰ Storage Size</b>: <code>{SS} MB</code>\n"
          f"<b>✰ Index Size</b>: <code>{IS} MB</code>\n"
@@ -90,7 +90,7 @@ RESTART_FILE = "restart_chat.txt"
 @Command('restart')
 @devs_only
 async def restart(update, context):
-    msg = await update.effective_message.reply_text("🔄 Bot Restarting...")
+    msg = await update.effective_message.reply_text(" Bot Restarting...")
 
     # save chat_id and message_id for editing after restart
     with open("restart_data.txt", "w") as f:
@@ -106,7 +106,7 @@ async def _ignoreUserlist(update, context):
         users = list(map(str, await ignore.get_all_users()))
         if not users:
              return await m.reply_text("Currently None blocked users.")
-        text = "🚫 *Blocked Users*:"
+        text = " *Blocked Users*:"
         text += "\n".join(f"–› `{user}`" for user in users)
         return await m.reply_text(text, parse_mode=constants.ParseMode.MARKDOWN)
 
@@ -129,7 +129,7 @@ async def _unIgnoreUser(update, context):
     if user_id in ignore.USER_IDS:
         ignore.USER_IDS.remove(user_id)
         await msg.edit_text(
-            '✅ *Unblocked user successfully.*',
+            ' *Unblocked user successfully.*',
             parse_mode=constants.ParseMode.MARKDOWN
         )
 
@@ -139,7 +139,7 @@ async def _unIgnoreUser(update, context):
         return
 
     await msg.edit_text(
-        f"🗣️ <b>Unblocked user {user.mention_html()} now he/she can interact with bot again.</b>",
+        f" <b>Unblocked user {user.mention_html()} now he/she can interact with bot again.</b>",
         parse_mode=constants.ParseMode.HTML
     )
 
@@ -153,7 +153,7 @@ async def _unIgnoreUser(update, context):
         if "protected content" in str(e).lower():
             await bot.send_message(
                 chat_id=config.LOGS_CHANNEL,
-                text=f"🗣️ Unblocked user {user.mention_html()}",
+                text=f" Unblocked user {user.mention_html()}",
                 parse_mode=constants.ParseMode.HTML
             )
         else:
@@ -176,7 +176,7 @@ async def _ignoreUser(update, context):
 
     user = await bot.get_chat(user_id)
     msg = await m.reply_text(
-        text=f"<b>🔇 Completely ignored user {user.mention_html()}</b>",
+        text=f"<b> Completely ignored user {user.mention_html()}</b>",
         parse_mode=constants.ParseMode.HTML
     )
 
@@ -192,7 +192,7 @@ async def _ignoreUser(update, context):
             # If still protected, just send plain text
             await bot.send_message(
                 chat_id=config.LOGS_CHANNEL,
-                text=f"🔇 Completely ignored user {user.mention_html()}",
+                text=f" Completely ignored user {user.mention_html()}",
                 parse_mode=constants.ParseMode.HTML
             )
         else:
@@ -222,7 +222,7 @@ async def UserPtbCallbackIgnore(update, context):
         if q.from_user.id in DEV_LIST or q.from_user.id in SUDO_USERS or q.from_user.id == OWNER_ID:
             return
         if q.from_user.id in ignore.USER_IDS:
-             await q.answer(font("🚫 You are blocked from interacting with the bot."), show_alert=True)
+             await q.answer(font(" You are blocked from interacting with the bot."), show_alert=True)
              raise ApplicationHandlerStop
 
 @pbot.on_callback_query(group=-1000000)
@@ -231,7 +231,7 @@ async def UserPyroCallbackIgnore(_, query):
          if query.from_user.id in DEV_LIST or query.from_user.id in SUDO_USERS or query.from_user.id == OWNER_ID:
              return
          if query.from_user.id in ignore.USER_IDS:
-              await query.answer(font("🚫 You are blocked from interacting with the bot."), show_alert=True)
+              await query.answer(font(" You are blocked from interacting with the bot."), show_alert=True)
               raise StopPropagation
 
 @pbot.on_inline_query(group=-1000000)
@@ -255,7 +255,7 @@ async def forwardToOwner(update, context):
             )
         except Exception as e:
             LOGGER.info(
-              f"❌ Error forwarding message:\n{e}"
+              f" Error forwarding message:\n{e}"
             )
 
 @Command('echo')
@@ -292,7 +292,7 @@ async def botSend(update, context):
                chat = await context.bot.get_chat(chat_id)
                return chat.id
            except Exception as e:
-               await m.reply_text(f"❌ *Chat not found*:\n{e}", parse_mode=constants.ParseMode.MARKDOWN)
+               await m.reply_text(f" *Chat not found*:\n{e}", parse_mode=constants.ParseMode.MARKDOWN)
                return False
                
             
@@ -304,17 +304,17 @@ async def botSend(update, context):
            chat_id = await get_chat(chat)
 
        if not chat_id:
-           return await m.reply_text("🤷 *I couldn't find the chat/user!*", parse_mode=constants.ParseMode.MARKDOWN)
+           return await m.reply_text(" *I couldn't find the chat/user!*", parse_mode=constants.ParseMode.MARKDOWN)
          
        try:
           await r.copy(chat_id)
        except Exception as e:
            return await m.reply_text(f"Error: {e}")
          
-       return await m.reply_text("✅")
+       return await m.reply_text("")
       
     else:
-        return await m.reply_text("🙋 *Reply to a message & give chat id!*", parse_mode=constants.ParseMode.MARKDOWN)
+        return await m.reply_text(" *Reply to a message & give chat id!*", parse_mode=constants.ParseMode.MARKDOWN)
 
 
 
@@ -323,7 +323,7 @@ async def botSend(update, context):
 async def leftChat(update, context):
     m = update.effective_message
     if not len(m.text.split()) == 2:
-        return await m.reply_text('chat id/username to left 🤔')
+        return await m.reply_text('chat id/username to left ')
     
     chat_id = m.text.split()[1]
     try:
@@ -331,7 +331,7 @@ async def leftChat(update, context):
         await m.reply_text(f"Leaving {chat.title} - ({chat.id})")
         await context.bot.leave_chat(chat.id)
     except Exception as e:
-        return await m.reply_text("❌ Error occured: " + str(e))
+        return await m.reply_text(" Error occured: " + str(e))
   
 
 @Command('bcast')
@@ -340,7 +340,7 @@ async def Broadcast(update, context):
    ''' info: broadcasting to all users '''
    m = update.effective_message
    if not m.reply_to_message:
-       return await m.reply_text("**⚡ Reply to the message for broadcast**")
+       return await m.reply_text("** Reply to the message for broadcast**")
      
    failed = 0
    count = 0
@@ -352,10 +352,10 @@ async def Broadcast(update, context):
 
    all_users = await get_all_active_users()
   
-   msg = await m.reply_text("🔄 *Broadcasting....*", parse_mode=constants.ParseMode.MARKDOWN)
+   msg = await m.reply_text(" *Broadcasting....*", parse_mode=constants.ParseMode.MARKDOWN)
    for user_id in all_users:
        if count % 5 == 0:
-           await msg.edit_text(f"⚡ *Broadcast successful done to {sent} users!*", parse_mode=constants.ParseMode.MARKDOWN)
+           await msg.edit_text(f" *Broadcast successful done to {sent} users!*", parse_mode=constants.ParseMode.MARKDOWN)
            await asyncio.sleep(5) # sleep 5 seconds every time send to 5 chats
        try:
            fmsg = await m.reply_to_message.forward(user_id)
@@ -379,7 +379,7 @@ async def Broadcast(update, context):
           errors_txt += f"[{user}]: {error}\n"
         
       document = get_as_document(errors_txt)
-      await m.reply_document(document, caption="❌ Errors when sending broadcast")
+      await m.reply_document(document, caption=" Errors when sending broadcast")
 
    if inactive_users_list:
         await update_users_status_to_inactive(inactive_users_list) # update inactive users status in database
@@ -415,7 +415,7 @@ async def send(msg, cmd, stime, bot, update, message_id):
             _paste = await paste(cmd)
             caption = _paste["paste_url"] if 'error' not in _paste else "<b>Paste link not available at the moment.</b>"
         else:
-            caption = f"<b>Command:</b>{cmd}\n\n⚡ <b>Taken time</b>: <code>{taken_time}</code>"
+            caption = f"<b>Command:</b>{cmd}\n\n <b>Taken time</b>: <code>{taken_time}</code>"
 
         out_file = get_as_document(msg)
         await bot.send_document(
@@ -429,7 +429,7 @@ async def send(msg, cmd, stime, bot, update, message_id):
         try:
             await bot.send_message(
                 chat_id=chat_id,
-                text=f"<b>Command:</b><pre language='python'>\n{cmd}</pre>\n\n<b>Output</b><pre language='python'>\n{msg}</pre>\n\n⚡ <b>Taken time</b>: <code>{taken_time}</code>",
+                text=f"<b>Command:</b><pre language='python'>\n{cmd}</pre>\n\n<b>Output</b><pre language='python'>\n{msg}</pre>\n\n <b>Taken time</b>: <code>{taken_time}</code>",
                 reply_parameters=ReplyParameters(message_id=message_id),
                 parse_mode=ParseMode.HTML,
             )
@@ -469,7 +469,7 @@ async def evaluate(update, context):
     stime = time.time()
     if len(message.text.split()) < 2:
         return await message.reply_text(
-          "**🕵️ Provide code execute...**"
+          "** Provide code execute...**"
        )
 
     bot = context.bot
@@ -545,7 +545,7 @@ async def shell(update: Update, context: ContextTypes.DEFAULT_TYPE):
         
     if not len(message.text.split()) >= 2:
        return await message.reply_text(
-          "🕵️ Provide code execute..."
+          " Provide code execute..."
        )
     code = message.text.split(maxsplit=1)[1]
     try:
@@ -606,9 +606,9 @@ async def pyroevaluate(bot: pbot, message: types.Message):
     stime = time.time()
     
     if len(message.text.split()) < 2:
-        return await message.reply_text("💻 **Provide code to execute...**")
+        return await message.reply_text(" **Provide code to execute...**")
 
-    msg = await message.reply("💻 **Executing code...**")
+    msg = await message.reply(" **Executing code...**")
     cmd = message.text.split(maxsplit=1)[1]
     
     r = m.reply_to_message
@@ -655,7 +655,7 @@ async def pyroevaluate(bot: pbot, message: types.Message):
     elif stdout:
         evaluation = stdout
     else:
-        evaluation = "**Success** ✅"
+        evaluation = "**Success** "
 
     output = evaluation.strip()
     taken_time = round(time.time() - stime, 3)
@@ -665,27 +665,27 @@ async def pyroevaluate(bot: pbot, message: types.Message):
         if len(cmd) > 1000:
             _paste = await paste(cmd)
             if 'error' in _paste:
-                caption = "**💻 Paste link not available at the moment.**"
+                caption = "** Paste link not available at the moment.**"
             else:
-                caption = f"**💻 Code**: {_paste['paste_url']}\n\n⚡ **Taken time**: `{taken_time}s`"
+                caption = f"** Code**: {_paste['paste_url']}\n\n **Taken time**: `{taken_time}s`"
         else:
-            caption = f"**💻 Command**:\n```python\n{cmd}\n```\n\n⚡ **Taken time**: `{taken_time}s`"
+            caption = f"** Command**:\n```python\n{cmd}\n```\n\n **Taken time**: `{taken_time}s`"
 
         file = get_as_document(output)
         await msg.delete()
         await m.reply_document(file, caption=caption)
     else:
         # Format output
-        if output == "**Success** ✅":
+        if output == "**Success** ":
             formatted_output = output
         else:
             formatted_output = f"```\n{output}\n```"
 
         await msg.edit_text(
             text=(
-                f"**💻 Command**:\n```python\n{cmd}\n```"
-                f"\n\n**📤 Output**:\n{formatted_output}"
-                f"\n\n⚡ **Taken Time**: `{taken_time}s`"
+                f"** Command**:\n```python\n{cmd}\n```"
+                f"\n\n** Output**:\n{formatted_output}"
+                f"\n\n **Taken Time**: `{taken_time}s`"
             ),
             parse_mode=enums.ParseMode.MARKDOWN
 		)

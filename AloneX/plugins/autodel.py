@@ -78,7 +78,7 @@ async def autodel_handler(e):
         return
     
     if not await is_admin(e):
-        m = await e.reply(font("❌ Only admins or devs can use this command."))
+        m = await e.reply(font(" Only admins or devs can use this command."))
         asyncio.create_task(delete_message(m, 3))
         asyncio.create_task(delete_message(e.message, 3))
         return
@@ -89,9 +89,9 @@ async def autodel_handler(e):
     if len(parts) < 2:
         d = await get_autodelete(cid)
         if d:
-            m = await e.reply(f"✅ **Auto Delete: ON**\n⏱️ Time: `{format_time(d)}`\n\nTurn off: `{prefix_cmds[0]}autodel off`")
+            m = await e.reply(f" **Auto Delete: ON**\n Time: `{format_time(d)}`\n\nTurn off: `{prefix_cmds[0]}autodel off`")
         else:
-            m = await e.reply(f"❌ **Auto Delete: OFF**\n\nEnable: `{prefix_cmds[0]}autodel 30s`\nTurn off: `{prefix_cmds[0]}autodel off`")
+            m = await e.reply(f" **Auto Delete: OFF**\n\nEnable: `{prefix_cmds[0]}autodel 30s`\nTurn off: `{prefix_cmds[0]}autodel off`")
         asyncio.create_task(delete_message(m, 5))
         asyncio.create_task(delete_message(e.message, 5))
         return
@@ -104,23 +104,23 @@ async def autodel_handler(e):
             await disable_autodelete(cid)
             if cid in auto_delete_chats:
                 del auto_delete_chats[cid]
-            m = await e.reply(font("✅ **Auto Delete turned OFF**"))
+            m = await e.reply(font(" **Auto Delete turned OFF**"))
         else:
-            m = await e.reply(font("ℹ️ Auto Delete is already OFF"))
+            m = await e.reply(font(" Auto Delete is already OFF"))
         asyncio.create_task(delete_message(m, 3))
         asyncio.create_task(delete_message(e.message, 3))
         return
     
     d = parse_time(arg)
     if d is None or d < 5 or d > 604800:
-        m = await e.reply(font("❌ **Invalid time format**\n\nUse: `5s` to `7d`\nExamples: `30s`, `5m`, `1h`, `2d`"))
+        m = await e.reply(font(" **Invalid time format**\n\nUse: `5s` to `7d`\nExamples: `30s`, `5m`, `1h`, `2d`"))
         asyncio.create_task(delete_message(m, 4))
         asyncio.create_task(delete_message(e.message, 4))
         return
     
     await set_autodelete(cid, d)
     auto_delete_chats[cid] = d
-    m = await e.reply(f"✅ **Auto Delete: ON**\n⏱️ Time: `{format_time(d)}`\n\nAll messages will be deleted after {format_time(d)}")
+    m = await e.reply(f" **Auto Delete: ON**\n Time: `{format_time(d)}`\n\nAll messages will be deleted after {format_time(d)}")
     asyncio.create_task(delete_message(m, 5))
     asyncio.create_task(delete_message(e.message, 5))
 
@@ -159,7 +159,7 @@ if "autodelete" not in tbot.handlers_loaded:
     tbot.add_event_handler(message_watcher, events.NewMessage(incoming=True))
     tbot.handlers_loaded.add("autodelete")
 
-__module__ = "𝐀ᴜᴛᴏ-𝐃ᴇʟ🗑"
+__module__ = "𝐀ᴜᴛᴏ-𝐃ᴇʟ"
 __help__ = """
 *Automatically Deleted All Massage*
 

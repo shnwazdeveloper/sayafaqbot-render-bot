@@ -13,10 +13,10 @@ from AloneX.db.antiraid import (
 )
 import re
 
-__module__ = "𝐀ɴᴛɪ-𝐑ᴀɪᴅ🚨"
+__module__ = "𝐀ɴᴛɪ-𝐑ᴀɪᴅ"
 
 __help__ = """
-*𝐀ɴᴛɪ-𝐑ᴀɪᴅ🚨*
+*𝐀ɴᴛɪ-𝐑ᴀɪᴅ*
 
 *Description:*  
 Prevent group raids where users join in bulk and spam. Admins can enable temporary protection or automate it during high join rates.
@@ -77,21 +77,21 @@ async def antiraid_handler(_, m: Message):
         config = await get_antiraid_config(chat_id)
         until = config.get("enabled_until")
         if until and until > datetime.now(timezone.utc):
-            return await m.reply(font("🛡️ AntiRaid is currently active."))
-        return await m.reply(font("❌ AntiRaid is not enabled."))
+            return await m.reply(font(" AntiRaid is currently active."))
+        return await m.reply(font(" AntiRaid is not enabled."))
 
     arg = args[1].strip().lower()
     if arg in ("off", "no", "disable"):
         await disable_antiraid(chat_id)
-        return await m.reply(font("✅ AntiRaid has been disabled."))
+        return await m.reply(font(" AntiRaid has been disabled."))
 
     duration = parse_time(arg)
     if not duration:
-        return await m.reply(font("❌ Invalid time. Use format like `3h`, `30m`, etc."))
+        return await m.reply(font(" Invalid time. Use format like `3h`, `30m`, etc."))
 
     until = datetime.now(timezone.utc) + timedelta(seconds=duration)
     await enable_antiraid(chat_id, until)
-    return await m.reply(f"✅ AntiRaid enabled for {human_time(duration)}.")
+    return await m.reply(f" AntiRaid enabled for {human_time(duration)}.")
 
 
 @pbot.on_message(filters.command("raidtime"), group=-989)
@@ -106,13 +106,13 @@ async def raidtime_handler(_, m: Message):
 
     if len(args) == 1:
         time_set = config.get("raid_time", 21600)
-        return await m.reply(f"📌 Current AntiRaid duration: {human_time(time_set)}")
+        return await m.reply(f" Current AntiRaid duration: {human_time(time_set)}")
 
     duration = parse_time(args[1])
     if not duration:
-        return await m.reply(font("❌ Invalid time format."))
+        return await m.reply(font(" Invalid time format."))
     await set_raid_time(chat_id, duration)
-    await m.reply(f"✅ AntiRaid duration set to {human_time(duration)}.")
+    await m.reply(f" AntiRaid duration set to {human_time(duration)}.")
 
 
 @pbot.on_message(filters.command("raidactiontime"), group=-990)
@@ -127,13 +127,13 @@ async def raidactiontime_handler(_, m: Message):
 
     if len(args) == 1:
         ban_time = config.get("ban_time", 3600)
-        return await m.reply(f"🔒 Current ban time for new joins: {human_time(ban_time)}")
+        return await m.reply(f" Current ban time for new joins: {human_time(ban_time)}")
 
     duration = parse_time(args[1])
     if not duration:
-        return await m.reply(font("❌ Invalid time format."))
+        return await m.reply(font(" Invalid time format."))
     await set_ban_time(chat_id, duration)
-    await m.reply(f"✅ Join ban duration set to {human_time(duration)}.")
+    await m.reply(f" Join ban duration set to {human_time(duration)}.")
 
 
 @pbot.on_message(filters.command("autoantiraid"), group=-991)
@@ -149,16 +149,16 @@ async def autoantiraid_handler(_, m: Message):
     if len(args) == 1:
         val = config.get("auto_trigger", 0)
         if val == 0:
-            return await m.reply(font("🚫 AutoAntiRaid is disabled."))
-        return await m.reply(f"🚨 AutoAntiRaid will trigger if {val}+ users join in 1 minute.")
+            return await m.reply(font(" AutoAntiRaid is disabled."))
+        return await m.reply(f" AutoAntiRaid will trigger if {val}+ users join in 1 minute.")
 
     arg = args[1].strip().lower()
     if arg in ("off", "no", "0"):
         await set_auto_trigger(chat_id, 0)
-        return await m.reply(font("❌ AutoAntiRaid disabled."))
+        return await m.reply(font(" AutoAntiRaid disabled."))
     if not arg.isdigit():
-        return await m.reply(font("❌ Please provide a valid number."))
+        return await m.reply(font(" Please provide a valid number."))
 
     threshold = int(arg)
     await set_auto_trigger(chat_id, threshold)
-    await m.reply(f"✅ AutoAntiRaid will now trigger after {threshold} joins/min.")
+    await m.reply(f" AutoAntiRaid will now trigger after {threshold} joins/min.")

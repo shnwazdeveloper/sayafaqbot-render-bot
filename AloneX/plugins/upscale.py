@@ -8,7 +8,7 @@ from pyrogram import filters
 from pyrogram.enums import ParseMode
 from AloneX import pbot, font
 
-__module__ = "𝐔ᴘsᴄᴀʟᴇʀ🖼️"
+__module__ = "𝐔ᴘsᴄᴀʟᴇʀ"
 
 __help__ = """
 *Upscaler*
@@ -72,19 +72,19 @@ async def upscale_func(_, message):
     user_id = user.id if user else None
 
     if not user_id:
-        return await message.reply(font("❌ Unknown user."), parse_mode=ParseMode.HTML)
+        return await message.reply(font(" Unknown user."), parse_mode=ParseMode.HTML)
 
     if users.get(user_id, False):
-        return await message.reply(font('⚠️ <b>You already have an ongoing upscale process.</b>'), parse_mode=ParseMode.HTML)
+        return await message.reply(font(' <b>You already have an ongoing upscale process.</b>'), parse_mode=ParseMode.HTML)
 
     users[user_id] = True
 
     is_photo = message.reply_to_message and message.reply_to_message.photo
     if not is_photo:
         users.pop(user_id, None)
-        return await message.reply(font('📷 <b>Reply to a photo to upscale it.</b>'), parse_mode=ParseMode.HTML)
+        return await message.reply(font(' <b>Reply to a photo to upscale it.</b>'), parse_mode=ParseMode.HTML)
 
-    loading_msg = await message.reply(font('🔄 <b>Upscaling your image...</b>'), parse_mode=ParseMode.HTML)
+    loading_msg = await message.reply(font(' <b>Upscaling your image...</b>'), parse_mode=ParseMode.HTML)
 
     path = None
     img_path = None
@@ -111,7 +111,7 @@ async def upscale_func(_, message):
 
                         await message.reply_document(
                             img_path,
-                            caption=f"✨ Upscaled by {config.BOT_USERNAME}",
+                            caption=f" Upscaled by {config.BOT_USERNAME}",
                         )
                     else:
                         raise Exception("Failed to download upscaled image.")
@@ -119,7 +119,7 @@ async def upscale_func(_, message):
             raise Exception("Upscaling failed or bad response URL.")
 
     except Exception as e:
-        await message.reply(f"❌ <b>Error:</b> <code>{e}</code>", parse_mode=ParseMode.HTML)
+        await message.reply(f" <b>Error:</b> <code>{e}</code>", parse_mode=ParseMode.HTML)
 
     finally:
         if path and os.path.exists(path):

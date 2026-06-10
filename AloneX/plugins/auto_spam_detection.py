@@ -93,9 +93,9 @@ async def auto_detect_spammers(client: Client, message: types.Message):
 
         # Compose warning message WITHOUT admin mentions
         warning_text = (
-            f"⚠️ <b>User {message.from_user.mention(style='html')}'s message has been deleted "
+            f" <b>User {message.from_user.mention(style='html')}'s message has been deleted "
             f"due to spam detection.\n\nDetected keywords</b>: <code>{keywords}</code>\n\n"
-            f"🤖 <i>Auto-spam detection is active</i>"
+            f" <i>Auto-spam detection is active</i>"
         )
 
         try:

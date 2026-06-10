@@ -23,7 +23,7 @@ from telegram import InlineKeyboardButton, InlineKeyboardMarkup, InputMediaVideo
 from PIL import Image
 
 
-__module__ = "𝐓ᴏᴏʟs🛠️"
+__module__ = "𝐓ᴏᴏʟs"
 
 __help__ = """
 *Tools*
@@ -73,22 +73,22 @@ async def fk_address(_, message):
                 data = await response.json()
                 user = data['results'][0]
                 text = (
-                    f"**👤 Name**: {user['name']['title']} {user['name']['first']} {user['name']['last']}\n"
-                    f"**🧬 Gender**: {user['gender']}\n"
-                    f"**📍 Location**: {user['location']['street']['number']} {user['location']['street']['name']}, "
+                    f"** Name**: {user['name']['title']} {user['name']['first']} {user['name']['last']}\n"
+                    f"** Gender**: {user['gender']}\n"
+                    f"** Location**: {user['location']['street']['number']} {user['location']['street']['name']}, "
                     f"{user['location']['city']}, {user['location']['state']}, {user['location']['country']}, "
                     f"{user['location']['postcode']}\n"
-                    f"**🌐 Coordinates**: ({user['location']['coordinates']['latitude']}, "
+                    f"** Coordinates**: ({user['location']['coordinates']['latitude']}, "
                     f"{user['location']['coordinates']['longitude']})\n"
-                    f"**🕰️ Timezone**: {user['location']['timezone']['offset']} - {user['location']['timezone']['description']}\n"
-                    f"**📧 Email**: {user['email']}\n"
-                    f"**🆔 Username**: {user['login']['username']}\n"
-                    f"**🎂 Date of Birth**: {user['dob']['date']} (Age: {user['dob']['age']})\n"
-                    f"**📅 Registered**: {user['registered']['date']} (Age: {user['registered']['age']})\n"
-                    f"**☎️ Phone**: {user['phone']}\n"
-                    f"**📱 Cell**: {user['cell']}\n"
-                    f"**🆔 ID**: {user['id']['name']} - {user['id']['value']}\n"
-                    f"**🌏 Nationality**: {user['nat']}\n"
+                    f"** Timezone**: {user['location']['timezone']['offset']} - {user['location']['timezone']['description']}\n"
+                    f"** Email**: {user['email']}\n"
+                    f"** Username**: {user['login']['username']}\n"
+                    f"** Date of Birth**: {user['dob']['date']} (Age: {user['dob']['age']})\n"
+                    f"** Registered**: {user['registered']['date']} (Age: {user['registered']['age']})\n"
+                    f"** Phone**: {user['phone']}\n"
+                    f"** Cell**: {user['cell']}\n"
+                    f"** ID**: {user['id']['name']} - {user['id']['value']}\n"
+                    f"** Nationality**: {user['nat']}\n"
                 )
                 photo_url = user['picture']['large']
                 if len(text) > 1023:
@@ -144,14 +144,14 @@ async def tiny_url(update, context):
    m = update.effective_message
    query = m.text.split(maxsplit=1)[1] if len(m.text.split()) > 1 else None
    if not query:
-       return await m.reply_text(font("*😁 Gimme url.*"), parse_mode=constants.ParseMode.MARKDOWN)
+       return await m.reply_text(font("* Gimme url.*"), parse_mode=constants.ParseMode.MARKDOWN)
    try:
        async with aiohttp.ClientSession() as session:
              async with session.post('https://tinyurl.com/api-create.php', data={'url': query}) as response:
                    text = await response.text()
                    await m.reply_text(text)
    except Exception as e:
-       return await m.reply_text(f'❌ ERROR: {e}')
+       return await m.reply_text(f' ERROR: {e}')
 
 
 @Command('repo')
@@ -159,18 +159,18 @@ async def repository(update, context):
    m = update.effective_message
    query = m.text.split(maxsplit=1)[1] if len(m.text.split()) > 1 else None
    if not query:
-       return await m.reply_text(font("*😁 Gimme Query.*"), parse_mode=constants.ParseMode.MARKDOWN)
-   msg = await m.reply_text(font("🔎 *Searching repository...*"), parse_mode=constants.ParseMode.MARKDOWN)
+       return await m.reply_text(font("* Gimme Query.*"), parse_mode=constants.ParseMode.MARKDOWN)
+   msg = await m.reply_text(font(" *Searching repository...*"), parse_mode=constants.ParseMode.MARKDOWN)
    async with aiohttp.ClientSession() as session:
          try:
              url = "https://api.github.com/search/repositories?q={}&sort=stars".format(urllib.parse.quote_plus(query))
              async with session.get(url) as response:
                     data = await response.json() or {}
                     if len(data.get('items', [])) == 0:
-                          return await msg.edit_text(font('❌ No results found!'))
+                          return await msg.edit_text(font(' No results found!'))
                                                      
                     repos = [{"name": item["name"], "url": item["html_url"]} for item in data["items"]]
-                    text = "✨ *Repository*:\n\n"
+                    text = " *Repository*:\n\n"
                
                     for idx, repo in enumerate(repos, start=1):
                          text += f"{idx}, [{repo['name']}]({repo['url']})\n"
@@ -178,7 +178,7 @@ async def repository(update, context):
                     text += f"\n\n*By {config.BOT_USERNAME}*"
                     return await msg.edit_text(text, parse_mode=constants.ParseMode.MARKDOWN)
          except Exception as e:
-              return await msg.edit_text(f'❌ *ERROR*: `{str(e)}`', parse_mode=constants.ParseMode.MARKDOWN)
+              return await msg.edit_text(f' *ERROR*: `{str(e)}`', parse_mode=constants.ParseMode.MARKDOWN)
 
      
 
@@ -188,7 +188,7 @@ async def pypi(update, context):
     bot = context.bot
     text = m.text
     if not len(text.split()) > 1:
-        return await m.reply_text(font('ℹ️ *Pypi name required!*'), parse_mode=constants.ParseMode.MARKDOWN)
+        return await m.reply_text(font(' *Pypi name required!*'), parse_mode=constants.ParseMode.MARKDOWN)
     else:
         if len(text.split()) > 2:
             pkg = text.split()[1]
@@ -197,27 +197,27 @@ async def pypi(update, context):
             pkg = text.split()[1]
             ver = None
     
-    msg = await m.reply_text(font('🔎 *Searching package info ...*'), parse_mode=constants.ParseMode.MARKDOWN)
+    msg = await m.reply_text(font(' *Searching package info ...*'), parse_mode=constants.ParseMode.MARKDOWN)
     data = await get_pypi_info(pkg, ver)
     error = data.get('error')
     if error: 
-        return await msg.edit_text(f'❌ *ERROR*: `{error}`', parse_mode=constants.ParseMode.MARKDOWN)
+        return await msg.edit_text(f' *ERROR*: `{error}`', parse_mode=constants.ParseMode.MARKDOWN)
     
     results = data['results']
     
     # Construct a detailed formatted message with .get() and fallback to 'N/A'
     text_parts = [
-        f"📦 *{results.get('name', 'N/A')}* - Package Information",
-        f"📝 *Description*: {results.get('summary', 'N/A')}",
-        f"🔢 *Version*: `{results.get('version', 'N/A')}`",
-        f"👤 *Author*: {results.get('author', 'N/A')} <{results.get('author_email', 'N/A')}>",
-        f"🐍 *Python Requires*: `{results.get('requires_python', 'N/A')}`",
-        f"🔑 *Keywords*: `{results.get('keywords', 'N/A')}`",
+        f" *{results.get('name', 'N/A')}* - Package Information",
+        f" *Description*: {results.get('summary', 'N/A')}",
+        f" *Version*: `{results.get('version', 'N/A')}`",
+        f" *Author*: {results.get('author', 'N/A')} <{results.get('author_email', 'N/A')}>",
+        f" *Python Requires*: `{results.get('requires_python', 'N/A')}`",
+        f" *Keywords*: `{results.get('keywords', 'N/A')}`",
         "",
-        "📦 *Installation*:",
+        " *Installation*:",
         f"```bash\npip install {results.get('name', 'package_name')}```",
         "",
-        "🌐 *Resources*:",
+        " *Resources*:",
         f"- [Download]({results.get('download_url', 'N/A')})",
         f"- [Homepage](https://pypi.org/project/{results.get('name', 'N/A')}/)"
     ]
@@ -270,7 +270,7 @@ async def html_to_image(update, context):
           async with aiohttp.ClientSession() as session:
                  async with session.post(url, json=data, headers=headers) as response:
                          if response.status != 200:
-                             return await msg.edit_text(f"❌ Status code {response.status} & {response.reason}")
+                             return await msg.edit_text(f" Status code {response.status} & {response.reason}")
                          data = await response.json()
                          url = data.get('url')
                          if not url:
@@ -278,7 +278,7 @@ async def html_to_image(update, context):
                          else:
                               return await msg.edit_media(media=InputMediaPhoto(url, caption=f"*By {config.BOT_USERNAME}*", parse_mode=constants.ParseMode.MARKDOWN))          
       except Exception as e:
-            return await msg.edit_text(f"❌ ERROR: {e}")
+            return await msg.edit_text(f" ERROR: {e}")
 
 
 @Command('repodl')
@@ -301,7 +301,7 @@ async def RepoDownloader(update, context):
       )
       except Exception as e:
                return await m.reply_text(
-                     text="*It looks like the repo is private or can't be downloaded* 🤷", 
+                     text="*It looks like the repo is private or can't be downloaded* ", 
                      parse_mode=constants.ParseMode.MARKDOWN
                )
                    
@@ -315,7 +315,7 @@ async def GitUser(update, context):
       if not username:
           return await m.reply_text(font("Username required for search!"))
 
-      msg = await m.reply_text(font("🔎 Searching ..."))
+      msg = await m.reply_text(font(" Searching ..."))
       async with aiohttp.ClientSession() as session:
             url = f"https://api.github.com/users/{username}"
             try:
@@ -341,23 +341,23 @@ async def GitUser(update, context):
                         created_date = dt.datetime.strptime(acc_date, '%Y-%m-%dT%H:%M:%SZ').strftime('%B %d, %Y')
                         
                         text = f"""
-🔍 *GitHub User Information*
+ *GitHub User Information*
 ━━━━━━━━━━━━━━━━━
-👤 *Name:* `{name}`
-🔗 *Link:* [ProfileLink](https://github.com/{username})
-📝 *Type:* `{type}`
-🏢 *Company:* `{company}`
-📍 *Location:* `{location}`
-📧 *Email:* `{email}`
+ *Name:* `{name}`
+ *Link:* [ProfileLink](https://github.com/{username})
+ *Type:* `{type}`
+ *Company:* `{company}`
+ *Location:* `{location}`
+ *Email:* `{email}`
 
-📊 *Statistics:*
+ *Statistics:*
 • *Repositories:* `{repo_count}`
 • *Gists:* `{gists_count}`
 • *Followers:* `{followers_count}`
 • *Following:* `{following_count}`
 
-ℹ️ *Bio:* `{bio}`
-📅 *Joined:* `{created_date}`
+ *Bio:* `{bio}`
+ *Joined:* `{created_date}`
 
 *By {config.BOT_USERNAME}*
 """
@@ -366,7 +366,7 @@ async def GitUser(update, context):
                         )
                         
             except Exception as e:
-                  return await msg.edit_text(f"❌ ERROR: {str(e)}")
+                  return await msg.edit_text(f" ERROR: {str(e)}")
 
 
 @Command('trendings')
@@ -385,7 +385,7 @@ async def getTrendingTags(update, context):
                   )
             
       msg = await m.reply_text(
-            text=f"*Searching trending tags for {country if country else '🌐 World wide'}*",
+            text=f"*Searching trending tags for {country if country else ' World wide'}*",
             parse_mode=constants.ParseMode.MARKDOWN
       )
       results = await get_trendings(country)
@@ -394,9 +394,9 @@ async def getTrendingTags(update, context):
             return await msg.edit_text(error['error'])
       text = ""
       text += f"*{results['title']}*\n\n"
-      text += f"*🔎 Now trending Tags*:\n" + "\n".join(f"[{data['title']}]({data['url']})" for data in results['now_hashtags'][:5])
-      text += f"\n*🔎 Today trending Tags*:\n" + "\n".join(f"[{data['title']}]({data['url']})" for data in results['today_hashtags'][:5])
-      text += f"\n*🔎 Top trending Tags*:\n" + "\n".join(f"[{data['title']}]({data['url']})" for data in results['top_hashtags'][:5])
+      text += f"* Now trending Tags*:\n" + "\n".join(f"[{data['title']}]({data['url']})" for data in results['now_hashtags'][:5])
+      text += f"\n* Today trending Tags*:\n" + "\n".join(f"[{data['title']}]({data['url']})" for data in results['today_hashtags'][:5])
+      text += f"\n* Top trending Tags*:\n" + "\n".join(f"[{data['title']}]({data['url']})" for data in results['top_hashtags'][:5])
       await msg.edit_text(text, parse_mode=constants.ParseMode.MARKDOWN)
 
 
@@ -404,19 +404,19 @@ async def getTrendingTags(update, context):
 async def Search(update, context):
     m = update.effective_message
     if len(m.text.split()) < 2:
-        return await m.reply_text(font("🙋 Write a query to search."))
+        return await m.reply_text(font(" Write a query to search."))
 
     query = m.text.split(maxsplit=1)[1]
-    msg = await m.reply_text(font("<b>Searching ... 🔎</b>"), parse_mode=constants.ParseMode.HTML)
+    msg = await m.reply_text(font("<b>Searching ... </b>"), parse_mode=constants.ParseMode.HTML)
 
     data = await ddg_search(query)  # returns a list of dicts
 
     # Check if it's a dict with error
     if isinstance(data, dict) and data.get("error"):
-        return await msg.edit_text(f"❌ ERROR: {data['error']}")
+        return await msg.edit_text(f" ERROR: {data['error']}")
 
     if not data:  # empty list
-        return await msg.edit_text(font("ℹ️ No Results Found!"))
+        return await msg.edit_text(font(" No Results Found!"))
 
     text = "<blockquote>\n"
     for idx, res in enumerate(data[:10], start=1):
@@ -448,7 +448,7 @@ async def pasteText(update, context):
    reply = message.reply_to_message
 
    msg = await message.reply_text(
-       text="*⚡ Reading contents...*", parse_mode=constants.ParseMode.MARKDOWN
+       text="* Reading contents...*", parse_mode=constants.ParseMode.MARKDOWN
    )
    if reply and reply.document and reply.document.mime_type.startswith('text'):
        file = await (await bot.get_file(reply.document.file_id)).download_to_drive()
@@ -487,9 +487,9 @@ async def media_uploader(_, message):
       r = m.reply_to_message
       try:
          
-         msg = await m.reply(font('**📩 Start to downloading ...**'))
+         msg = await m.reply(font('** Start to downloading ...**'))
          file = await r.download(in_memory=True)
-         await msg.edit('⤴️ **Started to uploading ...**')
+         await msg.edit(' **Started to uploading ...**')
          
          async with aiohttp.ClientSession() as session:
                url = "https://litterbox.catbox.moe/resources/internals/api.php"
@@ -503,10 +503,10 @@ async def media_uploader(_, message):
                      return await msg.edit(text)
                   
       except (ValueError, AttributeError):
-         return await msg.edit('✋ **Reply to any media e.g photo, document, video, gif ...**')   
+         return await msg.edit(' **Reply to any media e.g photo, document, video, gif ...**')   
          
       except Exception as e:
-         return await msg.edit('❌ Error: {}'.format(str(e)))
+         return await msg.edit(' Error: {}'.format(str(e)))
 
 
 
@@ -523,7 +523,7 @@ async def telegraphFileUpload(update, context):
   
     if m.text.split()[0][1:] == 'txt':
          if not reply or reply and not (reply.text or reply.caption):
-             return await m.reply_text(font("🙋 Reply to the text"))
+             return await m.reply_text(font(" Reply to the text"))
          else:
              content = reply.text or reply.caption
              try:
@@ -538,7 +538,7 @@ async def telegraphFileUpload(update, context):
     
     if not reply:
         return await message.reply_text(
-            text="⚡ Reply to the animation (GIF) or a photo to upload in graph.org"
+            text=" Reply to the animation (GIF) or a photo to upload in graph.org"
         )
     
     if reply.photo:
@@ -559,7 +559,7 @@ async def telegraphFileUpload(update, context):
       
     else:
         return await message.reply_text(
-            text="⚡ Reply to the animation (GIF) or a photo to upload in graph.org"
+            text=" Reply to the animation (GIF) or a photo to upload in graph.org"
         )
     
     msg = await message.reply_text(font("Downloading..."))
@@ -591,7 +591,7 @@ async def telegraphFileUpload(update, context):
       await msg.edit_text(results["data"]["url"])
       
     except Exception as error:
-          await msg.edit_text(f"❌ ERROR: `{error}`")
+          await msg.edit_text(f" ERROR: `{error}`")
        
     finally:
           # remove from memory

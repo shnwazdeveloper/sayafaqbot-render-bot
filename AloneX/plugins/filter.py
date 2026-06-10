@@ -9,7 +9,7 @@ from AloneX.db.filter import *
 from AloneX.helpers.markdown_parser import parse_buttons_from_text, dict_to_keyboard
 import asyncio
 
-__module__ = "𝐅ɪʟᴛᴇʀs⏩"
+__module__ = "𝐅ɪʟᴛᴇʀs"
 __help__ = """
 ❂ *Filters Module* — Automate responses in your group!
 
@@ -146,12 +146,12 @@ async def add_filter_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
     reply_msg, args = message.reply_to_message, context.args
     
     if not reply_msg or not args:
-        return await safe_reply_text(message, "❌ Reply to a message with <code>/filter trigger</code>", parse_mode="HTML")
+        return await safe_reply_text(message, " Reply to a message with <code>/filter trigger</code>", parse_mode="HTML")
     
     raw_triggers = " ".join(args)
     triggers = [t.strip().lower() for t in re.split(r"[,\|]+", raw_triggers) if t.strip()]
     if not triggers:
-        return await safe_reply_text(message, "❌ Trigger cannot be empty!")
+        return await safe_reply_text(message, " Trigger cannot be empty!")
     
     caption_html = None
     keyboard_data = None
@@ -200,7 +200,7 @@ async def add_filter_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
             caption_raw = _text_with_entities_as_html(reply_msg)
             caption_html, keyboard_data = parse_buttons_from_text(caption_raw)
     else:
-        return await safe_reply_text(message, "❌ Unsupported message type!")
+        return await safe_reply_text(message, " Unsupported message type!")
     
     added, updated = [], []
     for trigger in triggers:
@@ -216,9 +216,9 @@ async def add_filter_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
     
     resp = []
     if added:
-        resp.append(f"✅ Added: {', '.join(f'<code>{t}</code>' for t in added)}")
+        resp.append(f" Added: {', '.join(f'<code>{t}</code>' for t in added)}")
     if updated:
-        resp.append(f"🔄 Updated: {', '.join(f'<code>{t}</code>' for t in updated)}")
+        resp.append(f" Updated: {', '.join(f'<code>{t}</code>' for t in updated)}")
 
     title = update.effective_chat.title
     if chat_id != update.effective_chat.id:
@@ -228,7 +228,7 @@ async def add_filter_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
         except:
             title = str(chat_id)
 
-    log_text = f"⏩ <b>Filter Added/Updated</b>\n" \
+    log_text = f" <b>Filter Added/Updated</b>\n" \
                f"<b>Group:</b> {html.escape(title)}\n" \
                f"<b>Triggers:</b> {', '.join(triggers)}\n" \
                f"<b>By:</b> {update.effective_user.mention_html()}"
@@ -244,7 +244,7 @@ async def list_filters_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
     chat_id = await get_effective_chat_id(update)
     filters_ = await get_filters(chat_id)
     if not filters_:
-        return await safe_reply_text(message, "📝 No filters set in this chat.")
+        return await safe_reply_text(message, " No filters set in this chat.")
     title = update.effective_chat.title
     if chat_id != update.effective_chat.id:
         try:
@@ -253,7 +253,7 @@ async def list_filters_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
         except:
             title = str(chat_id)
 
-    msg = f"📝 <b>Filters in {title} ({len(filters_)}):</b>\n\n"
+    msg = f" <b>Filters in {title} ({len(filters_)}):</b>\n\n"
     msg += "\n".join(f"<b>{i}.</b> <code>{f['trigger']}</code> — <i>{f['reply_type']}</i>" for i, f in enumerate(filters_, 1))
     await safe_reply_text(message, msg, parse_mode="HTML")
 
@@ -265,11 +265,11 @@ async def stop_filter_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
     chat_id = await get_effective_chat_id(update)
     args = context.args
     if not args:
-        return await safe_reply_text(message, "❌ Usage: /stop <trigger>")
+        return await safe_reply_text(message, " Usage: /stop <trigger>")
     raw_triggers = " ".join(args)
     triggers = [t.strip().lower() for t in re.split(r"[,\|]+", raw_triggers) if t.strip()]
     if not triggers:
-        return await safe_reply_text(message, "❌ Trigger cannot be empty!")
+        return await safe_reply_text(message, " Trigger cannot be empty!")
     removed, not_found = [], []
     for trigger in triggers:
         if not await get_filter_by_trigger(chat_id, trigger):
@@ -279,9 +279,9 @@ async def stop_filter_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
         removed.append(trigger)
     resp = []
     if removed:
-        resp.append(f"✅ Removed: {', '.join(f'<code>{t}</code>' for t in removed)}")
+        resp.append(f" Removed: {', '.join(f'<code>{t}</code>' for t in removed)}")
     if not_found:
-        resp.append(f"❌ Not found: {', '.join(f'<code>{t}</code>' for t in not_found)}")
+        resp.append(f" Not found: {', '.join(f'<code>{t}</code>' for t in not_found)}")
 
     if removed:
         title = update.effective_chat.title
@@ -292,7 +292,7 @@ async def stop_filter_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
             except:
                 title = str(chat_id)
 
-        log_text = f"⏩ <b>Filter Removed</b>\n" \
+        log_text = f" <b>Filter Removed</b>\n" \
                    f"<b>Group:</b> {html.escape(title)}\n" \
                    f"<b>Triggers:</b> {', '.join(removed)}\n" \
                    f"<b>By:</b> {update.effective_user.mention_html()}"
@@ -317,10 +317,10 @@ async def stop_all_filters_cmd(update: Update, context: ContextTypes.DEFAULT_TYP
     if count == 0:
         return await safe_reply_text(message, "No filters to remove.")
     buttons = [
-        [InlineKeyboardButton(font("✅ Yes, remove all"), callback_data=f"stopall_confirm_{chat_id}_{user.id}")],
-        [InlineKeyboardButton(font("❌ Cancel"), callback_data=f"stopall_cancel_{chat_id}_{user.id}")]
+        [InlineKeyboardButton(font(" Yes, remove all"), callback_data=f"stopall_confirm_{chat_id}_{user.id}")],
+        [InlineKeyboardButton(font(" Cancel"), callback_data=f"stopall_cancel_{chat_id}_{user.id}")]
     ]
-    await safe_reply_text(message, f"⚠️ Are you sure you want to remove all {count} filters?", reply_markup=InlineKeyboardMarkup(buttons), parse_mode="HTML")
+    await safe_reply_text(message, f" Are you sure you want to remove all {count} filters?", reply_markup=InlineKeyboardMarkup(buttons), parse_mode="HTML")
 
 @Callbacks(pattern=r"^stopall_(confirm|cancel)_(-?\d+)_([0-9]+)$", block=True)
 async def stopall_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -330,13 +330,13 @@ async def stopall_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if query.from_user.id != user_id:
         return await query.answer(font("Only the one who initiated this can confirm!"), show_alert=True)
     if action == "cancel":
-        await query.edit_message_text(font("❌ Operation cancelled."))
+        await query.edit_message_text(font(" Operation cancelled."))
         return await query.answer(font("Cancelled."))
     count = await get_filter_count(chat_id)
     await remove_all_filters(chat_id)
-    await query.edit_message_text(f"✅ Removed all {count} filters.")
+    await query.edit_message_text(f" Removed all {count} filters.")
 
-    log_text = f"🧹 <b>All Filters Removed</b>\n" \
+    log_text = f" <b>All Filters Removed</b>\n" \
                f"<b>Group:</b> {html.escape(query.message.chat.title)}\n" \
                f"<b>Filters Removed:</b> {count}\n" \
                f"<b>By:</b> {query.from_user.mention_html()}"

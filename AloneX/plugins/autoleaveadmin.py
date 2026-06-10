@@ -25,7 +25,7 @@ async def autoleave_member_handler(update: Update, context: ContextTypes.DEFAULT
         try:
             bot_member = await chat.get_member(context.bot.id)
             if bot_member.status == constants.ChatMemberStatus.MEMBER:
-                await chat.send_message(font("❌ I am not an admin in this group, so I am leaving. To use me here, add me as an admin!"))
+                await chat.send_message(font(" I am not an admin in this group, so I am leaving. To use me here, add me as an admin!"))
                 await context.bot.leave_chat(chat.id)
         except Exception:
             pass

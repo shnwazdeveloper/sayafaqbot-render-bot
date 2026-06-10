@@ -77,26 +77,26 @@ async def report_admin_mention(client, message: Message):
         message_link = f"https://t.me/c/{chat_id_str}/{msg_id}"
     
     report_text = (
-        f"🚨 <b>Report Alert</b>\n\n"
-        f"👤 <b>Reported:</b> {reported_link}\n"
-        f"📢 <b>By:</b> {reporter_link}\n\n"
+        f" <b>Report Alert</b>\n\n"
+        f" <b>Reported:</b> {reported_link}\n"
+        f" <b>By:</b> {reporter_link}\n\n"
         f"Reported{admin_tags} to admins."
     )
     
     keyboard = InlineKeyboardMarkup([
         [
-            InlineKeyboardButton(font("💬 View Message"), url=message_link, style=ButtonStyle.PRIMARY)
+            InlineKeyboardButton(font(" View Message"), url=message_link, style=ButtonStyle.PRIMARY)
         ],
         [
-            InlineKeyboardButton(font("⚠️ Kick"), callback_data=f"rp_kick_{reported_user.id}", style=ButtonStyle.DANGER),
-            InlineKeyboardButton(font("🚫 Ban"), callback_data=f"rp_ban_{reported_user.id}", style=ButtonStyle.DANGER)
+            InlineKeyboardButton(font(" Kick"), callback_data=f"rp_kick_{reported_user.id}", style=ButtonStyle.DANGER),
+            InlineKeyboardButton(font(" Ban"), callback_data=f"rp_ban_{reported_user.id}", style=ButtonStyle.DANGER)
         ],
         [
-            InlineKeyboardButton(font("❌ Delete"), callback_data=f"rp_del_{message.reply_to_message.id}", style=ButtonStyle.DANGER),
-            InlineKeyboardButton(font("🔇 Mute"), callback_data=f"rp_mute_{reported_user.id}", style=ButtonStyle.PRIMARY)
+            InlineKeyboardButton(font(" Delete"), callback_data=f"rp_del_{message.reply_to_message.id}", style=ButtonStyle.DANGER),
+            InlineKeyboardButton(font(" Mute"), callback_data=f"rp_mute_{reported_user.id}", style=ButtonStyle.PRIMARY)
         ],
         [
-            InlineKeyboardButton(font("✅ Ignore"), callback_data=f"rp_ignore_{message.from_user.id}", style=ButtonStyle.PRIMARY)
+            InlineKeyboardButton(font(" Ignore"), callback_data=f"rp_ignore_{message.from_user.id}", style=ButtonStyle.PRIMARY)
         ]
     ])
     
@@ -111,7 +111,7 @@ async def report_admin_mention(client, message: Message):
         # Log to log channel
         from AloneX.helpers.log_helper import log_action
         from AloneX import app as ptb_app
-        log_text = f"📢 <b>Report</b>\n" \
+        log_text = f" <b>Report</b>\n" \
                    f"<b>Group:</b> {html.escape(message.chat.title)}\n" \
                    f"<b>Reported User:</b> {reported_link} (<code>{reported_user.id}</code>)\n" \
                    f"<b>By:</b> {reporter_link} (<code>{message.from_user.id}</code>)\n" \
@@ -135,99 +135,99 @@ async def report_kick_handler(client, query: CallbackQuery):
     from AloneX.helpers.decorator import get_effective_chat_id_pyro
     chat_id = await get_effective_chat_id_pyro(query)
     if not await get_admin_cached(chat_id, query.from_user.id):
-        return await query.answer(font("❌ Admins only"), show_alert=True)
+        return await query.answer(font(" Admins only"), show_alert=True)
     user_id = int(query.data.split("_")[2])
     try:
         bot_member = await client.get_chat_member(chat_id, "me")
         if not bot_member.privileges or not bot_member.privileges.can_restrict_members:
-            return await query.answer(font("❌ Bot needs restrict permission"), show_alert=True)
+            return await query.answer(font(" Bot needs restrict permission"), show_alert=True)
         target_member = await client.get_chat_member(chat_id, user_id)
         if target_member.status in [ChatMemberStatus.ADMINISTRATOR, ChatMemberStatus.OWNER]:
-            return await query.answer(font("❌ Cannot kick admins"), show_alert=True)
+            return await query.answer(font(" Cannot kick admins"), show_alert=True)
         await client.ban_chat_member(chat_id, user_id)
         await client.unban_chat_member(chat_id, user_id)
         invalidate_member_cache(chat_id, user_id)
         admin_name = query.from_user.first_name or "Admin"
         user_link = f"<a href='tg://user?id={user_id}'>{target_member.user.first_name or 'User'}</a>"
         await query.message.edit_text(
-            f"👢 {user_link} kicked by {admin_name}.",
+            f" {user_link} kicked by {admin_name}.",
             reply_markup=None,
             parse_mode=ParseMode.HTML
         )
-        await query.answer(font("✅ User kicked successfully"))
+        await query.answer(font(" User kicked successfully"))
     except FloodWait as e:
         await asyncio.sleep(e.value)
-        await query.answer(font("⏳ Rate limited, try again"), show_alert=True)
+        await query.answer(font(" Rate limited, try again"), show_alert=True)
     except UserAdminInvalid:
-        await query.answer(font("❌ Cannot kick admins"), show_alert=True)
+        await query.answer(font(" Cannot kick admins"), show_alert=True)
     except Exception as e:
-        await query.answer(f"❌ Failed: {str(e)[:50]}", show_alert=True)
+        await query.answer(f" Failed: {str(e)[:50]}", show_alert=True)
 
 @pbot.on_callback_query(filters.regex(r"^rp_ban_"))
 async def report_ban_handler(client, query: CallbackQuery):
     from AloneX.helpers.decorator import get_effective_chat_id_pyro
     chat_id = await get_effective_chat_id_pyro(query)
     if not await get_admin_cached(chat_id, query.from_user.id):
-        return await query.answer(font("❌ Admins only"), show_alert=True)
+        return await query.answer(font(" Admins only"), show_alert=True)
     user_id = int(query.data.split("_")[2])
     try:
         bot_member = await client.get_chat_member(chat_id, "me")
         if not bot_member.privileges or not bot_member.privileges.can_restrict_members:
-            return await query.answer(font("❌ Bot needs restrict permission"), show_alert=True)
+            return await query.answer(font(" Bot needs restrict permission"), show_alert=True)
         target_member = await client.get_chat_member(chat_id, user_id)
         if target_member.status in [ChatMemberStatus.ADMINISTRATOR, ChatMemberStatus.OWNER]:
-            return await query.answer(font("❌ Cannot ban admins"), show_alert=True)
+            return await query.answer(font(" Cannot ban admins"), show_alert=True)
         await client.ban_chat_member(chat_id, user_id)
         invalidate_member_cache(chat_id, user_id)
         admin_name = query.from_user.first_name or "Admin"
         user_link = f"<a href='tg://user?id={user_id}'>{target_member.user.first_name or 'User'}</a>"
         await query.message.edit_text(
-            f"🚫 {user_link} banned by {admin_name}.",
-            reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton(font("✅ Unban"), callback_data=f"rp_unban_{user_id}", style=ButtonStyle.SUCCESS)]]),
+            f" {user_link} banned by {admin_name}.",
+            reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton(font(" Unban"), callback_data=f"rp_unban_{user_id}", style=ButtonStyle.SUCCESS)]]),
             parse_mode=ParseMode.HTML
         )
-        await query.answer(font("✅ User banned successfully"))
+        await query.answer(font(" User banned successfully"))
     except FloodWait as e:
         await asyncio.sleep(e.value)
-        await query.answer(font("⏳ Rate limited, try again"), show_alert=True)
+        await query.answer(font(" Rate limited, try again"), show_alert=True)
     except UserAdminInvalid:
-        await query.answer(font("❌ Cannot ban admins"), show_alert=True)
+        await query.answer(font(" Cannot ban admins"), show_alert=True)
     except Exception as e:
-        await query.answer(f"❌ Failed: {str(e)[:50]}", show_alert=True)
+        await query.answer(f" Failed: {str(e)[:50]}", show_alert=True)
 
 @pbot.on_callback_query(filters.regex(r"^rp_unban_"))
 async def report_unban_handler(client, query: CallbackQuery):
     from AloneX.helpers.decorator import get_effective_chat_id_pyro
     chat_id = await get_effective_chat_id_pyro(query)
     if not await get_admin_cached(chat_id, query.from_user.id):
-        return await query.answer(font("❌ Admins only"), show_alert=True)
+        return await query.answer(font(" Admins only"), show_alert=True)
     user_id = int(query.data.split("_")[2])
     try:
         await client.unban_chat_member(chat_id, user_id)
         invalidate_member_cache(chat_id, user_id)
         admin_name = query.from_user.first_name or "Admin"
         await query.message.edit_text(
-            f"✅ User unbanned by {admin_name}.",
+            f" User unbanned by {admin_name}.",
             reply_markup=None
         )
-        await query.answer(font("✅ User unbanned"))
+        await query.answer(font(" User unbanned"))
     except Exception as e:
-        await query.answer(f"❌ Failed: {str(e)[:50]}", show_alert=True)
+        await query.answer(f" Failed: {str(e)[:50]}", show_alert=True)
 
 @pbot.on_callback_query(filters.regex(r"^rp_mute_"))
 async def report_mute_handler(client, query: CallbackQuery):
     from AloneX.helpers.decorator import get_effective_chat_id_pyro
     chat_id = await get_effective_chat_id_pyro(query)
     if not await get_admin_cached(chat_id, query.from_user.id):
-        return await query.answer(font("❌ Admins only"), show_alert=True)
+        return await query.answer(font(" Admins only"), show_alert=True)
     user_id = int(query.data.split("_")[2])
     try:
         bot_member = await client.get_chat_member(chat_id, "me")
         if not bot_member.privileges or not bot_member.privileges.can_restrict_members:
-            return await query.answer(font("❌ Bot needs restrict permission"), show_alert=True)
+            return await query.answer(font(" Bot needs restrict permission"), show_alert=True)
         target_member = await client.get_chat_member(chat_id, user_id)
         if target_member.status in [ChatMemberStatus.ADMINISTRATOR, ChatMemberStatus.OWNER]:
-            return await query.answer(font("❌ Cannot mute admins"), show_alert=True)
+            return await query.answer(font(" Cannot mute admins"), show_alert=True)
         await client.restrict_chat_member(
             chat_id,
             user_id,
@@ -237,25 +237,25 @@ async def report_mute_handler(client, query: CallbackQuery):
         admin_name = query.from_user.first_name or "Admin"
         user_link = f"<a href='tg://user?id={user_id}'>{target_member.user.first_name or 'User'}</a>"
         await query.message.edit_text(
-            f"🔇 {user_link} muted by {admin_name}.",
-            reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton(font("🔊 Unmute"), callback_data=f"rp_unmute_{user_id}", style=ButtonStyle.SUCCESS)]]),
+            f" {user_link} muted by {admin_name}.",
+            reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton(font(" Unmute"), callback_data=f"rp_unmute_{user_id}", style=ButtonStyle.SUCCESS)]]),
             parse_mode=ParseMode.HTML
         )
-        await query.answer(font("✅ User muted successfully"))
+        await query.answer(font(" User muted successfully"))
     except FloodWait as e:
         await asyncio.sleep(e.value)
-        await query.answer(font("⏳ Rate limited, try again"), show_alert=True)
+        await query.answer(font(" Rate limited, try again"), show_alert=True)
     except UserAdminInvalid:
-        await query.answer(font("❌ Cannot mute admins"), show_alert=True)
+        await query.answer(font(" Cannot mute admins"), show_alert=True)
     except Exception as e:
-        await query.answer(f"❌ Failed: {str(e)[:50]}", show_alert=True)
+        await query.answer(f" Failed: {str(e)[:50]}", show_alert=True)
 
 @pbot.on_callback_query(filters.regex(r"^rp_unmute_"))
 async def report_unmute_handler(client, query: CallbackQuery):
     from AloneX.helpers.decorator import get_effective_chat_id_pyro
     chat_id = await get_effective_chat_id_pyro(query)
     if not await get_admin_cached(chat_id, query.from_user.id):
-        return await query.answer(font("❌ Admins only"), show_alert=True)
+        return await query.answer(font(" Admins only"), show_alert=True)
     user_id = int(query.data.split("_")[2])
     try:
         await client.restrict_chat_member(
@@ -278,43 +278,43 @@ async def report_unmute_handler(client, query: CallbackQuery):
         invalidate_member_cache(chat_id, user_id)
         admin_name = query.from_user.first_name or "Admin"
         await query.message.edit_text(
-            f"🔊 User unmuted by {admin_name}.",
+            f" User unmuted by {admin_name}.",
             reply_markup=None
         )
-        await query.answer(font("✅ User unmuted"))
+        await query.answer(font(" User unmuted"))
     except Exception as e:
-        await query.answer(f"❌ Failed: {str(e)[:50]}", show_alert=True)
+        await query.answer(f" Failed: {str(e)[:50]}", show_alert=True)
 
 @pbot.on_callback_query(filters.regex(r"^rp_del_"))
 async def report_delete_handler(_, query: CallbackQuery):
     if not await get_admin_cached(query.message.chat.id, query.from_user.id):
-        return await query.answer(font("❌ Admins only"), show_alert=True)
+        return await query.answer(font(" Admins only"), show_alert=True)
     msg_id = int(query.data.split("_")[2])
     try:
         await pbot.delete_messages(query.message.chat.id, msg_id)
         admin_name = query.from_user.first_name or "Admin"
         await query.message.edit_text(
-            f"✅ Reported message deleted by {admin_name}.",
+            f" Reported message deleted by {admin_name}.",
             reply_markup=None
         )
-        await query.answer(font("✅ Message deleted"))
+        await query.answer(font(" Message deleted"))
     except MessageDeleteForbidden:
-        await query.answer("❌ Can't delete this message", show_alert=True)
+        await query.answer(" Can't delete this message", show_alert=True)
     except Exception as e:
-        await query.answer(f"❌ Error: {str(e)[:50]}", show_alert=True)
+        await query.answer(f" Error: {str(e)[:50]}", show_alert=True)
 
 @pbot.on_callback_query(filters.regex(r"^rp_ignore_"))
 async def report_ignore_handler(client, query: CallbackQuery):
     from AloneX.helpers.decorator import get_effective_chat_id_pyro
     chat_id = await get_effective_chat_id_pyro(query)
     if not await get_admin_cached(chat_id, query.from_user.id):
-        return await query.answer(font("❌ Admins only"), show_alert=True)
+        return await query.answer(font(" Admins only"), show_alert=True)
     admin_name = query.from_user.first_name or "Admin"
     try:
         await query.message.edit_text(
-            f"✅ Report ignored by {admin_name}.",
+            f" Report ignored by {admin_name}.",
             reply_markup=None
         )
-        await query.answer(font("✅ Report dismissed"))
+        await query.answer(font(" Report dismissed"))
     except Exception:
-        await query.answer(font("✅ Ignored"), show_alert=False)
+        await query.answer(font(" Ignored"), show_alert=False)

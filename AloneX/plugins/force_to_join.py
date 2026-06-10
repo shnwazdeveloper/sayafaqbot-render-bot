@@ -35,7 +35,7 @@ async def force_to_join(_, message):
             member = await chat.get_member(bot.me.id)
             member.privileges.can_restrict_members
         except Exception:
-           msg = await m.reply_text(font('❌ **I need administrative rights to manage members in this group!**'))
+           msg = await m.reply_text(font(' **I need administrative rights to manage members in this group!**'))
            return await auto_delete(msg, TIME)
               
         if not (await checker(user.id)):
@@ -48,11 +48,11 @@ async def force_to_join(_, message):
                     await bot.ban_chat_member(chat.id, user.id)
                     await bot.unban_chat_member(chat.id, user.id)
                     await m.reply_text(
-                       f"🚫 **{user.mention} has been removed from the group for not following the channel subscription requirement**."
+                       f" **{user.mention} has been removed from the group for not following the channel subscription requirement**."
                     )
                 except Exception as err:
                     msg = await m.reply_text(
-                        f"**❌ ERROR when removing user {user.mention}**: `{err}`"
+                        f"** ERROR when removing user {user.mention}**: `{err}`"
                     )
                     await auto_delete(msg, TIME)
                   
@@ -62,11 +62,11 @@ async def force_to_join(_, message):
           
             users[unique_id] = count + 1
             msg = await m.reply_text(
-                f"👋 **Hi {user.mention}**!\n\n"
-                f"📢 **To continue chatting in this group, please join our channel first.**\n"
-                f"📍 **Channel**: {FORCE_CHAT_ID}\n\n"
-                f"⚠️ **Warning** {count}/3\n"
-                f"❗️ **You'll be removed from the group if you don't join after 3 warnings.**"
+                f" **Hi {user.mention}**!\n\n"
+                f" **To continue chatting in this group, please join our channel first.**\n"
+                f" **Channel**: {FORCE_CHAT_ID}\n\n"
+                f" **Warning** {count}/3\n"
+                f" **You'll be removed from the group if you don't join after 3 warnings.**"
             )
           
             await auto_delete(msg, TIME)

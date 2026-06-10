@@ -60,14 +60,14 @@ async def speed_test(_, message):
 @pbot.on_callback_query(filters.regex("^speedtest"))
 async def callback_handler(_, query: CallbackQuery):
     if not query.from_user or query.from_user.id != OWNER_ID:
-        await query.answer(font("❌ Only the owner can use this."), show_alert=True)
+        await query.answer(font(" Only the owner can use this."), show_alert=True)
         return
     data = query.data
     if data == "speedtest_close":
         await query.message.delete()
         return
     mode = "text" if "text" in data else "image"
-    await query.message.edit_text(font("⚡ Running speedtest... ⏳"))
+    await query.message.edit_text(font(" Running speedtest... "))
     temp_file_path = None
     try:
         loop = asyncio.get_event_loop()
@@ -83,23 +83,23 @@ async def callback_handler(_, query: CallbackQuery):
         upload_mb = convert(result['upload'])
         ping_ms = result['ping']
         replymsg = (
-            f"📊 **Speedtest Result**\n\n"
-            f"📥 **Download:** `{download_mb} MB/s`\n"
-            f"📤 **Upload:** `{upload_mb} MB/s`\n"
-            f"📡 **Ping:** `{ping_ms} ms`\n"
-            f"🌐 **Server:** `{result['server']['name']}`"
+            f" **Speedtest Result**\n\n"
+            f" **Download:** `{download_mb} MB/s`\n"
+            f" **Upload:** `{upload_mb} MB/s`\n"
+            f" **Ping:** `{ping_ms} ms`\n"
+            f" **Server:** `{result['server']['name']}`"
         )
         buttons_after_result = [
             [
-                InlineKeyboardButton(font("🔄 Refresh"), callback_data=f"speedtest_{mode}", style=ButtonStyle.SUCCESS),
-                InlineKeyboardButton(font("❌ Close"), callback_data="speedtest_close", style=ButtonStyle.DANGER),
+                InlineKeyboardButton(font(" Refresh"), callback_data=f"speedtest_{mode}", style=ButtonStyle.SUCCESS),
+                InlineKeyboardButton(font(" Close"), callback_data="speedtest_close", style=ButtonStyle.DANGER),
             ]
         ]
         if mode == "image":
             try:
                 speedtest_image_url = speed.results.share()
                 if speedtest_image_url:
-                    await query.message.edit_text(font("⚡ Downloading speedtest image... 📸"))
+                    await query.message.edit_text(font(" Downloading speedtest image... "))
                     await asyncio.sleep(5)
                     temp_file_path = await download_and_validate_image(speedtest_image_url)
                     if temp_file_path and os.path.exists(temp_file_path):
@@ -113,8 +113,8 @@ async def callback_handler(_, query: CallbackQuery):
                             await query.message.delete()
                         except Exception:
                             await query.message.edit_text(
-                                f"📊 **Speedtest Result**\n"
-                                f"🖼️ **Image:** [View Result]({speedtest_image_url})\n\n"
+                                f" **Speedtest Result**\n"
+                                f" **Image:** [View Result]({speedtest_image_url})\n\n"
                                 f"{replymsg}",
                                 parse_mode=ParseMode.MARKDOWN,
                                 reply_markup=InlineKeyboardMarkup(buttons_after_result),
@@ -122,7 +122,7 @@ async def callback_handler(_, query: CallbackQuery):
                             )
                     else:
                         await query.message.edit_text(
-                            f"⚠️ **Image Download Failed**\n"
+                            f" **Image Download Failed**\n"
                             f"Speedtest.net image couldn't be downloaded or is invalid.\n\n"
                             f"**Text Result:**\n{replymsg}",
                             parse_mode=ParseMode.MARKDOWN,
@@ -130,7 +130,7 @@ async def callback_handler(_, query: CallbackQuery):
                         )
                 else:
                     await query.message.edit_text(
-                        f"⚠️ **No Image Generated**\n"
+                        f" **No Image Generated**\n"
                         f"Speedtest.net did not generate an image URL.\n\n"
                         f"**Text Result:**\n{replymsg}",
                         parse_mode=ParseMode.MARKDOWN,
@@ -138,7 +138,7 @@ async def callback_handler(_, query: CallbackQuery):
                     )
             except Exception as img_error:
                 await query.message.edit_text(
-                    f"⚠️ **Image Mode Failed**\n"
+                    f" **Image Mode Failed**\n"
                     f"Error: `{str(img_error)}`\n\n"
                     f"**Text Result:**\n{replymsg}",
                     parse_mode=ParseMode.MARKDOWN,
@@ -152,11 +152,11 @@ async def callback_handler(_, query: CallbackQuery):
             )
     except Exception as e:
         await query.message.edit_text(
-            f"❌ **Speedtest Failed**\n"
+            f" **Speedtest Failed**\n"
             f"Error: `{str(e)}`",
             parse_mode=ParseMode.MARKDOWN,
             reply_markup=InlineKeyboardMarkup([[
-                InlineKeyboardButton(font("❌ Close"), callback_data="speedtest_close", style=ButtonStyle.DANGER)
+                InlineKeyboardButton(font(" Close"), callback_data="speedtest_close", style=ButtonStyle.DANGER)
             ]])
         )
     finally:
@@ -172,4 +172,4 @@ __HELP__ = """
 » After result, you can Refresh or Close.
 """
 
-__MODULE__ = "𝐒ᴘᴇᴇᴅᴛᴇsᴛ🏎️"
+__MODULE__ = "𝐒ᴘᴇᴇᴅᴛᴇsᴛ"

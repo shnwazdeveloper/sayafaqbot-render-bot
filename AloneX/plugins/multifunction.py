@@ -19,29 +19,29 @@ def is_dev(user_id: int) -> bool:
 @app.on_message(filters.command("confess", prefixes=prefix_cmds) & filters.private, group=55)
 async def confess_command(_, m: Message):
     if len(m.command) < 3:
-        return await m.reply(font("❗Usage: `/confess @username I like your work!`"))
+        return await m.reply(font("Usage: `/confess @username I like your work!`"))
 
     username = m.command[1].lstrip("@")
     text = " ".join(m.command[2:])
     try:
         user = await app.get_users(username)
-        await app.send_message(user.id, f"📩 Anonymous confession:\n\n**{text}**")
+        await app.send_message(user.id, f" Anonymous confession:\n\n**{text}**")
         await log_confession(m.from_user.id, user.id, text)
-        await m.reply(font("✅ Confession sent anonymously!"))
+        await m.reply(font(" Confession sent anonymously!"))
     except:
-        await m.reply(font("❌ Failed to send. User not found or blocked the bot."))
+        await m.reply(font(" Failed to send. User not found or blocked the bot."))
 
 # ------------------ /getconfesslog ------------------ #
 @app.on_message(filters.command("getconfesslog", prefixes=prefix_cmds) & filters.private, group=56)
 async def get_confession_logs(_, m: Message):
     if not is_dev(m.from_user.id):
-        return await m.reply(font("❌ Only developers can use this command."))
+        return await m.reply(font(" Only developers can use this command."))
 
     logs = await get_confess_logs(m.from_user.id)
     if not logs:
-        return await m.reply(font("📭 No confession logs found."))
+        return await m.reply(font(" No confession logs found."))
 
-    text = "**🗒️ Your Confession Logs:**\n\n"
+    text = "** Your Confession Logs:**\n\n"
     for log in logs:
         timestamp = log["timestamp"].strftime("%Y-%m-%d %H:%M:%S")
         text += f"- `{log['message']}` (to ID: `{log['to_id']}`) at `{timestamp}`\n"
@@ -52,13 +52,13 @@ async def get_confession_logs(_, m: Message):
 @app.on_message(filters.command("getconfesslog_all", prefixes=prefix_cmds) & filters.private, group=57)
 async def get_all_confessions(_, m: Message):
     if not is_dev(m.from_user.id):
-        return await m.reply(font("❌ Only developers can use this command."))
+        return await m.reply(font(" Only developers can use this command."))
 
     logs = await get_confess_logs_all()
     if not logs:
-        return await m.reply(font("📭 No confessions found in the database."))
+        return await m.reply(font(" No confessions found in the database."))
 
-    text = "**🗒️ All Confession Logs:**\n\n"
+    text = "** All Confession Logs:**\n\n"
     for log in logs[:10]:
         timestamp = log["timestamp"].strftime("%Y-%m-%d %H:%M:%S")
         text += f"- `{log['message']}`\n  From: `{log['from_id']}` → To: `{log['to_id']}` at `{timestamp}`\n\n"
@@ -70,26 +70,26 @@ async def get_all_confessions(_, m: Message):
 async def toggle_antichannel(_, m: Message):
     member = await app.get_chat_member(m.chat.id, m.from_user.id)
     if not member or (not member.privileges and not is_dev(m.from_user.id)):
-        return await m.reply(font("❌ Only group admins or devs can toggle this."))
+        return await m.reply(font(" Only group admins or devs can toggle this."))
 
     args = m.text.split()
     if len(args) == 1:
         enabled = await get_antichannel_setting(m.chat.id)
         btn = InlineKeyboardMarkup([[
-            InlineKeyboardButton(font("✅ Enable"), callback_data="antichannel_on", style=ButtonStyle.SUCCESS),
-            InlineKeyboardButton(font("❌ Disable"), callback_data="antichannel_off", style=ButtonStyle.DANGER)
+            InlineKeyboardButton(font(" Enable"), callback_data="antichannel_on", style=ButtonStyle.SUCCESS),
+            InlineKeyboardButton(font(" Disable"), callback_data="antichannel_off", style=ButtonStyle.DANGER)
         ]])
         return await m.reply(
-            f"🔐 Anti-channel is currently **{'ENABLED' if enabled else 'DISABLED'}**.",
+            f" Anti-channel is currently **{'ENABLED' if enabled else 'DISABLED'}**.",
             reply_markup=btn
         )
 
     if args[1] not in ["on", "off"]:
-        return await m.reply(font("❗Usage: `/antichannel` or `/antichannel on|off`"))
+        return await m.reply(font("Usage: `/antichannel` or `/antichannel on|off`"))
 
     state = args[1] == "on"
     await set_antichannel_setting(m.chat.id, state)
-    await m.reply(f"✅ Anti-channel has been **{'ENABLED' if state else 'DISABLED'}** by `{m.from_user.first_name}`.")
+    await m.reply(f" Anti-channel has been **{'ENABLED' if state else 'DISABLED'}** by `{m.from_user.first_name}`.")
 
 @app.on_callback_query(filters.regex("antichannel_(on|off)"))
 async def antichannel_toggle_callback(_, cb):
@@ -103,7 +103,7 @@ async def antichannel_toggle_callback(_, cb):
     state = cb.data.endswith("on")
     await set_antichannel_setting(chat_id, state)
     await cb.message.edit_text(
-        f"✅ Anti-channel has been **{'ENABLED' if state else 'DISABLED'}** by `{cb.from_user.first_name}`."
+        f" Anti-channel has been **{'ENABLED' if state else 'DISABLED'}** by `{cb.from_user.first_name}`."
     )
     await cb.answer(font("Toggled successfully!"))
 
@@ -125,7 +125,7 @@ async def delete_forwarded_channels(_, m: Message):
 # ------------------ /mcommands ------------------ #
 @app.on_message(filters.command("mcommands", prefixes=prefix_cmds), group=59)
 async def list_commands(_, m: Message):
-    text = "**🤖 Available Commands:**\n\n"
+    text = "** Available Commands:**\n\n"
     text += "`/confess @user <msg>` - Send anonymous confession\n"
     text += "`/getconfesslog` - View your confessions (devs only)\n"
     text += "`/getconfesslog_all` - View all confessions (devs only)\n"

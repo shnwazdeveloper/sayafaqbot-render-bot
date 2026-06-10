@@ -154,44 +154,44 @@ async def root_route_handler(request):
 
         <div class="features">
             <div class="feature-card">
-                <div class="feature-icon">🤖</div>
+                <div class="feature-icon"></div>
                 <h3>AI Tools</h3>
                 <p>Advanced AI-powered features for chat, image generation, and more</p>
             </div>
 
             <div class="feature-card">
-                <div class="feature-icon">🎬</div>
+                <div class="feature-icon"></div>
                 <h3>Movies & Anime</h3>
                 <p>Access to a vast collection of movies and anime content</p>
             </div>
 
             <div class="feature-card">
-                <div class="feature-icon">💬</div>
+                <div class="feature-icon"></div>
                 <h3>Smart Chatbot</h3>
                 <p>Intelligent conversation system for natural interactions</p>
             </div>
 
             <div class="feature-card">
-                <div class="feature-icon">✨</div>
+                <div class="feature-icon"></div>
                 <h3>Font Styling</h3>
                 <p>Creative text formatting and stylish font options</p>
             </div>
 
             <div class="feature-card">
-                <div class="feature-icon">🧮</div>
+                <div class="feature-icon"></div>
                 <h3>Calculator</h3>
                 <p>Quick and easy calculations right in your chat</p>
             </div>
 
             <div class="feature-card">
-                <div class="feature-icon">👥</div>
+                <div class="feature-icon"></div>
                 <h3>Group Management</h3>
                 <p>Comprehensive tools for managing Telegram groups</p>
             </div>
         </div>
 
         <footer>
-            <p>Made with ❤️ by <a href="https://t.me/DEPSTEY" target="_blank">@Sahil</a></p>
+            <p>Made with  by <a href="https://t.me/DEPSTEY" target="_blank">@Sahil</a></p>
         </footer>
     </div>
 </body>

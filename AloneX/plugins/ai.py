@@ -16,7 +16,7 @@ import tempfile
 import contextlib
 import config
 
-__module__ = "𝐀ɪ🆕"
+__module__ = "𝐀ɪ"
 
 __help__ = """
 *AI*
@@ -70,11 +70,11 @@ async def generate_ai_image(prompt, key="Anime"):
                 output = result.get('data', {}).get('output', [])
                 if output and isinstance(output, list) and output[0].startswith("http"):
                     return output[0]
-                return "❌ *ERROR*: No valid image URL found!"
+                return " *ERROR*: No valid image URL found!"
             else:
-                return f"❌ *ERROR status*: `{response.status}`"
+                return f" *ERROR status*: `{response.status}`"
     except Exception as e:
-        return f"❌ *ERROR*: `{str(e)}`"
+        return f" *ERROR*: `{str(e)}`"
 
 art_users = {}
 
@@ -86,15 +86,15 @@ async def art_Img_func(update, context):
     bot = context.bot
 
     if len(m.text.split()) < 2:
-        return await m.reply_text(font("🙋 Where is the prompt? e.g., /art anime Makima"))
+        return await m.reply_text(font(" Where is the prompt? e.g., /art anime Makima"))
 
     if art_users.get(user.id, None):
-        return await m.reply_text(font('😉 *Please wait, an image is already generating!*'), parse_mode=constants.ParseMode.MARKDOWN)
+        return await m.reply_text(font(' *Please wait, an image is already generating!*'), parse_mode=constants.ParseMode.MARKDOWN)
     
     art_users[user.id] = True
 
     prompt = m.text.split(maxsplit=1)[1]
-    msg = await m.reply_text(font("⚡ *Generating Image...*"), parse_mode=constants.ParseMode.MARKDOWN)
+    msg = await m.reply_text(font(" *Generating Image...*"), parse_mode=constants.ParseMode.MARKDOWN)
 
     try:
         image_url = await generate_ai_image(prompt)
@@ -110,15 +110,15 @@ async def art_Img_func(update, context):
                         file.write(image_data)
 
                     await m.reply_photo(image_filename)
-                    okay = await m.reply_document(image_filename, caption=f"*⚡ By @{bot.username}*", parse_mode=constants.ParseMode.MARKDOWN)
+                    okay = await m.reply_document(image_filename, caption=f"* By @{bot.username}*", parse_mode=constants.ParseMode.MARKDOWN)
                     if LOGS_CHANNEL:
                         await okay.copy(LOGS_CHANNEL, caption=f"*By* `{user.id}`", parse_mode=constants.ParseMode.MARKDOWN)
                     await msg.delete()
                 else:
-                    return await msg.edit_text(font('❌ Failed to download the generated image.'))
+                    return await msg.edit_text(font(' Failed to download the generated image.'))
         
     except Exception as e:
-        await msg.edit_text(f'❌ *ERROR*: `{str(e)}`', parse_mode=constants.ParseMode.MARKDOWN)
+        await msg.edit_text(f' *ERROR*: `{str(e)}`', parse_mode=constants.ParseMode.MARKDOWN)
     finally:
         art_users.pop(user.id, None)
 
@@ -130,11 +130,11 @@ async def DrawImg(update: Update, context: CallbackContext):
     bot = context.bot
 
     if len(m.text.split()) < 2:
-        return await m.reply_text(font("🙋 where prompt ? e.g /imagine anime AloneX"))
+        return await m.reply_text(font(" where prompt ? e.g /imagine anime AloneX"))
 
     prompt = urllib.parse.quote(m.text.split(maxsplit=1)[1])
     url = f"https://image.pollinations.ai/prompt/{prompt}?width=1024&height=1024&nologo=true&model=flux-anime"
-    msg = await m.reply_text(font("⚡ *Generating Image...*"), parse_mode=constants.ParseMode.MARKDOWN)
+    msg = await m.reply_text(font(" *Generating Image...*"), parse_mode=constants.ParseMode.MARKDOWN)
 
     headers = {'user-agent': 'Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Mobile Safari/537.36 OPR/86.0.0.0'}
     image_data = None
@@ -149,11 +149,11 @@ async def DrawImg(update: Update, context: CallbackContext):
                     await asyncio.sleep(2.5)
         except (aiohttp.ClientConnectionError, aiohttp.ClientError, asyncio.TimeoutError) as e:
             if attempt == 4:
-                return await msg.edit_text(f'❌ Failed to generate image after multiple attempts: {str(e)}')
+                return await msg.edit_text(f' Failed to generate image after multiple attempts: {str(e)}')
             await asyncio.sleep(4.5)
 
     if not image_data:
-        return await msg.edit_text(font('❌ Failed to generate image. Please try again later.'))
+        return await msg.edit_text(font(' Failed to generate image. Please try again later.'))
 
     async with temporary_file(".png") as image:
         with open(image, "wb") as file:
@@ -161,10 +161,10 @@ async def DrawImg(update: Update, context: CallbackContext):
 
         try:
             await m.reply_photo(image)
-            await m.reply_document(image, caption=f"*⚡ By @{bot.username}*", parse_mode=constants.ParseMode.MARKDOWN)
+            await m.reply_document(image, caption=f"* By @{bot.username}*", parse_mode=constants.ParseMode.MARKDOWN)
             await msg.delete()
         except Exception as e:
-            return await msg.edit_text(f'❌ Error when uploading: {str(e)}')
+            return await msg.edit_text(f' Error when uploading: {str(e)}')
 
 MONSTER_API_KEY = config.MONSTER_API_KEY
 
@@ -220,11 +220,11 @@ async def imageDraw(update: Update, context: CallbackContext):
     bot = context.bot
 
     if not MONSTER_API_KEY:
-        return await m.reply_text(font("❌ Monster API Key not configured."))
+        return await m.reply_text(font(" Monster API Key not configured."))
 
     if len(m.text.split()) == 1:
         return await m.reply_text(
-            "🙋 Write something to draw.\nExample: `/draw anime girl neg: bad quality`",
+            " Write something to draw.\nExample: `/draw anime girl neg: bad quality`",
             parse_mode=constants.ParseMode.MARKDOWN,
         )
 
@@ -238,7 +238,7 @@ async def imageDraw(update: Update, context: CallbackContext):
         negprompt = ""
 
     msg = await m.reply_text(
-        "*✨ Drawing please wait...*", parse_mode=constants.ParseMode.MARKDOWN
+        "* Drawing please wait...*", parse_mode=constants.ParseMode.MARKDOWN
     )
 
     images = await get_output_monster(prompt, negprompt)
@@ -253,9 +253,9 @@ async def imageDraw(update: Update, context: CallbackContext):
             )
             return await msg.delete()
         except Exception as e:
-            return await msg.edit_text(f"❌ Error sending image: {e}")
+            return await msg.edit_text(f" Error sending image: {e}")
     else:
-        return await msg.edit_text(font("❌ No media generated. Try again later."))
+        return await msg.edit_text(font(" No media generated. Try again later."))
 
 gemini = Gemini(api_key=config.GEMINI_API_KEY)
 
@@ -268,25 +268,25 @@ async def _gemini(update, context):
     r = m.reply_to_message
 
     if not config.GEMINI_API_KEY:
-        return await m.reply_text(font("❌ Gemini API Key not configured."))
+        return await m.reply_text(font(" Gemini API Key not configured."))
 
-    msg = await m.reply_text("🔎")
+    msg = await m.reply_text("")
     
     if r and r.photo:
         file_id = r.photo[-1].file_id
         path = await (await bot.get_file(file_id)).download_to_drive()
         prompt = m.text.split(maxsplit=1)[1] if len(m.text.split()) > 2 else r.caption if r.caption else "describe this picture"
-        await msg.edit_text(font("📩 *Image processing ...*"), parse_mode=constants.ParseMode.MARKDOWN)
+        await msg.edit_text(font(" *Image processing ...*"), parse_mode=constants.ParseMode.MARKDOWN)
         
         try:
             file = await gemini.upload_image(path)
             if "error" in file: 
-                return await msg.edit_text(f"❌ ERROR: {file['error']}")
+                return await msg.edit_text(f" ERROR: {file['error']}")
             else:
                 output = await gemini.ask(prompt, file)
                 if "error" in output: 
-                    return await msg.edit_text(f"❌ ERROR: {output['error']}")
-                text = output.get('candidates', [{}])[0].get('content', {}).get('parts', [{}])[0].get('text', 'No response found 😓')
+                    return await msg.edit_text(f" ERROR: {output['error']}")
+                text = output.get('candidates', [{}])[0].get('content', {}).get('parts', [{}])[0].get('text', 'No response found ')
                 try:
                     return await msg.edit_text(text, parse_mode=constants.ParseMode.MARKDOWN)
                 except Exception as e:
@@ -301,14 +301,14 @@ async def _gemini(update, context):
                 prompt += "\nQuestion:" + m.text.split(maxsplit=1)[1]
         else:
             if len(m.text.split()) < 2:
-                return await msg.edit_text(font("*Ask Something !* 😓"), parse_mode=constants.ParseMode.MARKDOWN)
+                return await msg.edit_text(font("*Ask Something !* "), parse_mode=constants.ParseMode.MARKDOWN)
             prompt = m.text.split(maxsplit=1)[1]
         
         output = await gemini.ask(prompt)
         if "error" in output: 
-            return await msg.edit_text(f"❌ ERROR: {output['error']}")
+            return await msg.edit_text(f" ERROR: {output['error']}")
         else:
-            text = output.get('candidates', [{}])[0].get('content', {}).get('parts', [{}])[0].get('text', 'No response found 😓')
+            text = output.get('candidates', [{}])[0].get('content', {}).get('parts', [{}])[0].get('text', 'No response found ')
             try:
                 return await msg.edit_text(text, parse_mode=constants.ParseMode.MARKDOWN)
             except Exception as e:
@@ -323,7 +323,7 @@ async def AloneXAi(update: Update, context: CallbackContext) -> None:
     reply = message.reply_to_message
 
     msg = await message.reply_text(
-        "✨ *AloneX is thinking...*",
+        " *AloneX is thinking...*",
         parse_mode=constants.ParseMode.MARKDOWN
     )
 
@@ -347,14 +347,14 @@ async def AloneXAi(update: Update, context: CallbackContext) -> None:
     if len(reply_text) > 4000:
         paste_src = await paste(reply_text)
         return await msg.edit_text(
-            f"📑 [Full Reply Here]({paste_src['paste_url']})",
+            f" [Full Reply Here]({paste_src['paste_url']})",
             disable_web_page_preview=False,
             parse_mode=constants.ParseMode.MARKDOWN
         )
 
     try:
         return await msg.edit_text(
-            f"👩‍🦰 *AloneX says:*\n\n{reply_text}",
+            f" *AloneX says:*\n\n{reply_text}",
             parse_mode=constants.ParseMode.MARKDOWN
         )
     except Exception:
@@ -370,7 +370,7 @@ async def ChatGpt(update, context):
     
     if len(m.text.split()) == 1: 
         return await m.reply_text(
-            text="⚡ Enter some prompt", 
+            text=" Enter some prompt", 
             parse_mode=constants.ParseMode.MARKDOWN
         )
 
@@ -378,7 +378,7 @@ async def ChatGpt(update, context):
     if reply and reply.text:
         prompt = f"Old conversation:\n{reply.text}\n\nQuestion:\n{prompt}"
          
-    msg = await m.reply_text('🔍')
+    msg = await m.reply_text('')
     gpt = GPTGeneration()
     
     try:
@@ -390,7 +390,7 @@ async def ChatGpt(update, context):
         else:
             await msg.edit_text(text=gptReply, parse_mode=constants.ParseMode.MARKDOWN)
     except Exception as e:
-        return await msg.edit_text(font("*❌ Unknown Error*\n") + str(e), parse_mode=constants.ParseMode.MARKDOWN)
+        return await msg.edit_text(font("* Unknown Error*\n") + str(e), parse_mode=constants.ParseMode.MARKDOWN)
 
 @Command('groq')
 @send_action(constants.ChatAction.TYPING)
@@ -400,15 +400,15 @@ async def groq(update, context):
     reply = message.reply_to_message
     
     if not config.GROQ_API_KEY:
-        return await message.reply_text(font("❌ Groq API Key not configured."))
+        return await message.reply_text(font(" Groq API Key not configured."))
 
     if len(message.text.split()) == 1:
         return await message.reply_text(
-            "*Enter some query*. ⚡",
+            "*Enter some query*. ",
             parse_mode=constants.ParseMode.MARKDOWN
         )
       
-    msg = await message.reply_text("⚡")
+    msg = await message.reply_text("")
     
     user_prompt = message.text.split(maxsplit=1)[1]
     if reply and reply.text:
@@ -439,11 +439,11 @@ async def groq(update, context):
                     )
             else:
                 return await msg.edit_text(
-                    text=f"❌ *Request failed*: `{response.status} - {response.reason}`",
+                    text=f" *Request failed*: `{response.status} - {response.reason}`",
                     parse_mode=constants.ParseMode.MARKDOWN
                 )
     except Exception as e:
         return await msg.edit_text(
-            text=f"❌ *ERROR*: `{str(e)}`",
+            text=f" *ERROR*: `{str(e)}`",
             parse_mode=constants.ParseMode.MARKDOWN
         )

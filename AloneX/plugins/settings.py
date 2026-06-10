@@ -69,94 +69,94 @@ async def fetch_settings(chat_id: int) -> dict:
         return {}
 
 def fmt_header(title: str) -> str:
-    return f"<b>⚙️ sᴇᴛᴛɪɴɢs ғᴏʀ {title}</b>\n\n"
+    return f"<b> sᴇᴛᴛɪɴɢs ғᴏʀ {title}</b>\n\n"
 
 def fmt_footer(chat_id: int) -> str:
     return f"\n<code>ᴄʜᴀᴛ ɪᴅ: {chat_id}</code>"
 
 def fmt_greetings(chat_id: int, data: dict, title: str) -> str:
-    text = fmt_header(title) + "👋 <b>ɢʀᴇᴇᴛɪɴɢs sᴇᴛᴛɪɴɢs</b>\n\n🎉 <b>ᴡᴇʟᴄᴏᴍᴇ:</b>\n"
+    text = fmt_header(title) + " <b>ɢʀᴇᴇᴛɪɴɢs sᴇᴛᴛɪɴɢs</b>\n\n <b>ᴡᴇʟᴄᴏᴍᴇ:</b>\n"
     if data.get('welcome_exists'):
-        status = "✅ ᴇɴᴀʙʟᴇᴅ" if data.get('welcome_status') else "⚠️ ᴅɪsᴀʙʟᴇᴅ"
-        text += f"   └ sᴛᴀᴛᴜs: {status}\n   └ ᴍᴇssᴀɢᴇ: ✅ sᴇᴛ\n"
+        status = " ᴇɴᴀʙʟᴇᴅ" if data.get('welcome_status') else " ᴅɪsᴀʙʟᴇᴅ"
+        text += f"   └ sᴛᴀᴛᴜs: {status}\n   └ ᴍᴇssᴀɢᴇ:  sᴇᴛ\n"
     else:
-        text += "   └ sᴛᴀᴛᴜs: ❌ ɴᴏᴛ ᴄᴏɴғɪɢᴜʀᴇᴅ\n"
+        text += "   └ sᴛᴀᴛᴜs:  ɴᴏᴛ ᴄᴏɴғɪɢᴜʀᴇᴅ\n"
     
-    text += "\n👋 <b>ɢᴏᴏᴅʙʏᴇ:</b>\n"
+    text += "\n <b>ɢᴏᴏᴅʙʏᴇ:</b>\n"
     if data.get('goodbye_exists'):
-        status = "✅ ᴇɴᴀʙʟᴇᴅ" if data.get('goodbye_status') else "⚠️ ᴅɪsᴀʙʟᴇᴅ"
-        text += f"   └ sᴛᴀᴛᴜs: {status}\n   └ ᴍᴇssᴀɢᴇ: ✅ sᴇᴛ\n"
+        status = " ᴇɴᴀʙʟᴇᴅ" if data.get('goodbye_status') else " ᴅɪsᴀʙʟᴇᴅ"
+        text += f"   └ sᴛᴀᴛᴜs: {status}\n   └ ᴍᴇssᴀɢᴇ:  sᴇᴛ\n"
     else:
-        text += "   └ sᴛᴀᴛᴜs: ❌ ɴᴏᴛ ᴄᴏɴғɪɢᴜʀᴇᴅ\n"
+        text += "   └ sᴛᴀᴛᴜs:  ɴᴏᴛ ᴄᴏɴғɪɢᴜʀᴇᴅ\n"
     return text + fmt_footer(chat_id)
 
 def fmt_locks(chat_id: int, data: dict, title: str) -> str:
-    text = fmt_header(title) + "🔒 <b>ʟᴏᴄᴋs sᴇᴛᴛɪɴɢs</b>\n\n"
+    text = fmt_header(title) + " <b>ʟᴏᴄᴋs sᴇᴛᴛɪɴɢs</b>\n\n"
     if locks := data.get('locks', []):
-        text += f"🔐 <b>ʟᴏᴄᴋᴇᴅ ɪᴛᴇᴍs ({len(locks)}):</b>\n"
+        text += f" <b>ʟᴏᴄᴋᴇᴅ ɪᴛᴇᴍs ({len(locks)}):</b>\n"
         text += "\n".join(f"   └ <code>{lock}</code>" for lock in locks)
     else:
-        text += "   ✅ ɴᴏ ʟᴏᴄᴋs ᴇɴᴀʙʟᴇᴅ"
+        text += "    ɴᴏ ʟᴏᴄᴋs ᴇɴᴀʙʟᴇᴅ"
     return text + fmt_footer(chat_id)
 
 def fmt_antiflood(chat_id: int, data: dict, title: str) -> str:
-    text = fmt_header(title) + "💧 <b>ᴀɴᴛɪғʟᴏᴏᴅ sᴇᴛᴛɪɴɢs</b>\n\n"
+    text = fmt_header(title) + " <b>ᴀɴᴛɪғʟᴏᴏᴅ sᴇᴛᴛɪɴɢs</b>\n\n"
     flood = data.get('flood', {})
     if flood.get('limit', 0) > 0:
-        text += f"⚠️ <b>sᴛᴀᴛᴜs:</b> ᴇɴᴀʙʟᴇᴅ\n\n📊 <b>ʟɪᴍɪᴛ:</b> {flood['limit']} ᴍᴇssᴀɢᴇs\n"
-        text += f"⚡ <b>ᴀᴄᴛɪᴏɴ:</b> {flood.get('action', {}).get('type', 'N/A')}"
+        text += f" <b>sᴛᴀᴛᴜs:</b> ᴇɴᴀʙʟᴇᴅ\n\n <b>ʟɪᴍɪᴛ:</b> {flood['limit']} ᴍᴇssᴀɢᴇs\n"
+        text += f" <b>ᴀᴄᴛɪᴏɴ:</b> {flood.get('action', {}).get('type', 'N/A')}"
         if duration := flood.get('action', {}).get('duration'):
             text += f" ({duration})"
-        text += f"\n🗑️ <b>ᴄʟᴇᴀʀ ᴍᴇssᴀɢᴇs:</b> {'✅ ʏᴇs' if flood.get('clear') else '❌ ɴᴏ'}\n"
+        text += f"\n <b>ᴄʟᴇᴀʀ ᴍᴇssᴀɢᴇs:</b> {' ʏᴇs' if flood.get('clear') else ' ɴᴏ'}\n"
         if flood.get('timer', {}).get('count', 0) > 0:
-            text += f"⏱️ <b>ᴛɪᴍᴇʀ:</b> {flood['timer']['count']} ᴍᴇssᴀɢᴇs ɪɴ {flood['timer']['seconds']}s\n"
+            text += f" <b>ᴛɪᴍᴇʀ:</b> {flood['timer']['count']} ᴍᴇssᴀɢᴇs ɪɴ {flood['timer']['seconds']}s\n"
     else:
-        text += "   ✅ ᴀɴᴛɪғʟᴏᴏᴅ ɪs ᴅɪsᴀʙʟᴇᴅ"
+        text += "    ᴀɴᴛɪғʟᴏᴏᴅ ɪs ᴅɪsᴀʙʟᴇᴅ"
     return text + fmt_footer(chat_id)
 
 def fmt_antiraid(chat_id: int, data: dict, title: str) -> str:
-    text = fmt_header(title) + "🛡️ <b>ᴀɴᴛɪʀᴀɪᴅ sᴇᴛᴛɪɴɢs</b>\n\n"
+    text = fmt_header(title) + " <b>ᴀɴᴛɪʀᴀɪᴅ sᴇᴛᴛɪɴɢs</b>\n\n"
     raid = data.get('antiraid', {})
     if raid.get('enabled_until'):
-        text += f"⚠️ <b>sᴛᴀᴛᴜs:</b> ᴇɴᴀʙʟᴇᴅ\n⏰ <b>ᴜɴᴛɪʟ:</b> {raid['enabled_until']}\n"
+        text += f" <b>sᴛᴀᴛᴜs:</b> ᴇɴᴀʙʟᴇᴅ\n <b>ᴜɴᴛɪʟ:</b> {raid['enabled_until']}\n"
     else:
-        text += "   ✅ ᴀɴᴛɪʀᴀɪᴅ ɪs ᴅɪsᴀʙʟᴇᴅ\n"
-    text += f"⏱️ <b>ʀᴀɪᴅ ᴛɪᴍᴇ:</b> {raid.get('raid_time', 21600)}s\n"
-    text += f"⛔ <b>ʙᴀɴ ᴛɪᴍᴇ:</b> {raid.get('ban_time', 3600)}s\n"
-    text += f"🔢 <b>ᴀᴜᴛᴏ ᴛʀɪɢɢᴇʀ:</b> {raid.get('auto_trigger', 0)}"
+        text += "    ᴀɴᴛɪʀᴀɪᴅ ɪs ᴅɪsᴀʙʟᴇᴅ\n"
+    text += f" <b>ʀᴀɪᴅ ᴛɪᴍᴇ:</b> {raid.get('raid_time', 21600)}s\n"
+    text += f" <b>ʙᴀɴ ᴛɪᴍᴇ:</b> {raid.get('ban_time', 3600)}s\n"
+    text += f" <b>ᴀᴜᴛᴏ ᴛʀɪɢɢᴇʀ:</b> {raid.get('auto_trigger', 0)}"
     return text + fmt_footer(chat_id)
 
 def fmt_antinsfw(chat_id: int, data: dict, title: str) -> str:
-    text = fmt_header(title) + "🔞 <b>ᴀɴᴛɪ-ɴsғᴡ sᴇᴛᴛɪɴɢs</b>\n\n"
-    text += f"🛡️ <b>ᴀɴᴛɪ-ᴘᴏʀɴ:</b> {'✅ ᴇɴᴀʙʟᴇᴅ' if data.get('antinsfw') else '❌ ᴅɪsᴀʙʟᴇᴅ'}\n"
-    text += f"👮 <b>ᴄʜᴇᴄᴋ ᴀᴅᴍɪɴs:</b> {'✅ ʏᴇs' if data.get('antinsfw_admin') else '❌ ɴᴏ'}"
+    text = fmt_header(title) + " <b>ᴀɴᴛɪ-ɴsғᴡ sᴇᴛᴛɪɴɢs</b>\n\n"
+    text += f" <b>ᴀɴᴛɪ-ᴘᴏʀɴ:</b> {' ᴇɴᴀʙʟᴇᴅ' if data.get('antinsfw') else ' ᴅɪsᴀʙʟᴇᴅ'}\n"
+    text += f" <b>ᴄʜᴇᴄᴋ ᴀᴅᴍɪɴs:</b> {' ʏᴇs' if data.get('antinsfw_admin') else ' ɴᴏ'}"
     return text + fmt_footer(chat_id)
 
 def fmt_reactions(chat_id: int, data: dict, title: str) -> str:
-    text = fmt_header(title) + "😊 <b>ʀᴇᴀᴄᴛɪᴏɴs sᴇᴛᴛɪɴɢs</b>\n\n"
-    text += f"🎭 <b>sᴛᴀᴛᴜs:</b> {'✅ ᴇɴᴀʙʟᴇᴅ' if data.get('reactions') else '❌ ᴅɪsᴀʙʟᴇᴅ'}"
+    text = fmt_header(title) + " <b>ʀᴇᴀᴄᴛɪᴏɴs sᴇᴛᴛɪɴɢs</b>\n\n"
+    text += f" <b>sᴛᴀᴛᴜs:</b> {' ᴇɴᴀʙʟᴇᴅ' if data.get('reactions') else ' ᴅɪsᴀʙʟᴇᴅ'}"
     return text + fmt_footer(chat_id)
 
 def fmt_chatbot(chat_id: int, data: dict, title: str) -> str:
-    text = fmt_header(title) + "🤖 <b>ᴄʜᴀᴛʙᴏᴛ sᴇᴛᴛɪɴɢs</b>\n\n"
-    text += f"💬 <b>sᴛᴀᴛᴜs:</b> {'✅ ᴇɴᴀʙʟᴇᴅ' if data.get('chatbot') else '❌ ᴅɪsᴀʙʟᴇᴅ'}"
+    text = fmt_header(title) + " <b>ᴄʜᴀᴛʙᴏᴛ sᴇᴛᴛɪɴɢs</b>\n\n"
+    text += f" <b>sᴛᴀᴛᴜs:</b> {' ᴇɴᴀʙʟᴇᴅ' if data.get('chatbot') else ' ᴅɪsᴀʙʟᴇᴅ'}"
     return text + fmt_footer(chat_id)
 
 def fmt_cmd_disable(chat_id: int, data: dict, title: str) -> str:
-    text = fmt_header(title) + "🚫 <b>ᴅɪsᴀʙʟᴇᴅ ᴄᴏᴍᴍᴀɴᴅs</b>\n\n"
+    text = fmt_header(title) + " <b>ᴅɪsᴀʙʟᴇᴅ ᴄᴏᴍᴍᴀɴᴅs</b>\n\n"
     if disabled := data.get('disabled', []):
-        text += f"❌ <b>ᴅɪsᴀʙʟᴇᴅ ({len(disabled)}):</b>\n"
+        text += f" <b>ᴅɪsᴀʙʟᴇᴅ ({len(disabled)}):</b>\n"
         text += "\n".join(f"   └ <code>{cmd}</code>" for cmd in disabled[:10])
         if len(disabled) > 10:
             text += f"\n   └ ... ᴀɴᴅ {len(disabled) - 10} ᴍᴏʀᴇ"
     else:
-        text += "   ✅ ɴᴏ ᴄᴏᴍᴍᴀɴᴅs ᴅɪsᴀʙʟᴇᴅ"
+        text += "    ɴᴏ ᴄᴏᴍᴍᴀɴᴅs ᴅɪsᴀʙʟᴇᴅ"
     return text + fmt_footer(chat_id)
 
 async def fmt_admin(chat_id: int, data: dict, title: str) -> str:
-    text = fmt_header(title) + "👑 <b>ᴀᴅᴍɪɴ & ᴍᴏᴅs</b>\n\n"
+    text = fmt_header(title) + " <b>ᴀᴅᴍɪɴ & ᴍᴏᴅs</b>\n\n"
     if mods := data.get('mods', []):
-        text += f"🛡️ <b>ᴍᴏᴅs ({len(mods)}):</b>\n"
+        text += f" <b>ᴍᴏᴅs ({len(mods)}):</b>\n"
         for m in mods[:5]:
             try:
                 user = await pbot.get_users(m['user_id'])
@@ -171,9 +171,9 @@ async def fmt_admin(chat_id: int, data: dict, title: str) -> str:
     return text + fmt_footer(chat_id)
 
 def fmt_approvals(chat_id: int, data: dict, title: str) -> str:
-    text = fmt_header(title) + "✅ <b>ᴀᴘᴘʀᴏᴠᴇᴅ ᴜsᴇʀs</b>\n\n"
+    text = fmt_header(title) + " <b>ᴀᴘᴘʀᴏᴠᴇᴅ ᴜsᴇʀs</b>\n\n"
     approved = data.get('approved_users', [])
-    text += f"👥 <b>ᴛᴏᴛᴀʟ ᴀᴘᴘʀᴏᴠᴇᴅ:</b> {len(approved)}"
+    text += f" <b>ᴛᴏᴛᴀʟ ᴀᴘᴘʀᴏᴠᴇᴅ:</b> {len(approved)}"
     if approved:
         text += "\n\n<b>ᴜsᴇʀ ɪᴅs:</b>\n"
         text += "\n".join(f"   └ <code>{uid}</code>" for uid in approved[:10])
@@ -182,125 +182,125 @@ def fmt_approvals(chat_id: int, data: dict, title: str) -> str:
     return text + fmt_footer(chat_id)
 
 def fmt_join_request(chat_id: int, data: dict, title: str) -> str:
-    text = fmt_header(title) + "👥 <b>ᴊᴏɪɴ ʀᴇǫᴜᴇsᴛ</b>\n\n"
-    text += f"📢 <b>sᴛᴀᴛᴜs:</b> {'✅ ᴇɴᴀʙʟᴇᴅ' if data.get('join_request') else '❌ ᴅɪsᴀʙʟᴇᴅ'}"
+    text = fmt_header(title) + " <b>ᴊᴏɪɴ ʀᴇǫᴜᴇsᴛ</b>\n\n"
+    text += f" <b>sᴛᴀᴛᴜs:</b> {' ᴇɴᴀʙʟᴇᴅ' if data.get('join_request') else ' ᴅɪsᴀʙʟᴇᴅ'}"
     return text + fmt_footer(chat_id)
 
 def fmt_blacklist(chat_id: int, data: dict, title: str) -> str:
-    text = fmt_header(title) + "⛔ <b>ʙʟᴀᴄᴋʟɪsᴛ ᴡᴏʀᴅs</b>\n\n"
+    text = fmt_header(title) + " <b>ʙʟᴀᴄᴋʟɪsᴛ ᴡᴏʀᴅs</b>\n\n"
     if words := data.get('blacklist_words', []):
-        text += f"🚫 <b>ʙʟᴀᴄᴋʟɪsᴛᴇᴅ ({len(words)}):</b>\n"
+        text += f" <b>ʙʟᴀᴄᴋʟɪsᴛᴇᴅ ({len(words)}):</b>\n"
         text += "   " + ", ".join(f"<code>{w}</code>" for w in words[:8])
         if len(words) > 8:
             text += f" ... +{len(words) - 8} ᴍᴏʀᴇ"
-        text += f"\n\n🔧 <b>ᴍᴏᴅᴇ:</b> {'✅ sᴛʀɪᴄᴛ' if data.get('blacklist_mode') else '❌ sᴏғᴛ'}"
+        text += f"\n\n <b>ᴍᴏᴅᴇ:</b> {' sᴛʀɪᴄᴛ' if data.get('blacklist_mode') else ' sᴏғᴛ'}"
     else:
-        text += "   ✅ ɴᴏ ʙʟᴀᴄᴋʟɪsᴛᴇᴅ ᴡᴏʀᴅs"
+        text += "    ɴᴏ ʙʟᴀᴄᴋʟɪsᴛᴇᴅ ᴡᴏʀᴅs"
     return text + fmt_footer(chat_id)
 
 def fmt_translator(chat_id: int, data: dict, title: str) -> str:
-    text = fmt_header(title) + "🌐 <b>ᴛʀᴀɴsʟᴀᴛᴏʀ sᴇᴛᴛɪɴɢs</b>\n\n"
+    text = fmt_header(title) + " <b>ᴛʀᴀɴsʟᴀᴛᴏʀ sᴇᴛᴛɪɴɢs</b>\n\n"
     if data.get('translator'):
-        text += f"🔤 <b>ʟᴀɴɢᴜᴀɢᴇ:</b> {data['translator']}\n📊 <b>sᴛᴀᴛᴜs:</b> ✅ ᴇɴᴀʙʟᴇᴅ"
+        text += f" <b>ʟᴀɴɢᴜᴀɢᴇ:</b> {data['translator']}\n <b>sᴛᴀᴛᴜs:</b>  ᴇɴᴀʙʟᴇᴅ"
     else:
-        text += "   ❌ ᴛʀᴀɴsʟᴀᴛᴏʀ ɴᴏᴛ ᴄᴏɴғɪɢᴜʀᴇᴅ"
+        text += "    ᴛʀᴀɴsʟᴀᴛᴏʀ ɴᴏᴛ ᴄᴏɴғɪɢᴜʀᴇᴅ"
     return text + fmt_footer(chat_id)
 
 def fmt_riddle(chat_id: int, data: dict, title: str) -> str:
-    text = fmt_header(title) + "🎲 <b>ʀɪᴅᴅʟᴇ sᴇᴛᴛɪɴɢs</b>\n\n"
+    text = fmt_header(title) + " <b>ʀɪᴅᴅʟᴇ sᴇᴛᴛɪɴɢs</b>\n\n"
     if data.get('riddle'):
-        text += "📊 <b>sᴛᴀᴛᴜs:</b> ✅ ᴇɴᴀʙʟᴇᴅ"
+        text += " <b>sᴛᴀᴛᴜs:</b>  ᴇɴᴀʙʟᴇᴅ"
         if data.get('riddle_count'):
-            text += f"\n🔢 <b>ᴄᴏᴜɴᴛ:</b> {data['riddle_count']}"
+            text += f"\n <b>ᴄᴏᴜɴᴛ:</b> {data['riddle_count']}"
     else:
-        text += "   ❌ ʀɪᴅᴅʟᴇ ɪs ᴅɪsᴀʙʟᴇᴅ"
+        text += "    ʀɪᴅᴅʟᴇ ɪs ᴅɪsᴀʙʟᴇᴅ"
     return text + fmt_footer(chat_id)
 
 def fmt_notes(chat_id: int, data: dict, title: str) -> str:
-    text = fmt_header(title) + "📝 <b>ɴᴏᴛᴇs</b>\n\n"
+    text = fmt_header(title) + " <b>ɴᴏᴛᴇs</b>\n\n"
     if notes_list := data.get('notes', []):
-        text += f"📋 <b>ᴛᴏᴛᴀʟ ɴᴏᴛᴇs: {len(notes_list)}</b>\n\n"
+        text += f" <b>ᴛᴏᴛᴀʟ ɴᴏᴛᴇs: {len(notes_list)}</b>\n\n"
         for note in notes_list[:5]:
             text += f"   └ <code>#{note.get('tag', 'N/A')}</code> - {note.get('type', 'text')}\n"
         if len(notes_list) > 5:
             text += f"   └ ... ᴀɴᴅ {len(notes_list) - 5} ᴍᴏʀᴇ"
     else:
-        text += "   ✅ ɴᴏ ɴᴏᴛᴇs sᴀᴠᴇᴅ"
+        text += "    ɴᴏ ɴᴏᴛᴇs sᴀᴠᴇᴅ"
     return text + fmt_footer(chat_id)
 
 def fmt_clean_cmd(chat_id: int, data: dict, title: str) -> str:
-    text = fmt_header(title) + "🧹 <b>ᴄʟᴇᴀɴ ᴄᴏᴍᴍᴀɴᴅ</b>\n\n"
+    text = fmt_header(title) + " <b>ᴄʟᴇᴀɴ ᴄᴏᴍᴍᴀɴᴅ</b>\n\n"
     if data.get('clean_command'):
-        text += f"🔧 <b>ᴛʏᴘᴇ:</b> {data['clean_command']}\n📊 <b>sᴛᴀᴛᴜs:</b> ✅ ᴇɴᴀʙʟᴇᴅ"
+        text += f" <b>ᴛʏᴘᴇ:</b> {data['clean_command']}\n <b>sᴛᴀᴛᴜs:</b>  ᴇɴᴀʙʟᴇᴅ"
     else:
-        text += "   ❌ ᴄʟᴇᴀɴ ᴄᴏᴍᴍᴀɴᴅ ᴅɪsᴀʙʟᴇᴅ"
+        text += "    ᴄʟᴇᴀɴ ᴄᴏᴍᴍᴀɴᴅ ᴅɪsᴀʙʟᴇᴅ"
     return text + fmt_footer(chat_id)
 
 def fmt_clean_service(chat_id: int, data: dict, title: str) -> str:
-    text = fmt_header(title) + "🧼 <b>ᴄʟᴇᴀɴ sᴇʀᴠɪᴄᴇ</b>\n\n"
+    text = fmt_header(title) + " <b>ᴄʟᴇᴀɴ sᴇʀᴠɪᴄᴇ</b>\n\n"
     if services := data.get('clean_service', []):
-        text += f"🗑️ <b>ᴄʟᴇᴀɴɪɴɢ ({len(services)}):</b>\n"
+        text += f" <b>ᴄʟᴇᴀɴɪɴɢ ({len(services)}):</b>\n"
         text += "\n".join(f"   └ {svc}" for svc in services)
     else:
-        text += "   ✅ ɴᴏ sᴇʀᴠɪᴄᴇ ᴄʟᴇᴀɴɪɴɢ ᴇɴᴀʙʟᴇᴅ"
+        text += "    ɴᴏ sᴇʀᴠɪᴄᴇ ᴄʟᴇᴀɴɪɴɢ ᴇɴᴀʙʟᴇᴅ"
     return text + fmt_footer(chat_id)
 
 def fmt_rules(chat_id: int, data: dict, title: str) -> str:
-    text = fmt_header(title) + "📜 <b>ʀᴜʟᴇs</b>\n\n"
+    text = fmt_header(title) + " <b>ʀᴜʟᴇs</b>\n\n"
     if data.get('rules'):
-        text += f"📋 <b>sᴛᴀᴛᴜs:</b> ✅ sᴇᴛ\n"
-        text += f"🔒 <b>ᴘʀɪᴠᴀᴛᴇ:</b> {'✅ ʏᴇs' if data.get('rules_private') else '❌ ɴᴏ'}"
+        text += f" <b>sᴛᴀᴛᴜs:</b>  sᴇᴛ\n"
+        text += f" <b>ᴘʀɪᴠᴀᴛᴇ:</b> {' ʏᴇs' if data.get('rules_private') else ' ɴᴏ'}"
     else:
-        text += "   ❌ ɴᴏ ʀᴜʟᴇs sᴇᴛ"
+        text += "    ɴᴏ ʀᴜʟᴇs sᴇᴛ"
     return text + fmt_footer(chat_id)
 
 def fmt_couple(chat_id: int, data: dict, title: str) -> str:
-    text = fmt_header(title) + "💑 <b>ᴄᴏᴜᴘʟᴇ sᴇᴛᴛɪɴɢs</b>\n\n"
+    text = fmt_header(title) + " <b>ᴄᴏᴜᴘʟᴇ sᴇᴛᴛɪɴɢs</b>\n\n"
     if couple_data := data.get('couple'):
         if couple_data.get('couples'):
-            text += f"👫 <b>ᴛᴏᴛᴀʟ ᴄᴏᴜᴘʟᴇs:</b> {len(couple_data['couples'])}\n"
-            text += f"📅 <b>ʟᴀsᴛ ᴜᴘᴅᴀᴛᴇ:</b> ᴅᴀʏ {couple_data.get('day', 0)}"
+            text += f" <b>ᴛᴏᴛᴀʟ ᴄᴏᴜᴘʟᴇs:</b> {len(couple_data['couples'])}\n"
+            text += f" <b>ʟᴀsᴛ ᴜᴘᴅᴀᴛᴇ:</b> ᴅᴀʏ {couple_data.get('day', 0)}"
         else:
-            text += "   ❌ ɴᴏ ᴄᴏᴜᴘʟᴇs sᴇᴛ"
+            text += "    ɴᴏ ᴄᴏᴜᴘʟᴇs sᴇᴛ"
     else:
-        text += "   ❌ ɴᴏ ᴄᴏᴜᴘʟᴇs sᴇᴛ"
+        text += "    ɴᴏ ᴄᴏᴜᴘʟᴇs sᴇᴛ"
     return text + fmt_footer(chat_id)
 
 def fmt_autodelete(chat_id: int, data: dict, title: str) -> str:
-    text = fmt_header(title) + "🗑️ <b>ᴀᴜᴛᴏ ᴅᴇʟᴇᴛᴇ sᴇᴛᴛɪɴɢs</b>\n\n"
+    text = fmt_header(title) + " <b>ᴀᴜᴛᴏ ᴅᴇʟᴇᴛᴇ sᴇᴛᴛɪɴɢs</b>\n\n"
 
     # Check if it's the new mediadelete feature first
     if mdata := data.get('mediadelete'):
         if mdata.get('enabled'):
-            text += f"⏱️ <b>ᴅᴇʟᴀʏ:</b> {mdata['delay']} sᴇᴄᴏɴᴅs\n📊 <b>sᴛᴀᴛᴜs:</b> ✅ ᴇɴᴀʙʟᴇᴅ (ᴍᴇᴅɪᴀ)"
+            text += f" <b>ᴅᴇʟᴀʏ:</b> {mdata['delay']} sᴇᴄᴏɴᴅs\n <b>sᴛᴀᴛᴜs:</b>  ᴇɴᴀʙʟᴇᴅ (ᴍᴇᴅɪᴀ)"
             return text + fmt_footer(chat_id)
 
     if delay := data.get('autodelete'):
-        text += f"⏱️ <b>ᴅᴇʟᴀʏ:</b> {delay} sᴇᴄᴏɴᴅs\n📊 <b>sᴛᴀᴛᴜs:</b> ✅ ᴇɴᴀʙʟᴇᴅ"
+        text += f" <b>ᴅᴇʟᴀʏ:</b> {delay} sᴇᴄᴏɴᴅs\n <b>sᴛᴀᴛᴜs:</b>  ᴇɴᴀʙʟᴇᴅ"
     else:
-        text += "   ❌ ᴀᴜᴛᴏ ᴅᴇʟᴇᴛᴇ ᴅɪsᴀʙʟᴇᴅ"
+        text += "    ᴀᴜᴛᴏ ᴅᴇʟᴇᴛᴇ ᴅɪsᴀʙʟᴇᴅ"
     return text + fmt_footer(chat_id)
 
 def fmt_antitag(chat_id: int, data: dict, title: str) -> str:
-    text = fmt_header(title) + "🏷️ <b>ᴀɴᴛɪ ᴛᴀɢ sᴇᴛᴛɪɴɢs</b>\n\n"
+    text = fmt_header(title) + " <b>ᴀɴᴛɪ ᴛᴀɢ sᴇᴛᴛɪɴɢs</b>\n\n"
     if limit := data.get('antitag'):
-        text += f"📊 <b>ʟɪᴍɪᴛ:</b> {limit} ᴍᴇɴᴛɪᴏɴs\n📊 <b>sᴛᴀᴛᴜs:</b> ✅ ᴇɴᴀʙʟᴇᴅ"
+        text += f" <b>ʟɪᴍɪᴛ:</b> {limit} ᴍᴇɴᴛɪᴏɴs\n <b>sᴛᴀᴛᴜs:</b>  ᴇɴᴀʙʟᴇᴅ"
     else:
-        text += "   ❌ ᴀɴᴛɪ ᴛᴀɢ ᴅɪsᴀʙʟᴇᴅ"
+        text += "    ᴀɴᴛɪ ᴛᴀɢ ᴅɪsᴀʙʟᴇᴅ"
     return text + fmt_footer(chat_id)
 
 def fmt_joinmute(chat_id: int, data: dict, title: str) -> str:
-    text = fmt_header(title) + "🤐 <b>ᴊᴏɪɴ ᴍᴜᴛᴇ sᴇᴛᴛɪɴɢs</b>\n\n"
+    text = fmt_header(title) + " <b>ᴊᴏɪɴ ᴍᴜᴛᴇ sᴇᴛᴛɪɴɢs</b>\n\n"
     if duration := data.get('joinmute'):
         from .joinmute import format_time
-        text += f"⏱️ <b>ᴅᴜʀᴀᴛɪᴏɴ:</b> {format_time(duration)}\n📊 <b>sᴛᴀᴛᴜs:</b> ✅ ᴇɴᴀʙʟᴇᴅ"
+        text += f" <b>ᴅᴜʀᴀᴛɪᴏɴ:</b> {format_time(duration)}\n <b>sᴛᴀᴛᴜs:</b>  ᴇɴᴀʙʟᴇᴅ"
     else:
-        text += "   ❌ ᴊᴏɪɴ ᴍᴜᴛᴇ ᴅɪsᴀʙʟᴇᴅ"
+        text += "    ᴊᴏɪɴ ᴍᴜᴛᴇ ᴅɪsᴀʙʟᴇᴅ"
     return text + fmt_footer(chat_id)
 
 def fmt_antiforward(chat_id: int, data: dict, title: str) -> str:
-    text = fmt_header(title) + "⏩ <b>ᴀɴᴛɪ ғᴏʀᴡᴀʀᴅ sᴇᴛᴛɪɴɢs</b>\n\n"
-    text += f"📊 <b>sᴛᴀᴛᴜs:</b> {'✅ ᴇɴᴀʙʟᴇᴅ' if data.get('antiforward') else '❌ ᴅɪsᴀʙʟᴇᴅ'}"
+    text = fmt_header(title) + " <b>ᴀɴᴛɪ ғᴏʀᴡᴀʀᴅ sᴇᴛᴛɪɴɢs</b>\n\n"
+    text += f" <b>sᴛᴀᴛᴜs:</b> {' ᴇɴᴀʙʟᴇᴅ' if data.get('antiforward') else ' ᴅɪsᴀʙʟᴇᴅ'}"
     return text + fmt_footer(chat_id)
 
 FORMATTERS = {
@@ -366,28 +366,28 @@ def build_category_keyboard(page: int, chat_id: int) -> PyroMarkup:
     if nav_buttons:
         keyboard.append(nav_buttons)
     
-    keyboard.append([PyroButton(font("✖️ Close"), callback_data=f"sett:close:{chat_id}", style=ButtonStyle.DANGER)])
+    keyboard.append([PyroButton(font(" Close"), callback_data=f"sett:close:{chat_id}", style=ButtonStyle.DANGER)])
     
     return PyroMarkup(keyboard)
 
 def build_detail_keyboard(chat_id: int) -> PyroMarkup:
     return PyroMarkup([
         [PyroButton(font("« Menu"), callback_data=f"sett:back:{chat_id}", style=ButtonStyle.PRIMARY)],
-        [PyroButton(font("✖️ Close"), callback_data=f"sett:close:{chat_id}", style=ButtonStyle.DANGER)]
+        [PyroButton(font(" Close"), callback_data=f"sett:close:{chat_id}", style=ButtonStyle.DANGER)]
     ])
 
 async def handle_settings_deeplink(message, token: str):
     try:
         parts = token.split('_')
         if len(parts) < 3:
-            await message.reply_text(font("❌ ɪɴᴠᴀʟɪᴅ sᴇᴛᴛɪɴɢs ʟɪɴᴋ!"))
+            await message.reply_text(font(" ɪɴᴠᴀʟɪᴅ sᴇᴛᴛɪɴɢs ʟɪɴᴋ!"))
             return False
         
         chat_id = int(parts[2])
         chat_title = await get_chat_title(chat_id)
         
         if parts[1] == 'main':
-            text = f"<b>⚙️ ᴀᴠᴀɪʟᴀʙʟᴇ sᴇᴛᴛɪɴɢs ғᴏʀ {chat_title}</b>\n\n💫 sᴡɪᴘᴇ ᴀɴᴅ ᴄʜᴇᴄᴋ sᴇᴛᴛɪɴɢs.."
+            text = f"<b> ᴀᴠᴀɪʟᴀʙʟᴇ sᴇᴛᴛɪɴɢs ғᴏʀ {chat_title}</b>\n\n sᴡɪᴘᴇ ᴀɴᴅ ᴄʜᴇᴄᴋ sᴇᴛᴛɪɴɢs.."
             await message.reply_text(
                 text,
                 reply_markup=build_category_keyboard(0, chat_id),
@@ -405,7 +405,7 @@ async def handle_settings_deeplink(message, token: str):
             else:
                 text = formatter(chat_id, settings_data, chat_title)
         else:
-            text = f"{fmt_header(chat_title)}⚠️ <b>{category.upper()}</b>\n\n⚠️ ғᴇᴀᴛᴜʀᴇ ɴᴏᴛ ʏᴇᴛ ɪᴍᴘʟᴇᴍᴇɴᴛᴇᴅ{fmt_footer(chat_id)}"
+            text = f"{fmt_header(chat_title)} <b>{category.upper()}</b>\n\n ғᴇᴀᴛᴜʀᴇ ɴᴏᴛ ʏᴇᴛ ɪᴍᴘʟᴇᴍᴇɴᴛᴇᴅ{fmt_footer(chat_id)}"
         
         await message.reply_text(
             text,
@@ -415,11 +415,11 @@ async def handle_settings_deeplink(message, token: str):
         return True
         
     except ValueError:
-        await message.reply_text(font("❌ ɪɴᴠᴀʟɪᴅ ᴄʜᴀᴛ ɪᴅ!"))
+        await message.reply_text(font(" ɪɴᴠᴀʟɪᴅ ᴄʜᴀᴛ ɪᴅ!"))
         return False
     except Exception as e:
         print(f"[SETTINGS_DEEPLINK ERROR] {e}")
-        await message.reply_text(font("❌ ᴇʀʀᴏʀ ʟᴏᴀᴅɪɴɢ sᴇᴛᴛɪɴɢs!"))
+        await message.reply_text(font(" ᴇʀʀᴏʀ ʟᴏᴀᴅɪɴɢ sᴇᴛᴛɪɴɢs!"))
         return False
 
 @pbot.on_callback_query(filters.regex(r"^sett:"))
@@ -428,7 +428,7 @@ async def handle_settings_callback(client: Client, query: CallbackQuery):
         parts = query.data.split(":")
         
         if len(parts) < 3:
-            await query.answer(font("❌ ɪɴᴠᴀʟɪᴅ ᴅᴀᴛᴀ"), show_alert=True)
+            await query.answer(font(" ɪɴᴠᴀʟɪᴅ ᴅᴀᴛᴀ"), show_alert=True)
             return
         
         action = parts[1]
@@ -442,11 +442,11 @@ async def handle_settings_callback(client: Client, query: CallbackQuery):
             return
         
         if action == "back":
-            await query.answer(font("🔄 ʟᴏᴀᴅɪɴɢ ᴍᴇɴᴜ..."))
+            await query.answer(font(" ʟᴏᴀᴅɪɴɢ ᴍᴇɴᴜ..."))
             chat_id = int(parts[2])
             chat_title = await get_chat_title(chat_id)
             
-            text = f"<b>⚙️ ᴀᴠᴀɪʟᴀʙʟᴇ sᴇᴛᴛɪɴɢs ғᴏʀ {chat_title}</b>\n\n💫 sᴡɪᴘᴇ ᴀɴᴅ ᴄʜᴇᴄᴋ sᴇᴛᴛɪɴɢs.."
+            text = f"<b> ᴀᴠᴀɪʟᴀʙʟᴇ sᴇᴛᴛɪɴɢs ғᴏʀ {chat_title}</b>\n\n sᴡɪᴘᴇ ᴀɴᴅ ᴄʜᴇᴄᴋ sᴇᴛᴛɪɴɢs.."
             
             try:
                 await query.edit_message_text(
@@ -464,7 +464,7 @@ async def handle_settings_callback(client: Client, query: CallbackQuery):
             chat_id = int(parts[3])
             chat_title = await get_chat_title(chat_id)
             
-            text = f"<b>⚙️ ᴀᴠᴀɪʟᴀʙʟᴇ sᴇᴛᴛɪɴɢs ғᴏʀ {chat_title}</b>\n\n💫 sᴡɪᴘᴇ ᴀɴᴅ ᴄʜᴇᴄᴋ sᴇᴛᴛɪɴɢs.."
+            text = f"<b> ᴀᴠᴀɪʟᴀʙʟᴇ sᴇᴛᴛɪɴɢs ғᴏʀ {chat_title}</b>\n\n sᴡɪᴘᴇ ᴀɴᴅ ᴄʜᴇᴄᴋ sᴇᴛᴛɪɴɢs.."
             
             try:
                 await query.edit_message_text(
@@ -476,7 +476,7 @@ async def handle_settings_callback(client: Client, query: CallbackQuery):
                 print(f"[CALLBACK_PAGE ERROR] {e}")
             return
         
-        await query.answer(font("🔄 ʟᴏᴀᴅɪɴɢ..."))
+        await query.answer(font(" ʟᴏᴀᴅɪɴɢ..."))
         category = action
         chat_id = int(parts[2])
         chat_title = await get_chat_title(chat_id)
@@ -489,7 +489,7 @@ async def handle_settings_callback(client: Client, query: CallbackQuery):
             else:
                 text = formatter(chat_id, settings_data, chat_title)
         else:
-            text = f"{fmt_header(chat_title)}⚠️ <b>{category.upper()}</b>\n\n⚠️ ғᴇᴀᴛᴜʀᴇ ɴᴏᴛ ʏᴇᴛ ɪᴍᴘʟᴇᴍᴇɴᴛᴇᴅ{fmt_footer(chat_id)}"
+            text = f"{fmt_header(chat_title)} <b>{category.upper()}</b>\n\n ғᴇᴀᴛᴜʀᴇ ɴᴏᴛ ʏᴇᴛ ɪᴍᴘʟᴇᴍᴇɴᴛᴇᴅ{fmt_footer(chat_id)}"
         
         try:
             await query.edit_message_text(
@@ -501,10 +501,10 @@ async def handle_settings_callback(client: Client, query: CallbackQuery):
             print(f"[CALLBACK_CATEGORY ERROR] {e}")
             
     except ValueError as e:
-        await query.answer(font("❌ ɪɴᴠᴀʟɪᴅ ᴅᴀᴛᴀ ғᴏʀᴍᴀᴛ"), show_alert=True)
+        await query.answer(font(" ɪɴᴠᴀʟɪᴅ ᴅᴀᴛᴀ ғᴏʀᴍᴀᴛ"), show_alert=True)
         print(f"[CALLBACK_VALUE ERROR] {e}")
     except Exception as e:
-        await query.answer(font("❌ ᴇʀʀᴏʀ ᴏᴄᴄᴜʀʀᴇᴅ"), show_alert=True)
+        await query.answer(font(" ᴇʀʀᴏʀ ᴏᴄᴄᴜʀʀᴇᴅ"), show_alert=True)
         print(f"[CALLBACK ERROR] {e}")
 
 @Command(["settings", "setting"], block=False)
@@ -519,12 +519,12 @@ async def show_settings(update: Update, context: ContextTypes.DEFAULT_TYPE):
     # Escape HTML special characters in chat title
     safe_title = html.escape(chat_title)
     
-    text = f"<b>⚙️ ᴀᴠᴀɪʟᴀʙʟᴇ sᴇᴛᴛɪɴɢs ғᴏʀ {safe_title}</b>\n\n💫 ᴄʟɪᴄᴋ ʜᴇʀᴇ ɢᴇᴛ sᴇᴛᴛɪɴɢs ɪɴ ᴘʀɪᴠᴀᴛᴇ..\n\n🎶 ғᴏʀ ᴄʜᴀɴɢᴇ ᴍᴜsɪᴄ ᴘʟᴀʏᴍᴏᴅᴇ\n\n🤖 ᴄʟɪᴄᴋ ʜᴇʀᴇ : /msettings"
+    text = f"<b> ᴀᴠᴀɪʟᴀʙʟᴇ sᴇᴛᴛɪɴɢs ғᴏʀ {safe_title}</b>\n\n ᴄʟɪᴄᴋ ʜᴇʀᴇ ɢᴇᴛ sᴇᴛᴛɪɴɢs ɪɴ ᴘʀɪᴠᴀᴛᴇ..\n\n ғᴏʀ ᴄʜᴀɴɢᴇ ᴍᴜsɪᴄ ᴘʟᴀʏᴍᴏᴅᴇ\n\n ᴄʟɪᴄᴋ ʜᴇʀᴇ : /msettings"
     
     bot_username = BOT_USERNAME.lstrip('@')
     keyboard = PTBMarkup([[
         PTBButton(
-            "⚙️ sᴇᴛᴛɪɴɢs",
+            " sᴇᴛᴛɪɴɢs",
             url=f"t.me/{bot_username}?start=settings_main_{chat_id}"
         )
     ]])

@@ -10,7 +10,7 @@ from AloneX.helpers.pyro_utils import check_membership, is_admin, check_admin_ri
 
 refresh = {}
 
-__module__ = "𝐅-𝐒ᴜʙ🚡"
+__module__ = "𝐅-𝐒ᴜʙ"
 
 __help__ = """
 ❂ *Force Subscribe Module* — Ensure members join your channel before interacting in the group.
@@ -35,21 +35,21 @@ async def refresh_fsub_user(bot, query):
     user_id, force_chat_id = int(user_id), int(force_chat_id)
 
     if user.id != user_id:
-        return await query.answer(f'💀 This is not for you, {user.full_name}!', show_alert=True)
+        return await query.answer(f' This is not for you, {user.full_name}!', show_alert=True)
 
     if refresh.get(user.id, None):
-        return await query.answer(f"🧐 Don't spam the button, {user.full_name}!", show_alert=True)
+        return await query.answer(f" Don't spam the button, {user.full_name}!", show_alert=True)
 
     refresh[user.id] = str(uuid.uuid4())
 
     is_member = await check_membership(force_chat_id, user.id)
     if not is_member:
-        await query.answer(f"😌 Don't be so smart, {user.full_name}. Join our channel to continue chatting here.", show_alert=True)
+        await query.answer(f" Don't be so smart, {user.full_name}. Join our channel to continue chatting here.", show_alert=True)
         return
 
     member = await bot.get_chat_member(m.chat.id, user.id)
     if member.status != enums.ChatMemberStatus.RESTRICTED:        
-        await query.answer(f"🧐 Nah! You're not restricted, {user.full_name}!", show_alert=True)
+        await query.answer(f" Nah! You're not restricted, {user.full_name}!", show_alert=True)
         await asyncio.sleep(5)
         if user.id in list(refresh.keys()):
             del refresh[user.id]   
@@ -63,7 +63,7 @@ async def refresh_fsub_user(bot, query):
         await m.delete()
         del refresh[user.id]
     except Exception as e:
-        await m.edit_text(f'❌ **Error when unrestricting user {user.mention} (ID: {user.id})**: `{e}`')
+        await m.edit_text(f' **Error when unrestricting user {user.mention} (ID: {user.id})**: `{e}`')
         await asyncio.sleep(5)
         del refresh[user.id]
 
@@ -81,7 +81,7 @@ async def force_user(_, message):
 
             invite_link = (await pbot.get_chat(force_chat_id)).invite_link
             if not invite_link:
-                return await m.reply(f"🤨 **I can't generate invite link for force chat {chat.title} (ID: {chat.id}), please checkout and give me rights.**")
+                return await m.reply(f" **I can't generate invite link for force chat {chat.title} (ID: {chat.id}), please checkout and give me rights.**")
 
             is_member = await check_membership(force_chat_id, user.id)
 
@@ -89,15 +89,15 @@ async def force_user(_, message):
                 try:
                     await bot.restrict_chat_member(chat.id, user.id, types.ChatPermissions())
                 except errors.ChatAdminRequired:
-                    return await m.reply_text(f'🧐 **I need admin rights to restrict users who are not joined in the fsub group/channel {chat.title} (ID: {chat.id})!**')
+                    return await m.reply_text(f' **I need admin rights to restrict users who are not joined in the fsub group/channel {chat.title} (ID: {chat.id})!**')
                 except errors.UserAdminInvalid:
                     return  # Skip the user
                 except Exception as e:
-                    return await m.reply_text(f'❌ **Error when restricting user {user.mention} (ID: {user.id})**: `{e}`')
+                    return await m.reply_text(f' **Error when restricting user {user.mention} (ID: {user.id})**: `{e}`')
 
                 buttons = [
-                    [InlineKeyboardButton(font("📢 Join"), url=invite_link, style=ButtonStyle.SUCCESS),
-                     InlineKeyboardButton(font("🔄 Refresh"), callback_data=f"fsub_refresh#{user.id}#{force_chat_id}", style=ButtonStyle.PRIMARY)]
+                    [InlineKeyboardButton(font(" Join"), url=invite_link, style=ButtonStyle.SUCCESS),
+                     InlineKeyboardButton(font(" Refresh"), callback_data=f"fsub_refresh#{user.id}#{force_chat_id}", style=ButtonStyle.PRIMARY)]
                 ]
 
                 await m.reply_text(
@@ -112,7 +112,7 @@ async def remove_force_sub(_, message):
     user = m.from_user
 
     if chat.type == enums.ChatType.PRIVATE:
-        return await m.reply(f'🤨 **This feature only works for groups, {user.full_name}!**')
+        return await m.reply(f' **This feature only works for groups, {user.full_name}!**')
 
     can_do = await check_admin_rights(chat.id, user.id, 'can_restrict_members')
     if not can_do:
@@ -123,7 +123,7 @@ async def remove_force_sub(_, message):
 
     await remove_chat(chat.id)
 
-    return await m.reply(f'✅ **Force Subscription Removed from {chat.title} (ID: {chat.id})!**')
+    return await m.reply(f' **Force Subscription Removed from {chat.title} (ID: {chat.id})!**')
 
 
 @pbot.on_message(filters.command('fsub') & ~filters.forwarded, group=-92)
@@ -133,7 +133,7 @@ async def force_sub(_, message):
     user = m.from_user
 
     if chat.type == enums.ChatType.PRIVATE:
-        return await m.reply(f'🤨 **This feature only works for groups, {user.full_name}!**')
+        return await m.reply(f' **This feature only works for groups, {user.full_name}!**')
 
     query = m.text.split(maxsplit=1)[1].strip().split()[0] if len(m.text.split()) > 1 else False
 
@@ -154,14 +154,14 @@ async def force_sub(_, message):
     try:
         info = await bot.get_chat(chat_id)
     except Exception as e:
-        return await m.reply(f'❌ **Error when checking force chat info for {chat.title} (ID: {chat.id})**: `{e}`')
+        return await m.reply(f' **Error when checking force chat info for {chat.title} (ID: {chat.id})**: `{e}`')
 
     if (await is_admin(info.id, bot.me.id)) and (await check_admin_rights(chat.id, bot.me.id, 'can_restrict_members')):
         if chat.id not in CHAT_IDS:
             CHAT_IDS.append(chat.id)
         await update_fsub(chat.id, force_chat_id=info.id)
-        await m.reply(f'✅ **Enabled force subscription for {chat.title} (ID: {chat.id}) to {info.title}** (`{info.id}`) ...')
+        await m.reply(f' **Enabled force subscription for {chat.title} (ID: {chat.id}) to {info.title}** (`{info.id}`) ...')
     else:
-        await m.reply_text(f'🧐 **I need restrict rights to enable this feature in {chat.title} (ID: {chat.id}), {user.full_name}!**')
+        await m.reply_text(f' **I need restrict rights to enable this feature in {chat.title} (ID: {chat.id}), {user.full_name}!**')
 
   

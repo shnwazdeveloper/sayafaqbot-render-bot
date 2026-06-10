@@ -285,7 +285,7 @@ async def meme_handler(client, message: Message):
     if not top_text and not bottom_text:
         return await message.reply(font("Please provide at least top or bottom text!"))
 
-    msg = await message.reply(font("🎨 Processing..."))
+    msg = await message.reply(font(" Processing..."))
     
     try:
         file_path = await client.download_media(message.reply_to_message)
@@ -302,7 +302,7 @@ async def meme_handler(client, message: Message):
             out = await process_tgs(file_path, top_text, bottom_text, color)
             await message.reply_sticker(out)
         else:
-            await msg.edit("❌ Unsupported file type")
+            await msg.edit(" Unsupported file type")
             return
 
         for f in [file_path, out]:
@@ -310,7 +310,7 @@ async def meme_handler(client, message: Message):
                 os.remove(f)
                 
     except Exception as e:
-        await msg.edit(f"❌ Error: {str(e)}")
+        await msg.edit(f" Error: {str(e)}")
         return
 
     await msg.delete()

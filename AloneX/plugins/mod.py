@@ -8,9 +8,9 @@ from AloneX.db.mod import *
 from AloneX.helpers.mod_helper import clear_mod_cache
 import html
 
-__module__ = "𝐌ᴏᴅᴇʀᴀᴛᴏʀs👮"
+__module__ = "𝐌ᴏᴅᴇʀᴀᴛᴏʀs"
 __help__ = """
-*Moderators👮*
+*Moderators*
 *Description:* Assign special moderator roles with limited permissions.
 *Roles:*
 • **Moderator** - Has all permissions
@@ -50,13 +50,13 @@ async def add_mod(update: Update, context: ContextTypes.DEFAULT_TYPE):
     existing_roles = await get_user_all_roles(m.chat.id, user_id)
     if "mod" in existing_roles:
         mention = await get_user_mention_html(context.bot, m.chat.id, user_id)
-        return await m.reply_html(f"⚠️ {mention} is already a <b>Moderator</b>!")
+        return await m.reply_html(f" {mention} is already a <b>Moderator</b>!")
     await remove_all_user_mods(m.chat.id, user_id)
     result = await add_mod_role(m.chat.id, user_id, "mod")
     if result:
         clear_mod_cache(m.chat.id, user_id)
         mention = await get_user_mention_html(context.bot, m.chat.id, user_id)
-        await m.reply_html(f"✅ {mention} added as <b>Moderator</b>\nCan: Warn, Mute, Ban, Delete messages")
+        await m.reply_html(f" {mention} added as <b>Moderator</b>\nCan: Warn, Mute, Ban, Delete messages")
 
 @Command("rmmod")
 @admin_check("can_restrict_members")
@@ -71,9 +71,9 @@ async def rm_mod(update: Update, context: ContextTypes.DEFAULT_TYPE):
     clear_mod_cache(m.chat.id, user_id)
     mention = await get_user_mention_html(context.bot, m.chat.id, user_id)
     if result:
-        await m.reply_html(f"✅ {mention} removed from moderators")
+        await m.reply_html(f" {mention} removed from moderators")
     else:
-        await m.reply_html(f"❌ {mention} is not a moderator")
+        await m.reply_html(f" {mention} is not a moderator")
 
 @Command("warner")
 @admin_check("can_restrict_members")
@@ -87,15 +87,15 @@ async def add_warner(update: Update, context: ContextTypes.DEFAULT_TYPE):
     existing_roles = await get_user_all_roles(m.chat.id, user_id)
     if "mod" in existing_roles:
         mention = await get_user_mention_html(context.bot, m.chat.id, user_id)
-        return await m.reply_html(f"⚠️ {mention} is already a <b>Moderator</b> (has all permissions)!")
+        return await m.reply_html(f" {mention} is already a <b>Moderator</b> (has all permissions)!")
     if "warner" in existing_roles:
         mention = await get_user_mention_html(context.bot, m.chat.id, user_id)
-        return await m.reply_html(f"⚠️ {mention} is already a <b>Warner</b>!")
+        return await m.reply_html(f" {mention} is already a <b>Warner</b>!")
     result = await add_mod_role(m.chat.id, user_id, "warner")
     if result:
         clear_mod_cache(m.chat.id, user_id)
         mention = await get_user_mention_html(context.bot, m.chat.id, user_id)
-        await m.reply_html(f"✅ {mention} added as <b>Warner</b>\nCan: Warn users only")
+        await m.reply_html(f" {mention} added as <b>Warner</b>\nCan: Warn users only")
 
 @Command("rmwarner")
 @admin_check("can_restrict_members")
@@ -110,9 +110,9 @@ async def rm_warner(update: Update, context: ContextTypes.DEFAULT_TYPE):
     clear_mod_cache(m.chat.id, user_id)
     mention = await get_user_mention_html(context.bot, m.chat.id, user_id)
     if result:
-        await m.reply_html(f"✅ {mention} removed from warners")
+        await m.reply_html(f" {mention} removed from warners")
     else:
-        await m.reply_html(f"❌ {mention} is not a warner")
+        await m.reply_html(f" {mention} is not a warner")
 
 @Command("muter")
 @admin_check("can_restrict_members")
@@ -126,15 +126,15 @@ async def add_muter(update: Update, context: ContextTypes.DEFAULT_TYPE):
     existing_roles = await get_user_all_roles(m.chat.id, user_id)
     if "mod" in existing_roles:
         mention = await get_user_mention_html(context.bot, m.chat.id, user_id)
-        return await m.reply_html(f"⚠️ {mention} is already a <b>Moderator</b> (has all permissions)!")
+        return await m.reply_html(f" {mention} is already a <b>Moderator</b> (has all permissions)!")
     if "muter" in existing_roles:
         mention = await get_user_mention_html(context.bot, m.chat.id, user_id)
-        return await m.reply_html(f"⚠️ {mention} is already a <b>Muter</b>!")
+        return await m.reply_html(f" {mention} is already a <b>Muter</b>!")
     result = await add_mod_role(m.chat.id, user_id, "muter")
     if result:
         clear_mod_cache(m.chat.id, user_id)
         mention = await get_user_mention_html(context.bot, m.chat.id, user_id)
-        await m.reply_html(f"✅ {mention} added as <b>Muter</b>\nCan: Mute/Unmute users only")
+        await m.reply_html(f" {mention} added as <b>Muter</b>\nCan: Mute/Unmute users only")
 
 @Command("rmmuter")
 @admin_check("can_restrict_members")
@@ -149,9 +149,9 @@ async def rm_muter(update: Update, context: ContextTypes.DEFAULT_TYPE):
     clear_mod_cache(m.chat.id, user_id)
     mention = await get_user_mention_html(context.bot, m.chat.id, user_id)
     if result:
-        await m.reply_html(f"✅ {mention} removed from muters")
+        await m.reply_html(f" {mention} removed from muters")
     else:
-        await m.reply_html(f"❌ {mention} is not a muter")
+        await m.reply_html(f" {mention} is not a muter")
 
 @Command("cleaner")
 @admin_check("can_delete_messages")
@@ -165,15 +165,15 @@ async def add_cleaner(update: Update, context: ContextTypes.DEFAULT_TYPE):
     existing_roles = await get_user_all_roles(m.chat.id, user_id)
     if "mod" in existing_roles:
         mention = await get_user_mention_html(context.bot, m.chat.id, user_id)
-        return await m.reply_html(f"⚠️ {mention} is already a <b>Moderator</b> (has all permissions)!")
+        return await m.reply_html(f" {mention} is already a <b>Moderator</b> (has all permissions)!")
     if "cleaner" in existing_roles:
         mention = await get_user_mention_html(context.bot, m.chat.id, user_id)
-        return await m.reply_html(f"⚠️ {mention} is already a <b>Cleaner</b>!")
+        return await m.reply_html(f" {mention} is already a <b>Cleaner</b>!")
     result = await add_mod_role(m.chat.id, user_id, "cleaner")
     if result:
         clear_mod_cache(m.chat.id, user_id)
         mention = await get_user_mention_html(context.bot, m.chat.id, user_id)
-        await m.reply_html(f"✅ {mention} added as <b>Cleaner</b>\nCan: Delete messages only")
+        await m.reply_html(f" {mention} added as <b>Cleaner</b>\nCan: Delete messages only")
 
 @Command("rmcleaner")
 @admin_check("can_delete_messages")
@@ -188,9 +188,9 @@ async def rm_cleaner(update: Update, context: ContextTypes.DEFAULT_TYPE):
     clear_mod_cache(m.chat.id, user_id)
     mention = await get_user_mention_html(context.bot, m.chat.id, user_id)
     if result:
-        await m.reply_html(f"✅ {mention} removed from cleaners")
+        await m.reply_html(f" {mention} removed from cleaners")
     else:
-        await m.reply_html(f"❌ {mention} is not a cleaner")
+        await m.reply_html(f" {mention} is not a cleaner")
 
 @Command("modlist")
 @only_groups
@@ -199,9 +199,9 @@ async def mod_list(update: Update, context: ContextTypes.DEFAULT_TYPE):
     m = update.effective_message
     mods_data = await get_all_mods(m.chat.id)
     if not mods_data:
-        return await m.reply_text(font("❌ No moderators assigned in this chat."))
-    text = "<b>👮 Moderators List:</b>\n\n"
-    role_names = {"mod": "🛡️ Moderator","warner": "⚠️ Warner","muter": "🔇 Muter","cleaner": "🧹 Cleaner"}
+        return await m.reply_text(font(" No moderators assigned in this chat."))
+    text = "<b> Moderators List:</b>\n\n"
+    role_names = {"mod": " Moderator","warner": " Warner","muter": " Muter","cleaner": " Cleaner"}
     grouped = {}
     for mod in mods_data:
         role = mod["role"]

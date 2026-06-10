@@ -22,7 +22,7 @@ from AloneX.helpers.message_helper import MessageHelper
 from AloneX.helpers.log_helper import log_action
 import html
 
-__module__ = "𝐆ʀᴇᴇᴛɪɴɢs📕"
+__module__ = "𝐆ʀᴇᴇᴛɪɴɢs"
 __help__ = MessageHelper.get_help_text()
 
 welcome_temp = {}
@@ -38,9 +38,9 @@ async def CleanWelcomeOnOff(update, context):
         args = m.text.split()
         if len(args) < 2:
             status = await get_clean_welcome(chat_id)
-            status_text = "✅ Enabled" if status else "❌ Disabled"
+            status_text = " Enabled" if status else " Disabled"
             return await m.reply_text(
-                f'ℹ️ *Clean Welcome Status:* {status_text}\n\n'
+                f' *Clean Welcome Status:* {status_text}\n\n'
                 '*Usage:* `/cleanwelcome on` or `/cleanwelcome off` \n'
                 '*(Deletes previous welcome message when a new one is sent)*',
                 parse_mode=constants.ParseMode.MARKDOWN
@@ -48,17 +48,17 @@ async def CleanWelcomeOnOff(update, context):
 
         action = args[1].lower()
         if action not in ['on', 'off']:
-            return await m.reply_text(font("❌ Invalid argument! Usage: /cleanwelcome on/off"))
+            return await m.reply_text(font(" Invalid argument! Usage: /cleanwelcome on/off"))
 
         new_status = (action == 'on')
         await set_clean_welcome(chat_id, new_status)
 
         status_text = "enabled" if new_status else "disabled"
-        return await m.reply_text(font(f"✅ Clean welcome {status_text} for this chat."))
+        return await m.reply_text(font(f" Clean welcome {status_text} for this chat."))
 
     except Exception as e:
         print(f"[CleanWelcomeOnOff] Error: {e}")
-        await m.reply_text(font("❌ An error occurred."))
+        await m.reply_text(font(" An error occurred."))
 
 @Command('cleangoodbye')
 @admin_check()
@@ -70,9 +70,9 @@ async def CleanGoodbyeOnOff(update, context):
         args = m.text.split()
         if len(args) < 2:
             status = await get_clean_goodbye(chat_id)
-            status_text = "✅ Enabled" if status else "❌ Disabled"
+            status_text = " Enabled" if status else " Disabled"
             return await m.reply_text(
-                f'ℹ️ *Clean Goodbye Status:* {status_text}\n\n'
+                f' *Clean Goodbye Status:* {status_text}\n\n'
                 '*Usage:* `/cleangoodbye on` or `/cleangoodbye off` \n'
                 '*(Deletes previous goodbye message when a new one is sent)*',
                 parse_mode=constants.ParseMode.MARKDOWN
@@ -80,17 +80,17 @@ async def CleanGoodbyeOnOff(update, context):
 
         action = args[1].lower()
         if action not in ['on', 'off']:
-            return await m.reply_text(font("❌ Invalid argument! Usage: /cleangoodbye on/off"))
+            return await m.reply_text(font(" Invalid argument! Usage: /cleangoodbye on/off"))
 
         new_status = (action == 'on')
         await set_clean_goodbye(chat_id, new_status)
 
         status_text = "enabled" if new_status else "disabled"
-        return await m.reply_text(font(f"✅ Clean goodbye {status_text} for this chat."))
+        return await m.reply_text(font(f" Clean goodbye {status_text} for this chat."))
 
     except Exception as e:
         print(f"[CleanGoodbyeOnOff] Error: {e}")
-        await m.reply_text(font("❌ An error occurred."))
+        await m.reply_text(font(" An error occurred."))
 
 async def is_user_admin(chat_id: int, user_id: int):
     from AloneX.helpers.decorator import user_admin_cache
@@ -117,10 +117,10 @@ async def get_greetings_keyboard(chat_id: int, g_type: str):
         cb = "gb_toggle"
 
     if enabled:
-        text = f"🟢 {g_type.title()}: ON"
+        text = f" {g_type.title()}: ON"
         style = ButtonStyle.SUCCESS
     else:
-        text = f"🔴 {g_type.title()}: OFF"
+        text = f" {g_type.title()}: OFF"
         style = ButtonStyle.DANGER
 
     return IKM([[IKB(font(text), callback_data=cb, style=style)]])
@@ -134,18 +134,18 @@ async def WelcomeOnOff(_, message: Message):
         chat_id = await get_connected_chat(user_id) or chat_id
 
     if not await is_user_admin(chat_id, user_id):
-        return await message.reply_text(font("❌ You must be an admin to use this command."))
+        return await message.reply_text(font(" You must be an admin to use this command."))
 
     if len(message.command) > 1:
         action = message.command[1].lower()
         if action == "on":
             await set_welcome_status(chat_id, True)
-            await message.reply_text(font("✅ Welcome messages have been **enabled**."))
+            await message.reply_text(font(" Welcome messages have been **enabled**."))
         elif action == "off":
             await set_welcome_status(chat_id, False)
-            await message.reply_text(font("🚫 Welcome messages have been **disabled**."))
+            await message.reply_text(font(" Welcome messages have been **disabled**."))
         else:
-            await message.reply_text(font("❌ Invalid argument! Use `on` or `off`."))
+            await message.reply_text(font(" Invalid argument! Use `on` or `off`."))
         return
 
     status = await get_welcome_status(chat_id)
@@ -154,7 +154,7 @@ async def WelcomeOnOff(_, message: Message):
     message_type = "Custom" if has_custom else "Default"
     
     await message.reply_text(
-        font(f"👋 **Welcome Status:** {status_text}\n📝 **Message Type:** {message_type}\n\nClick the button below to toggle."),
+        font(f" **Welcome Status:** {status_text}\n **Message Type:** {message_type}\n\nClick the button below to toggle."),
         reply_markup=await get_greetings_keyboard(chat_id, "welcome")
     )
 
@@ -167,18 +167,18 @@ async def GoodbyeOnOff(_, message: Message):
         chat_id = await get_connected_chat(user_id) or chat_id
 
     if not await is_user_admin(chat_id, user_id):
-        return await message.reply_text(font("❌ You must be an admin to use this command."))
+        return await message.reply_text(font(" You must be an admin to use this command."))
 
     if len(message.command) > 1:
         action = message.command[1].lower()
         if action == "on":
             await set_goodbye_status(chat_id, True)
-            await message.reply_text(font("✅ Goodbye messages have been **enabled**."))
+            await message.reply_text(font(" Goodbye messages have been **enabled**."))
         elif action == "off":
             await set_goodbye_status(chat_id, False)
-            await message.reply_text(font("🚫 Goodbye messages have been **disabled**."))
+            await message.reply_text(font(" Goodbye messages have been **disabled**."))
         else:
-            await message.reply_text(font("❌ Invalid argument! Use `on` or `off`."))
+            await message.reply_text(font(" Invalid argument! Use `on` or `off`."))
         return
 
     status = await get_goodbye_status(chat_id)
@@ -187,7 +187,7 @@ async def GoodbyeOnOff(_, message: Message):
     message_type = "Custom" if has_custom else "Default"
     
     await message.reply_text(
-        font(f"👋 **Goodbye Status:** {status_text}\n📝 **Message Type:** {message_type}\n\nClick the button below to toggle."),
+        font(f" **Goodbye Status:** {status_text}\n **Message Type:** {message_type}\n\nClick the button below to toggle."),
         reply_markup=await get_greetings_keyboard(chat_id, "goodbye")
     )
 
@@ -197,7 +197,7 @@ async def greetings_toggle_callback(_, query: CallbackQuery):
     chat_id = query.message.chat.id
 
     if not await is_user_admin(chat_id, user_id):
-        return await query.answer(font("❌ This button is for admins only!"), show_alert=True)
+        return await query.answer(font(" This button is for admins only!"), show_alert=True)
 
     g_type = "welcome" if query.data == "wel_toggle" else "goodbye"
     
@@ -216,7 +216,7 @@ async def greetings_toggle_callback(_, query: CallbackQuery):
     message_type = "Custom" if has_custom else "Default"
 
     await query.message.edit_text(
-        font(f"👋 **{g_type.title()} Status:** {status_text}\n📝 **Message Type:** {message_type}\n\nClick the button below to toggle."),
+        font(f" **{g_type.title()} Status:** {status_text}\n **Message Type:** {message_type}\n\nClick the button below to toggle."),
         reply_markup=await get_greetings_keyboard(chat_id, g_type)
     )
     await query.answer(font(f"{g_type.title()} {'Enabled' if new_state else 'Disabled'}"))
@@ -231,7 +231,7 @@ async def SetGoodByeTime(update, context):
         args = m.text.split()
         if len(args) < 2:
             return await m.reply_text(
-                '⚠️ *Usage:* `/setgoodbyetime <seconds>`\n'
+                ' *Usage:* `/setgoodbyetime <seconds>`\n'
                 '*Example:* `/setgoodbyetime 30`\n'
                 '*Range:* 5-86400 seconds (5 sec - 24 hours)',
                 parse_mode=constants.ParseMode.MARKDOWN
@@ -240,25 +240,25 @@ async def SetGoodByeTime(update, context):
         time_val = MessageHelper.validate_time(args[1])
         if time_val is None:
             return await m.reply_text(
-                '❌ *Invalid time value!*\n'
+                ' *Invalid time value!*\n'
                 'Please provide a number between 5 and 86400 seconds.',
                 parse_mode=constants.ParseMode.MARKDOWN
             )
         
         if await set_goodbye_time(chat_id, time_val):
             return await m.reply_text(
-                f"✅ *Goodbye auto-delete time set to {time_val} seconds.*",
+                f" *Goodbye auto-delete time set to {time_val} seconds.*",
                 parse_mode=constants.ParseMode.MARKDOWN
             )
         else:
             return await m.reply_text(
-                'ℹ️ *Please set a goodbye message first using /setgoodbye*',
+                ' *Please set a goodbye message first using /setgoodbye*',
                 parse_mode=constants.ParseMode.MARKDOWN
             )
     
     except Exception as e:
         print(f"[SetGoodByeTime] Error: {e}")
-        await m.reply_text(font("❌ An error occurred while setting goodbye time."))
+        await m.reply_text(font(" An error occurred while setting goodbye time."))
 
 @Command('setwelcometime')
 @admin_check("can_change_info", protect_target=False)
@@ -270,7 +270,7 @@ async def SetWelcomeTime(update, context):
         args = m.text.split()
         if len(args) < 2:
             return await m.reply_text(
-                '⚠️ *Usage:* `/setwelcometime <seconds>`\n'
+                ' *Usage:* `/setwelcometime <seconds>`\n'
                 '*Example:* `/setwelcometime 30`\n'
                 '*Range:* 5-86400 seconds (5 sec - 24 hours)',
                 parse_mode=constants.ParseMode.MARKDOWN
@@ -279,25 +279,25 @@ async def SetWelcomeTime(update, context):
         time_val = MessageHelper.validate_time(args[1])
         if time_val is None:
             return await m.reply_text(
-                '❌ *Invalid time value!*\n'
+                ' *Invalid time value!*\n'
                 'Please provide a number between 5 and 86400 seconds.',
                 parse_mode=constants.ParseMode.MARKDOWN
             )
         
         if await set_welcome_time(chat_id, time_val):
             return await m.reply_text(
-                f"✅ *Welcome auto-delete time set to {time_val} seconds.*",
+                f" *Welcome auto-delete time set to {time_val} seconds.*",
                 parse_mode=constants.ParseMode.MARKDOWN
             )
         else:
             return await m.reply_text(
-                'ℹ️ *Please set a welcome message first using /setwelcome*',
+                ' *Please set a welcome message first using /setwelcome*',
                 parse_mode=constants.ParseMode.MARKDOWN
             )
     
     except Exception as e:
         print(f"[SetWelcomeTime] Error: {e}")
-        await m.reply_text(font("❌ An error occurred while setting welcome time."))
+        await m.reply_text(font(" An error occurred while setting welcome time."))
 
 @Callbacks(r"(^gb_chk|^gb_verify|^gb_cancel)")
 @admin_check("can_change_info", protect_target=False)
@@ -316,12 +316,12 @@ async def GoodbyeSettings(update, context):
         if cmd == "gb_cancel":
             if chat_id in goodbye_temp:
                 del goodbye_temp[chat_id]
-            return await m.edit_text(font("❌ *Goodbye setup cancelled.*"), parse_mode=constants.ParseMode.MARKDOWN)
+            return await m.edit_text(font(" *Goodbye setup cancelled.*"), parse_mode=constants.ParseMode.MARKDOWN)
 
         elif cmd == "gb_verify":
             data = goodbye_temp.get(chat_id)
             if not data:
-                return await query.answer(font("❌ Setup data expired. Please try again."), show_alert=True)
+                return await query.answer(font(" Setup data expired. Please try again."), show_alert=True)
             
             await set_goodbye(
                 chat_id,
@@ -336,14 +336,14 @@ async def GoodbyeSettings(update, context):
             
             rules_info = " (with Rules button)" if data.get('has_rules_button') else ""
             return await m.edit_text(
-                f"✅ *Goodbye message successfully set for {chat.title}!*{rules_info}", 
+                f" *Goodbye message successfully set for {chat.title}!*{rules_info}", 
                 parse_mode=constants.ParseMode.MARKDOWN
             )
             
         elif cmd == "gb_chk":
             data = goodbye_temp.get(chat_id)
             if not data:
-                return await query.answer(font("❌ Setup data expired. Please try again."), show_alert=True)
+                return await query.answer(font(" Setup data expired. Please try again."), show_alert=True)
             
             rules_button_text = None
             if data.get('has_rules_button'):
@@ -361,11 +361,11 @@ async def GoodbyeSettings(update, context):
                 rules_button_text
             )
             
-            await query.answer(font("👀 Preview sent above!"), show_alert=False)
+            await query.answer(font(" Preview sent above!"), show_alert=False)
     
     except Exception as e:
         print(f"[GoodbyeSettings] Error: {e}")
-        await query.answer(font("❌ An error occurred."), show_alert=True)
+        await query.answer(font(" An error occurred."), show_alert=True)
 
 @Callbacks(r"(^wel_chk|^wel_verify|^wel_cancel)")
 @admin_check("can_change_info", protect_target=False)
@@ -384,12 +384,12 @@ async def WelcomeSettings(update, context):
         if cmd == "wel_cancel":
             if chat_id in welcome_temp:
                 del welcome_temp[chat_id]
-            return await m.edit_text(font("❌ *Welcome setup cancelled.*"), parse_mode=constants.ParseMode.MARKDOWN)
+            return await m.edit_text(font(" *Welcome setup cancelled.*"), parse_mode=constants.ParseMode.MARKDOWN)
 
         elif cmd == "wel_verify":
             data = welcome_temp.get(chat_id)
             if not data:
-                return await query.answer(font("❌ Setup data expired. Please try again."), show_alert=True)
+                return await query.answer(font(" Setup data expired. Please try again."), show_alert=True)
             
             await set_welcome(
                 chat_id,
@@ -404,14 +404,14 @@ async def WelcomeSettings(update, context):
             
             rules_info = " (with Rules button)" if data.get('has_rules_button') else ""
             return await m.edit_text(
-                f"✅ *Welcome message successfully set for {chat.title}!*{rules_info}", 
+                f" *Welcome message successfully set for {chat.title}!*{rules_info}", 
                 parse_mode=constants.ParseMode.MARKDOWN
             )
             
         elif cmd == "wel_chk":
             data = welcome_temp.get(chat_id)
             if not data:
-                return await query.answer(font("❌ Setup data expired. Please try again."), show_alert=True)
+                return await query.answer(font(" Setup data expired. Please try again."), show_alert=True)
             
             rules_button_text = None
             if data.get('has_rules_button'):
@@ -429,11 +429,11 @@ async def WelcomeSettings(update, context):
                 rules_button_text
             )
             
-            await query.answer(font("👀 Preview sent above!"), show_alert=False)
+            await query.answer(font(" Preview sent above!"), show_alert=False)
     
     except Exception as e:
         print(f"[WelcomeSettings] Error: {e}")
-        await query.answer(font("❌ An error occurred."), show_alert=True)
+        await query.answer(font(" An error occurred."), show_alert=True)
 
 @Command('cleargoodbye')
 @admin_check("can_change_info", protect_target=False)
@@ -443,12 +443,12 @@ async def ClearGoodbye(update, context):
     
     try:
         if await clear_goodbye(chat_id):
-            return await m.reply_text(font("✅ *Cleared custom goodbye message.*"), parse_mode=constants.ParseMode.MARKDOWN)
+            return await m.reply_text(font(" *Cleared custom goodbye message.*"), parse_mode=constants.ParseMode.MARKDOWN)
         else:
-            return await m.reply_text(font("🤷 *No custom goodbye message set yet.*"), parse_mode=constants.ParseMode.MARKDOWN)
+            return await m.reply_text(font(" *No custom goodbye message set yet.*"), parse_mode=constants.ParseMode.MARKDOWN)
     except Exception as e:
         print(f"[ClearGoodbye] Error: {e}")
-        await m.reply_text(font("❌ An error occurred while clearing goodbye message."))
+        await m.reply_text(font(" An error occurred while clearing goodbye message."))
 
 @Command('clearwelcome')
 @admin_check('can_change_info')
@@ -458,12 +458,12 @@ async def ClearWelcome(update, context):
     
     try:
         if await clear_welcome(chat_id):
-            return await m.reply_text(font("✅ *Cleared custom welcome message.*"), parse_mode=constants.ParseMode.MARKDOWN)
+            return await m.reply_text(font(" *Cleared custom welcome message.*"), parse_mode=constants.ParseMode.MARKDOWN)
         else:
-            return await m.reply_text(font("🤷 *No custom welcome message set yet.*"), parse_mode=constants.ParseMode.MARKDOWN)
+            return await m.reply_text(font(" *No custom welcome message set yet.*"), parse_mode=constants.ParseMode.MARKDOWN)
     except Exception as e:
         print(f"[ClearWelcome] Error: {e}")
-        await m.reply_text(font("❌ An error occurred while clearing welcome message."))
+        await m.reply_text(font(" An error occurred while clearing welcome message."))
 
 @Command('getgoodbye')
 @admin_check("can_change_info", protect_target=False)
@@ -475,7 +475,7 @@ async def GetGoodbye(update, context):
     try:
         data = await get_goodbye(chat_id)
         if not data:
-            return await m.reply_text(font("🤷 *No custom goodbye set yet.*"), parse_mode=constants.ParseMode.MARKDOWN)
+            return await m.reply_text(font(" *No custom goodbye set yet.*"), parse_mode=constants.ParseMode.MARKDOWN)
         
         rules_button_text = None
         if data.get('has_rules_button'):
@@ -495,7 +495,7 @@ async def GetGoodbye(update, context):
     
     except Exception as e:
         print(f"[GetGoodbye] Error: {e}")
-        await m.reply_text(font("❌ An error occurred while retrieving goodbye message."))
+        await m.reply_text(font(" An error occurred while retrieving goodbye message."))
 
 @Command('getwelcome')
 @admin_check("can_change_info", protect_target=False)
@@ -507,7 +507,7 @@ async def GetWelcome(update, context):
     try:
         data = await get_welcome(chat_id)
         if not data:
-            return await m.reply_text(font("🤷 *No custom welcome set yet.*"), parse_mode=constants.ParseMode.MARKDOWN)
+            return await m.reply_text(font(" *No custom welcome set yet.*"), parse_mode=constants.ParseMode.MARKDOWN)
         
         rules_button_text = None
         if data.get('has_rules_button'):
@@ -527,7 +527,7 @@ async def GetWelcome(update, context):
     
     except Exception as e:
         print(f"[GetWelcome] Error: {e}")
-        await m.reply_text(font("❌ An error occurred while retrieving welcome message."))
+        await m.reply_text(font(" An error occurred while retrieving welcome message."))
 
 @Command('getgoodbye')
 @admin_check("can_change_info", protect_target=False)
@@ -540,7 +540,7 @@ async def GetGoodbye(update, context):
     try:
         data = await get_goodbye(chat_id)
         if not data:
-            return await m.reply_text(font("🤷 *No custom goodbye set yet.*"), parse_mode=constants.ParseMode.MARKDOWN)
+            return await m.reply_text(font(" *No custom goodbye set yet.*"), parse_mode=constants.ParseMode.MARKDOWN)
         
         rules_button_text = None
         if data.get('has_rules_button'):
@@ -560,7 +560,7 @@ async def GetGoodbye(update, context):
     
     except Exception as e:
         print(f"[GetGoodbye] Error: {e}")
-        await m.reply_text(font("❌ An error occurred while retrieving goodbye message."))
+        await m.reply_text(font(" An error occurred while retrieving goodbye message."))
 
 @Command('getwelcome')
 @admin_check("can_change_info", protect_target=False)
@@ -573,7 +573,7 @@ async def GetWelcome(update, context):
     try:
         data = await get_welcome(chat_id)
         if not data:
-            return await m.reply_text(font("🤷 *No custom welcome set yet.*"), parse_mode=constants.ParseMode.MARKDOWN)
+            return await m.reply_text(font(" *No custom welcome set yet.*"), parse_mode=constants.ParseMode.MARKDOWN)
         
         rules_button_text = None
         if data.get('has_rules_button'):
@@ -593,7 +593,7 @@ async def GetWelcome(update, context):
     
     except Exception as e:
         print(f"[GetWelcome] Error: {e}")
-        await m.reply_text(font("❌ An error occurred while retrieving welcome message."))
+        await m.reply_text(font(" An error occurred while retrieving welcome message."))
 
 @Command('setgoodbye')
 @admin_check("can_change_info", protect_target=False)
@@ -648,10 +648,10 @@ async def SetGoodbye(update, context):
         
         else:
             return await m.reply_text(
-                "❌ *Please provide a goodbye message!*\n\n"
+                " *Please provide a goodbye message!*\n\n"
                 "*Two ways to set:*\n"
-                "1️⃣ `/setgoodbye Your message here`\n"
-                "2️⃣ Reply to a message with `/setgoodbye`\n\n"
+                "1⃣ `/setgoodbye Your message here`\n"
+                "2⃣ Reply to a message with `/setgoodbye`\n\n"
                 "*Supported formats:*\n"
                 "• Text messages with formatting\n"
                 "• Photos, videos, animations\n" 
@@ -697,10 +697,10 @@ async def SetGoodbye(update, context):
             'timestamp': datetime.now().timestamp()
         }
         
-        rules_info = "\n📋 *Rules button will be added automatically!*" if has_rules_button else ""
+        rules_info = "\n *Rules button will be added automatically!*" if has_rules_button else ""
         
         await m.reply_text(
-            f"⚠️ *Please verify your goodbye message before setting it.*{rules_info}\n\n"
+            f" *Please verify your goodbye message before setting it.*{rules_info}\n\n"
             "• *Preview:* Shows how the message will look\n"
             "• *Confirm:* Sets the message as goodbye\n"
             "• *Cancel:* Cancels the setup process",
@@ -710,7 +710,7 @@ async def SetGoodbye(update, context):
     
     except Exception as e:
         print(f"[SetGoodbye] Error: {e}")
-        await m.reply_text(font("❌ An error occurred while setting goodbye message."))
+        await m.reply_text(font(" An error occurred while setting goodbye message."))
 
 @Command('setwelcome')
 @admin_check("can_change_info", protect_target=False)
@@ -765,10 +765,10 @@ async def SetWelcome(update, context):
         
         else:
             return await m.reply_text(
-                "❌ *Please provide a welcome message!*\n\n"
+                " *Please provide a welcome message!*\n\n"
                 "*Two ways to set:*\n"
-                "1️⃣ `/setwelcome Your message here`\n"
-                "2️⃣ Reply to a message with `/setwelcome`\n\n"
+                "1⃣ `/setwelcome Your message here`\n"
+                "2⃣ Reply to a message with `/setwelcome`\n\n"
                 "*Supported formats:*\n"
                 "• Text messages with formatting\n"
                 "• Photos, videos, animations\n"
@@ -814,10 +814,10 @@ async def SetWelcome(update, context):
             'timestamp': datetime.now().timestamp()
         }
         
-        rules_info = "\n📋 *Rules button will be added automatically!*" if has_rules_button else ""
+        rules_info = "\n *Rules button will be added automatically!*" if has_rules_button else ""
         
         await m.reply_text(
-            f"⚠️ *Please verify your welcome message before setting it.*{rules_info}\n\n"
+            f" *Please verify your welcome message before setting it.*{rules_info}\n\n"
             "• *Preview:* Shows how the message will look\n"
             "• *Confirm:* Sets the message as welcome\n"
             "• *Cancel:* Cancels the setup process",
@@ -827,4 +827,4 @@ async def SetWelcome(update, context):
     
     except Exception as e:
         print(f"[SetWelcome] Error: {e}")
-        await m.reply_text(font("❌ An error occurred while setting welcome message."))
+        await m.reply_text(font(" An error occurred while setting welcome message."))

@@ -37,7 +37,7 @@ AI_DATA = {
 CMDS = list(AI_DATA.keys())
 
 
-__module__ = "𝐀ɪ-(𝐓ᴇxᴛ)🤖"
+__module__ = "𝐀ɪ-(𝐓ᴇxᴛ)"
 
 __help__ = """
 *AI Commands*:
@@ -47,8 +47,8 @@ https://graph.org/DEPSTEY-07-23
 Interact with various AI models for text-based responses. Generate answers, summaries, or creative text with ease.
 
 *Note:*  
-❗ Compatibility with all models is not guaranteed.  
-❗ Report any issues to the /support team.
+ Compatibility with all models is not guaranteed.  
+ Report any issues to the /support team.
 """
 
 
@@ -77,17 +77,17 @@ async def AI_models(_, message):
     command = m.text.split()[0][1:].lower()
 
     if process.get(user_id):
-        return await m.reply_text(font("❌ <b>Processing another request!</b> Please wait for it to complete."))
+        return await m.reply_text(font(" <b>Processing another request!</b> Please wait for it to complete."))
 
     if len(m.text.split()) == 1:
-        return await m.reply_text(f'❌ <b>Wrong usage!</b> Example: <code>/{command} hello</code>')
+        return await m.reply_text(f' <b>Wrong usage!</b> Example: <code>/{command} hello</code>')
 
     ai_data = AI_DATA.get(command)
     if not ai_data:
-        return await m.reply_text(f'❌ <b>Invalid model!</b> Available models: <code>{", ".join(CMDS)}</code>')
+        return await m.reply_text(f' <b>Invalid model!</b> Available models: <code>{", ".join(CMDS)}</code>')
 
     model, model_name = ai_data
-    msg = await m.reply(f'🔁 <b>{model_name} processing...</b>')
+    msg = await m.reply(f' <b>{model_name} processing...</b>')
 
     payload = {
         "messages": [
@@ -116,11 +116,11 @@ async def AI_models(_, message):
                     await msg.edit(response_text)
 
     except aiohttp.ClientError as e:
-        await msg.edit(f'❌ <b>Request failed!</b>')
+        await msg.edit(f' <b>Request failed!</b>')
     except asyncio.TimeoutError:
-        await msg.edit('❌ <b>Request timed out!</b> Please try again.')
+        await msg.edit(' <b>Request timed out!</b> Please try again.')
     except Exception as e:
-        await msg.edit(f'❌ <b>ERROR</b>')
+        await msg.edit(f' <b>ERROR</b>')
     finally:
         # Remove user from processing list
         process.pop(user_id, None)

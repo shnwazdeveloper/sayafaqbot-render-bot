@@ -147,21 +147,21 @@ async def get_stats_text():
         text.append(f"`{(results.get('total_warns') or 0):,}` ᴏᴠᴇʀᴀʟʟ ᴡᴀʀɴs, ᴀᴄʀᴏss `{(results.get('warn_chats') or 0):,}` ᴄʜᴀᴛs.")
         text.append(f"`{(results.get('warn_filters') or 0):,}` ᴡᴀʀɴ ғɪʟᴛᴇʀs, ᴀᴄʀᴏss `{(results.get('warn_filter_chats') or 0):,}` ᴄʜᴀᴛs.")
         ist_time = current_time.strftime("%d/%m/%Y %I:%M:%S %p IST")
-        text.append(f"\n⚡ **Lᴀsᴛ Uᴘᴅᴀᴛᴇᴅ:** `{ist_time}`")
+        text.append(f"\n **Lᴀsᴛ Uᴘᴅᴀᴛᴇᴅ:** `{ist_time}`")
         return "\n".join(text)
     except Exception as e:
-        return f"**❌ Eʀʀᴏʀ:** `{str(e)}`"
+        return f"** Eʀʀᴏʀ:** `{str(e)}`"
 
 @pbot.on_message(filters.command("stats", prefix_cmds), group=-329)
 @no_channel
 async def bot_stats(_, message):
     if not message.from_user:
-        return await message.reply_text(font("❌ Unable to identify user. This command cannot be used by channels or anonymous admins."))
+        return await message.reply_text(font(" Unable to identify user. This command cannot be used by channels or anonymous admins."))
     if not await is_sudo(message.from_user.id):
-        return await message.reply_text(font("❌ Access denied! Only sudo users can use this."))
+        return await message.reply_text(font(" Access denied! Only sudo users can use this."))
     msg = None
     try:
-        msg = await handle_flood_wait(message.reply_text, "**⏳ Lᴏᴀᴅɪɴɢ sᴛᴀᴛs...**", parse_mode=enums.ParseMode.MARKDOWN)
+        msg = await handle_flood_wait(message.reply_text, "** Lᴏᴀᴅɪɴɢ sᴛᴀᴛs...**", parse_mode=enums.ParseMode.MARKDOWN)
         if not msg:
             return
         text = await get_stats_text()
@@ -171,13 +171,13 @@ async def bot_stats(_, message):
         await asyncio.sleep(min(getattr(e, "value", 0), 60))
         try:
             if msg:
-                await handle_flood_wait(msg.edit_text, f"**⏳ Rᴀᴛᴇ ʟɪᴍɪᴛᴇᴅ, ᴘʟᴇᴀsᴇ ᴡᴀɪᴛ {getattr(e,'value',0)} sᴇᴄᴏɴᴅs**", parse_mode=enums.ParseMode.MARKDOWN)
+                await handle_flood_wait(msg.edit_text, f"** Rᴀᴛᴇ ʟɪᴍɪᴛᴇᴅ, ᴘʟᴇᴀsᴇ ᴡᴀɪᴛ {getattr(e,'value',0)} sᴇᴄᴏɴᴅs**", parse_mode=enums.ParseMode.MARKDOWN)
             else:
-                await handle_flood_wait(message.reply_text, f"**⏳ Rᴀᴛᴇ ʟɪᴍɪᴛᴇᴅ, ᴘʟᴇᴀsᴇ ᴡᴀɪᴛ {getattr(e,'value',0)} sᴇᴄᴏɴᴅs**", parse_mode=enums.ParseMode.MARKDOWN)
+                await handle_flood_wait(message.reply_text, f"** Rᴀᴛᴇ ʟɪᴍɪᴛᴇᴅ, ᴘʟᴇᴀsᴇ ᴡᴀɪᴛ {getattr(e,'value',0)} sᴇᴄᴏɴᴅs**", parse_mode=enums.ParseMode.MARKDOWN)
         except:
             pass
     except Exception as e:
-        err = f"**❌ Fᴀɪʟᴇᴅ:** `{str(e)}`"
+        err = f"** Fᴀɪʟᴇᴅ:** `{str(e)}`"
         try:
             if msg:
                 await handle_flood_wait(msg.edit_text, err, parse_mode=enums.ParseMode.MARKDOWN)
@@ -189,19 +189,19 @@ async def bot_stats(_, message):
 @pbot.on_callback_query(filters.regex(r"^refresh_stats_cb$"))
 async def refresh_stats_cb(_, query):
     if not query.from_user:
-        return await query.answer(font("❌ Unable to identify user."), show_alert=True)
+        return await query.answer(font(" Unable to identify user."), show_alert=True)
     if not await is_sudo(query.from_user.id):
-        return await query.answer(font("❌ Access denied!"), show_alert=True)
+        return await query.answer(font(" Access denied!"), show_alert=True)
     temp_kb = InlineKeyboardMarkup([[InlineKeyboardButton(font("✪ Refresh ✪"), callback_data="refresh_stats_cb", style=ButtonStyle.SUCCESS)]])
     try:
-        await query.message.edit_text(font("⚡ **🖥️ ᴜᴘᴅᴀᴛɪɴɢ ʟᴀᴛᴇꜱᴛ ᴅᴀᴛᴀ...**"), reply_markup=temp_kb, parse_mode=enums.ParseMode.MARKDOWN)
+        await query.message.edit_text(font(" ** ᴜᴘᴅᴀᴛɪɴɢ ʟᴀᴛᴇꜱᴛ ᴅᴀᴛᴀ...**"), reply_markup=temp_kb, parse_mode=enums.ParseMode.MARKDOWN)
         text = await get_stats_text()
         await query.edit_message_text(text, reply_markup=temp_kb, parse_mode=enums.ParseMode.MARKDOWN)
-        await query.answer(font("✅ Stats refreshed!"), show_alert=False)
+        await query.answer(font(" Stats refreshed!"), show_alert=False)
     except FloodWait as e:
-        await query.answer(f"⏳ Rate limited! Please wait {getattr(e,'value',0)} seconds", show_alert=True)
+        await query.answer(f" Rate limited! Please wait {getattr(e,'value',0)} seconds", show_alert=True)
     except Exception as e:
         try:
-            await query.message.edit_text(f"**❌ Eʀʀᴏʀ:** `{str(e)}`", parse_mode=enums.ParseMode.MARKDOWN)
+            await query.message.edit_text(f"** Eʀʀᴏʀ:** `{str(e)}`", parse_mode=enums.ParseMode.MARKDOWN)
         except:
-            await query.answer(font("❌ Refresh failed!"), show_alert=True)
+            await query.answer(font(" Refresh failed!"), show_alert=True)

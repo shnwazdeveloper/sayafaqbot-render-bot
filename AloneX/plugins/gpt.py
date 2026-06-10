@@ -19,7 +19,7 @@ def is_hindi(text: str) -> bool:
 
 async def gpt(query: str) -> str:
     if not groq_client:
-        return "❌ Groq API Key not configured."
+        return " Groq API Key not configured."
 
     try:
         lang = "Hindi" if is_hindi(query) else "English"

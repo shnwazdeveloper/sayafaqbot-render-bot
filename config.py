@@ -25,7 +25,7 @@ if _missing_env_vars:
     raise SystemExit(1)
 
 if not TOKEN or not DB_URL:
-    print("❌ ERROR: 'TOKEN' and 'DB_URL' environment variables are required.")
+    print(" ERROR: 'TOKEN' and 'DB_URL' environment variables are required.")
     exit(1)
 
 BOT_ID: int = int(TOKEN.split(':')[0])
@@ -199,13 +199,13 @@ AF_SUB_CHAT = getenv('AF_SUB_CHAT', "@AloneUpdates")
 FILE_DB_CHANNEL = int(getenv('FILE_DB_CHANNEL', '0')) # file store channel
 AF_SUB_TEXT = getenv('AF_SUB_TEXT', """
 <blockquote><b>
-To access your files, first click on [📢 Join Our Channel/Group]. Once you've joined, click the [📁 Get File] button to download your files. We're glad to have you with us!
+To access your files, first click on [ Join Our Channel/Group]. Once you've joined, click the [ Get File] button to download your files. We're glad to have you with us!
 
-Thank you for being part of our community! 📲 ✨
+Thank you for being part of our community!  
 </b></blockquote>
 """)
 AF_QS_TEXT = getenv('AF_QS_TEXT', """
-🔎 <b>Quick Search</b>:
+ <b>Quick Search</b>:
 <blockquote>Select the below buttons to get accurate results for language, media type, etc.</blockquote>
 """)
 

@@ -7,14 +7,14 @@ from AloneX.helpers.decorator import unavailable
 from AloneX import pbot, font
 
 
-__module__ = "𝐑ᴇɴᴀᴍᴇ📝"
+__module__ = "𝐑ᴇɴᴀᴍᴇ"
 
 __help__ = """
 *Commands*:
 /rename
 
 *Description:*  
-📂 Rename documents, photos, stickers, videos, and files directly in Telegram and quickly upload them with a new name.
+ Rename documents, photos, stickers, videos, and files directly in Telegram and quickly upload them with a new name.
 
 *Usage:*  
 ❂ `/rename <file_name_with_extension or None>` — Rename the replied file or document  
@@ -47,20 +47,20 @@ async def thumbnail(_, message):
            if r and r.photo:
                path = await r.download()
                temp[user.id] = path
-               return await m.reply(font("✅ **thumbnail saved Successfully.**"))
+               return await m.reply(font(" **thumbnail saved Successfully.**"))
            else:
                return await m.reply(font("Only reply to photo type."))
        elif cmd == "clearthumb":
              if user.id in temp:
                    del temp[user.id]
-                   return await m.reply(font("✅ **Removed thumbnail from saved!**"))
+                   return await m.reply(font(" **Removed thumbnail from saved!**"))
              else:
-                   return await m.reply(font("❌ No thumbnail is currently in disk!"))
+                   return await m.reply(font(" No thumbnail is currently in disk!"))
        else:
             if user.id in temp:
-                return await m.reply_photo(photo=temp[user.id], caption="👀 **Your currently saved thumbnail!**")
+                return await m.reply_photo(photo=temp[user.id], caption=" **Your currently saved thumbnail!**")
             else:
-                return await m.reply(font("❌ No thumbnail is currently in disk!"))
+                return await m.reply(font(" No thumbnail is currently in disk!"))
  
 
 @pbot.on_message(filters.command("rename") & ~filters.forwarded)
@@ -80,9 +80,9 @@ async def renamer(_, message):
          enums.MessageMediaType.AUDIO
      ]
      if not getattr(reply, 'media', None):
-         return await m.reply(font("**⚠️ Only reply to a media file!**"))
+         return await m.reply(font("** Only reply to a media file!**"))
      elif reply.media not in media:
-         return await m.reply(font("**⚠️ Not Supported media type!**"))
+         return await m.reply(font("** Not Supported media type!**"))
      else:
 
         def get_ext(doc: str) -> str:
@@ -102,13 +102,13 @@ async def renamer(_, message):
     enums.MessageMediaType.DOCUMENT: lambda r: (f"document_{r.document.file_id}.{get_ext(r.document)}", r.document.file_size, getattr(r.document, "thumbs", []) if not r.document.thumbs else r.document.thumbs[0].file_id),
     enums.MessageMediaType.AUDIO: lambda r: (f"audio_{r.audio.file_id}.{get_ext(r.audio)}", r.audio.file_size, getattr(r.audio, "thumbs", []) if not r.audio.thumbs else r.audio.thumbs[0].file_id)
         }
-        msg = await m.reply(font("**📩 Downloading file please wait.....**"))
+        msg = await m.reply(font("** Downloading file please wait.....**"))
         file_name, file_size, thumb = file_name_formats[reply.media](reply)
         
         if len(m.text.split()) > 1:
              file_name = m.text.split(maxsplit=1)[1]
 
-        await msg.edit_text(font("⚡ **Downloading thumbnail from the file...**"))
+        await msg.edit_text(font(" **Downloading thumbnail from the file...**"))
         thumb = await pbot.download_media(thumb) if thumb and user.id not in temp else temp[user.id] if user.id in temp else None
               
         start_time = time.perf_counter()
@@ -118,7 +118,7 @@ async def renamer(_, message):
         with open(file_name, "wb+") as file:
              download_size = 0
              mb = 1024 * 1024  # 1 MB = 1024 * 1024 bytes
-             await msg.edit("📩 **Downloading ...**")
+             await msg.edit(" **Downloading ...**")
              
              async for chunk in pbot.stream_media(reply):
                    file.write(chunk)
@@ -132,7 +132,7 @@ async def renamer(_, message):
                    if current_time - last_update_time >= 6:
                        try:
                            await msg.edit_text(
-                              f"⬇️ **Downloaded {progress:.2f}% "
+                              f" **Downloaded {progress:.2f}% "
                               f"({download_size/mb:.2f} MB / {file_size/mb:.2f} MB)**"
                            )
                            last_update_time = current_time
@@ -142,7 +142,7 @@ async def renamer(_, message):
                         
         downloaded_time = round(time.perf_counter() - start_time, 4)
                
-        await msg.edit("⬆️ **Successfully downloaded now trying to upload in telegram takes some minutes...**")
+        await msg.edit(" **Successfully downloaded now trying to upload in telegram takes some minutes...**")
 
         try:
              
@@ -160,9 +160,9 @@ async def renamer(_, message):
           await upload_msg.edit_caption(
                f"```python\nDownloaded time: {downloaded_time}\n"
                f"Uploaded time: {uploaded_time}```\n\n"
-               f"**⚡ Successfully reamed by @{_.me.username}**!"
+               f"** Successfully reamed by @{_.me.username}**!"
           )
              
         except Exception as e:
-            await msg.edit(f"❌ **ERROR**: {e}")
+            await msg.edit(f" **ERROR**: {e}")
 

@@ -17,10 +17,10 @@ from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, InputMedi
 
 
 
-__module__ = "𝐒ᴏᴄɪᴀʟ🌐"
+__module__ = "𝐒ᴏᴄɪᴀʟ"
 
 __help__ = """
-*Social🌐*
+*Social*
 
 *Description:*  
 Download media from popular social platforms like Instagram, X, Pinterest, and Spotify directly through the bot.
@@ -73,7 +73,7 @@ async def pinterest(_, message):
        url_re = re.search(r'https:\/\/(pin\.it|in\.pinterest\.com\/pin)\/[^\s]+', text)
 
        if not url_re:
-          return await m.reply(font('✋ Not a pinterest url, e.g format https://pin.it/xxxxx or https://in.pinterest.com/pin/xxxxx'))
+          return await m.reply(font(' Not a pinterest url, e.g format https://pin.it/xxxxx or https://in.pinterest.com/pin/xxxxx'))
               
        url = url_re.group().strip()
        
@@ -81,7 +81,7 @@ async def pinterest(_, message):
           data = await pinterest_link2download(url)
           image_url = data.get('image_url', None)
           video_urls = data.get('video_urls', [])
-          txt = f"**❤️ By {config.BOT_USERNAME}**"
+          txt = f"** By {config.BOT_USERNAME}**"
           if image_url:
               await m.reply_photo(image_url, caption=txt)
           if video_urls:
@@ -116,7 +116,7 @@ async def spotifyer(_, message):
                 data = await response.json()
                 error = data.get('error')
                 if error:
-                   return await msg.edit(f"❌ **ERROR**: `{error['message']}`")
+                   return await msg.edit(f" **ERROR**: `{error['message']}`")
                 d = data['result']
                 id = d['id']
                 name = d['name']
@@ -126,7 +126,7 @@ async def spotifyer(_, message):
                 async with session.get(f'https://api.fabdl.com/spotify/mp3-convert-task/{gid}/{id}') as response:
                       data = await response.json()
                       result = data.get('result')
-                      if not result: return await msg.edit("Couldn't download 🤷")
+                      if not result: return await msg.edit("Couldn't download ")
                       url = result['download_url']
                       async with session.get(f'https://api.fabdl.com{url}') as r:
                              data = await r.read()
@@ -136,8 +136,8 @@ async def spotifyer(_, message):
                            file.write(data)
                       
                       caption_txt = (
-                        f"🎵 **Song Name**: `{name}`"
-                        f"\n\n❤️ **By {config.BOT_USERNAME}**"
+                        f" **Song Name**: `{name}`"
+                        f"\n\n **By {config.BOT_USERNAME}**"
                       )
                       await m.reply_photo(image, caption=caption_txt)
                       await m.reply_audio(
@@ -149,7 +149,7 @@ async def spotifyer(_, message):
                       await msg.delete()
                       os.remove(path)
        except Exception as e:
-             return await msg.edit_text(f'❌ ERROR: `{e}`')
+             return await msg.edit_text(f' ERROR: `{e}`')
           
 
 
@@ -158,7 +158,7 @@ async def instagramDL(_, message):
     try:
         # Get URL from message
         if len(message.text.split()) <= 1:
-            return await message.reply(font('**Please provide an Instagram URL to download** ✋'))
+            return await message.reply(font('**Please provide an Instagram URL to download** '))
         
         url_txt = message.text.split(maxsplit=1)[1]
         
@@ -167,10 +167,10 @@ async def instagramDL(_, message):
         ig_match = re.match(ig_pattern, url_txt)
         
         if not ig_match:
-            return await message.reply(font('✋ **Invalid Instagram URL. Please provide a valid post/reel URL.**'))
+            return await message.reply(font(' **Invalid Instagram URL. Please provide a valid post/reel URL.**'))
         
         Instagram_url = ig_match.group()
-        msg = await message.reply(font('📩 **Downloading please wait ...**'))
+        msg = await message.reply(font(' **Downloading please wait ...**'))
         
         # Download process
         async with aiohttp.ClientSession() as session:
@@ -180,15 +180,15 @@ async def instagramDL(_, message):
             try:
                 async with session.get(api_url) as response:
                     if response.status != 200:
-                        return await msg.edit("❌ **API request failed. Please try again later.**")
+                        return await msg.edit(" **API request failed. Please try again later.**")
                     
                     results = await response.json()
                     
                     if results.get('error'):
-                        return await msg.edit(f"❌ **Error: {results['error']}**")
+                        return await msg.edit(f" **Error: {results['error']}**")
                     
                     if not results.get('result') or not results['result'].get('url'):
-                        return await msg.edit("❌ **Failed to get download URL.**")
+                        return await msg.edit(" **Failed to get download URL.**")
                     
                     dl_url = results['result']['url']
                     
@@ -200,7 +200,7 @@ async def instagramDL(_, message):
                     # Download media
                     async with session.get(dl_url) as dl_res:
                         if dl_res.status != 200:
-                            return await msg.edit("❌ **Failed to download media.**")
+                            return await msg.edit(" **Failed to download media.**")
                         
                         src_data = await dl_res.read()
                         
@@ -213,12 +213,12 @@ async def instagramDL(_, message):
                             if mime_type.startswith('image'):
                                 await message.reply_photo(
                                     path,
-                                    caption=f"❤️ **Downloaded by {config.BOT_USERNAME}**"
+                                    caption=f" **Downloaded by {config.BOT_USERNAME}**"
                                 )
                             else:
                                 await message.reply_video(
                                     path,
-                                    caption=f"❤️ **Downloaded by {config.BOT_USERNAME}**"
+                                    caption=f" **Downloaded by {config.BOT_USERNAME}**"
                                 )
                         finally:
                             # Cleanup
@@ -229,10 +229,10 @@ async def instagramDL(_, message):
                             await msg.delete()
                                 
             except aiohttp.ClientError as e:
-                return await msg.edit(f"❌ **Network error: {str(e)}**")
+                return await msg.edit(f" **Network error: {str(e)}**")
             
     except Exception as e:
-        return await msg.edit(f"❌ **An error occurred: {str(e)}**")      
+        return await msg.edit(f" **An error occurred: {str(e)}**")      
                        
 
 
@@ -261,22 +261,22 @@ async def PinterestVideoCQ(update, context):
     async def edit_msg(video_id):
         video = videos[video_id]
         text = (
-            f"🔎 *Results for {search_query}.*\n"
-            f"📌 *Current page*: `{video_id+1}` of `{len(videos)}`\n"  # Add 1 for user-friendly display
-            f"🎥 *Duration*: `{round(video['duration']/60, 2)} Min`\n\n"
+            f" *Results for {search_query}.*\n"
+            f" *Current page*: `{video_id+1}` of `{len(videos)}`\n"  # Add 1 for user-friendly display
+            f" *Duration*: `{round(video['duration']/60, 2)} Min`\n\n"
             f"*By {config.BOT_USERNAME}*"
         )
         
         button = InlineKeyboardMarkup([
             [
-                InlineKeyboardButton(font('Back ◀️'), callback_data=f'pin_back#{video_id}#{user.id}', style=enums.ButtonStyle.PRIMARY),
-                InlineKeyboardButton(font('Next ⏭️'), callback_data=f'pin_next#{video_id}#{user.id}', style=enums.ButtonStyle.PRIMARY),
+                InlineKeyboardButton(font('Back '), callback_data=f'pin_back#{video_id}#{user.id}', style=enums.ButtonStyle.PRIMARY),
+                InlineKeyboardButton(font('Next '), callback_data=f'pin_next#{video_id}#{user.id}', style=enums.ButtonStyle.PRIMARY),
             ],
             [
-                InlineKeyboardButton(font('Download 📩'), callback_data=f'pin_dl#{video_id}#{user.id}', style=enums.ButtonStyle.SUCCESS)
+                InlineKeyboardButton(font('Download '), callback_data=f'pin_dl#{video_id}#{user.id}', style=enums.ButtonStyle.SUCCESS)
             ],
             [
-                InlineKeyboardButton(font('Close ❌'), callback_data=f'delete#{user.id}', style=enums.ButtonStyle.DANGER)
+                InlineKeyboardButton(font('Close '), callback_data=f'delete#{user.id}', style=enums.ButtonStyle.DANGER)
             ]
         ])
         
@@ -309,7 +309,7 @@ async def PinterestVideoCQ(update, context):
             return await m.reply_video(video_url, duration=duration, thumbnail=thumb)
         
         msg = await m.reply_text(
-            "📩 *Video Downloading ...*",
+            " *Video Downloading ...*",
             parse_mode=constants.ParseMode.MARKDOWN
         )
         
@@ -348,7 +348,7 @@ async def PinterestVideoSearch(update, context):
     
     query = m.text.split(maxsplit=1)[1]
     msg = await m.reply_text(
-          text="🔎 *Searching for videos ...*",
+          text=" *Searching for videos ...*",
           parse_mode=constants.ParseMode.MARKDOWN
     )
     
@@ -367,22 +367,22 @@ async def PinterestVideoSearch(update, context):
         
         button = InlineKeyboardMarkup([
             [
-                InlineKeyboardButton(font('Back ◀️'), callback_data=f'pin_back#{video_id}#{user.id}', style=enums.ButtonStyle.PRIMARY),
-                InlineKeyboardButton(font('Next ⏭️'), callback_data=f'pin_next#{video_id}#{user.id}', style=enums.ButtonStyle.PRIMARY),
+                InlineKeyboardButton(font('Back '), callback_data=f'pin_back#{video_id}#{user.id}', style=enums.ButtonStyle.PRIMARY),
+                InlineKeyboardButton(font('Next '), callback_data=f'pin_next#{video_id}#{user.id}', style=enums.ButtonStyle.PRIMARY),
             ],
             [
-                InlineKeyboardButton(font('Download 📩'), callback_data=f'pin_dl#{video_id}#{user.id}', style=enums.ButtonStyle.SUCCESS)
+                InlineKeyboardButton(font('Download '), callback_data=f'pin_dl#{video_id}#{user.id}', style=enums.ButtonStyle.SUCCESS)
             ],
             [
-                InlineKeyboardButton(font('Close ❌'), callback_data=f'delete#{user.id}', style=enums.ButtonStyle.DANGER)
+                InlineKeyboardButton(font('Close '), callback_data=f'delete#{user.id}', style=enums.ButtonStyle.DANGER)
             ]
         ])
 
         text = (
-            f"🔎 *Results for {query}.*\n"
-            f"📌 *Current page*: `{video_id+1}` of `{len(videos)}`\n"
-            f"🎥 *Duration*: `{round(first_video['duration']/60, 2)}`\n\n"
-            f"❤️ *By {config.BOT_USERNAME}*"
+            f" *Results for {query}.*\n"
+            f" *Current page*: `{video_id+1}` of `{len(videos)}`\n"
+            f" *Duration*: `{round(first_video['duration']/60, 2)}`\n\n"
+            f" *By {config.BOT_USERNAME}*"
         )
 
         await msg.edit_media(
@@ -403,16 +403,16 @@ async def PinterestVideoSearch(update, context):
 async def XDl(_, message):
     text = message.text
     if not len(text.split()) > 1:
-        return await message.reply_text("🧐 You haven't give me any X url yet.")
+        return await message.reply_text(" You haven't give me any X url yet.")
           
     pattern = r"https:\/\/(www\.)?(x|twitter)\.com\/.*"
     url = re.search(pattern, text)
       
     if not url:
-        return await message.reply_text(font("🤔 Looks like not a vali x/twitter url."))
+        return await message.reply_text(font(" Looks like not a vali x/twitter url."))
           
     msg = await message.reply_text(
-          f"**🧏 Downloading pls wait a minute....**",
+          f"** Downloading pls wait a minute....**",
           
     )
       
@@ -420,7 +420,7 @@ async def XDl(_, message):
       
     if results.get('error'):
         return await msg.edit_text(
-            "❌ ERROR:\n" + results['error']
+            " ERROR:\n" + results['error']
         )        
       
     video_url = results['medias'][-1]['url']
@@ -428,10 +428,10 @@ async def XDl(_, message):
     await message.reply_video(
                  video_url,
                  caption=(
-                 f"📛 **Title**: {results.get('title')}\n"
-                 f"⏱️ **Duration**: {results.get('duration')}\n"
-                 f"🎥 **Quality**: {results['medias'][-1]['quality']}\n"
-                 f"🗂️ **FormattedSize**: {results['medias'][-1]['formattedSize']}\n"
+                 f" **Title**: {results.get('title')}\n"
+                 f" **Duration**: {results.get('duration')}\n"
+                 f" **Quality**: {results['medias'][-1]['quality']}\n"
+                 f" **FormattedSize**: {results['medias'][-1]['formattedSize']}\n"
               )
     )
     await msg.delete()      

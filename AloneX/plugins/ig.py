@@ -93,16 +93,16 @@ async def auto_download(c: Client, m: Message):
     if not url:
         return
     
-    msg = await m.reply(font("🔍 Fetching..."))
+    msg = await m.reply(font(" Fetching..."))
     
     # Get media URLs
     media_items = await get_media_urls(url)
     
     if not media_items:
-        return await msg.edit("❌ Failed to fetch media")
+        return await msg.edit(" Failed to fetch media")
     
     total = len(media_items)
-    await msg.edit(f"⬇️ Downloading {total} file{'s' if total > 1 else ''}...")
+    await msg.edit(f" Downloading {total} file{'s' if total > 1 else ''}...")
     
     # Download all files concurrently
     download_tasks = [download_media(item["url"], item["is_video"]) for item in media_items]
@@ -115,24 +115,24 @@ async def auto_download(c: Client, m: Message):
     ]
     
     if not downloaded:
-        return await msg.edit("❌ Download failed")
+        return await msg.edit(" Download failed")
     
-    await msg.edit(f"📤 Sending {len(downloaded)} file{'s' if len(downloaded) > 1 else ''}...")
+    await msg.edit(f" Sending {len(downloaded)} file{'s' if len(downloaded) > 1 else ''}...")
     
     try:
         if len(downloaded) == 1:
             f = downloaded[0]
             if f["is_video"]:
-                await m.reply_video(f["path"], caption="✅ Downloaded from Instagram")
+                await m.reply_video(f["path"], caption=" Downloaded from Instagram")
             else:
-                await m.reply_photo(f["path"], caption="✅ Downloaded from Instagram")
+                await m.reply_photo(f["path"], caption=" Downloaded from Instagram")
         else:
             # Send in batches of 10 (Telegram limit for media groups)
             for i in range(0, len(downloaded), 10):
                 batch = downloaded[i:i+10]
                 media = []
                 for j, f in enumerate(batch):
-                    caption = "✅ Downloaded from Instagram" if j == 0 else ""
+                    caption = " Downloaded from Instagram" if j == 0 else ""
                     if f["is_video"]:
                         media.append(InputMediaVideo(f["path"], caption=caption))
                     else:
@@ -147,7 +147,7 @@ async def auto_download(c: Client, m: Message):
         await msg.delete()
     
     except Exception as e:
-        await msg.edit(f"❌ Upload error: {str(e)}")
+        await msg.edit(f" Upload error: {str(e)}")
     
     finally:
         # Cleanup downloaded files

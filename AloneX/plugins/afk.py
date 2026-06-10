@@ -12,9 +12,9 @@ from cachetools import TTLCache
 afk_cache = TTLCache(maxsize=10000, ttl=3600)
 username_cache = TTLCache(maxsize=5000, ttl=1800)
 
-__module__ = "𝐀ғᴋ🛌"
+__module__ = "𝐀ғᴋ"
 __help__ = """
-*Afk🛌*
+*Afk*
 *Description:*  
 This module lets you mark yourself as AFK (Away From Keyboard). When you return online, the bot will automatically greet you in the group.
 *Commands:*  
@@ -26,46 +26,46 @@ This module lets you mark yourself as AFK (Away From Keyboard). When you return 
 """
 
 AFK_BACK_STRING_LIST = [
-    "🎉 Welcome back, {}! The cursed spirits can finally relax!",
-    "👀 Look who decided to show up! It's the sorcerer, {}!",
-    "🔥 Hot stuff alert! {} has returned to exorcise the vibes!",
-    "😎 You missed me, didn't you? Just kidding, {}! You know I'm unbeatable!",
-    "🚀 Blast off! {} is back, ready to unleash some cursed techniques!",
-    "🍕 Pizza's here, and so is the strongest sorcerer, {}!",
-    "🎈 Time to celebrate, {} is back to save the day!",
-    "💥 Boom! {} has re-entered the chat like a true sorcerer!",
-    "🕺 Dance time! {} is back on the battlefield, let's go!",
-    "🤩 Did you miss me? Nah, just kidding, {}! You know I'm always around!",
-    "🌟 Shine bright like a cursed technique, {} is here to dazzle!",
-    "🎤 Mic check! 1, 2, 3... it's the legendary sorcerer, {}!",
-    "🦸‍♂️ Superhero landing! Welcome back, {}! Time to exorcise some spirits!",
-    "🎭 The show can go on, {} is here to dominate the stage!",
-    "🍹 Time for some fun, {} is back in the Jujutsu game!"
+    " Welcome back, {}! The cursed spirits can finally relax!",
+    " Look who decided to show up! It's the sorcerer, {}!",
+    " Hot stuff alert! {} has returned to exorcise the vibes!",
+    " You missed me, didn't you? Just kidding, {}! You know I'm unbeatable!",
+    " Blast off! {} is back, ready to unleash some cursed techniques!",
+    " Pizza's here, and so is the strongest sorcerer, {}!",
+    " Time to celebrate, {} is back to save the day!",
+    " Boom! {} has re-entered the chat like a true sorcerer!",
+    " Dance time! {} is back on the battlefield, let's go!",
+    " Did you miss me? Nah, just kidding, {}! You know I'm always around!",
+    " Shine bright like a cursed technique, {} is here to dazzle!",
+    " Mic check! 1, 2, 3... it's the legendary sorcerer, {}!",
+    " Superhero landing! Welcome back, {}! Time to exorcise some spirits!",
+    " The show can go on, {} is here to dominate the stage!",
+    " Time for some fun, {} is back in the Jujutsu game!"
 ]
 
 AFK_MESSAGES = [
-    "User  {} is currently on a quest for snacks. 🍕",
-    "User  {} has entered the realm of the AFK. 💤",
-    "User  {} is busy fighting the urge to procrastinate. ⚔️",
-    "User  {} is off saving the world... or just their phone battery. 🔋",
-    "User  {} has temporarily vanished like a cursed spirit. 👻",
-    "User  {} is in a deep meditation... or napping. 🧘‍♂️",
-    "User  {} is away, probably plotting world domination. 🌍"
+    "User  {} is currently on a quest for snacks. ",
+    "User  {} has entered the realm of the AFK. ",
+    "User  {} is busy fighting the urge to procrastinate. ",
+    "User  {} is off saving the world... or just their phone battery. ",
+    "User  {} has temporarily vanished like a cursed spirit. ",
+    "User  {} is in a deep meditation... or napping. ",
+    "User  {} is away, probably plotting world domination. "
 ]
 
 AFK_STRING = """
-<b>⚡ Yo, {} is chillin' AFK!</b>
-<b>🕣 Since</b>: <code>{}</code>
-<b>🕣 Now</b>: <code>{}</code>
-<b>📑 Reason</b>: 
+<b> Yo, {} is chillin' AFK!</b>
+<b> Since</b>: <code>{}</code>
+<b> Now</b>: <code>{}</code>
+<b> Reason</b>: 
 <code>{}</code>
 """
 
 BACK_AFK_STRING = """
 <b>{}</b>
-<b>🕣 Since</b>: <code>{}</code>
-<b>🕣 Now</b>: <code>{}</code>
-<b>📑 Reason</b>: 
+<b> Since</b>: <code>{}</code>
+<b> Now</b>: <code>{}</code>
+<b> Reason</b>: 
 <code>{}</code>
 """
 
@@ -97,7 +97,7 @@ async def NoLongerAfk(update, context):
     if user.id in afk_cache or await get_afk_cached(user.id):
         afk = await get_afk_cached(user.id)
         if afk:
-            reason = html.escape(afk.get('reason', '✋ Reason Not Provided.'))
+            reason = html.escape(afk.get('reason', ' Reason Not Provided.'))
             datetime = afk['datetime']
             await remove_user_afk(user.id)
             invalidate_afk_cache(user.id)
@@ -152,11 +152,11 @@ async def set_afk_handler(update, context):
     user_id = message.from_user.id
     datetime = str(message.date).split('+')[0]
     if len(message.text) >= 100:
-        await message.reply_text(font('🧏 Your Afk Reason was shortened to 100 characters.'))
+        await message.reply_text(font(' Your Afk Reason was shortened to 100 characters.'))
     if message.text.lower().startswith('brb'):
-        reason = message.text[3:].strip()[:100] if len(message.text) > 3 else "✋ Reason Not Provided. "
+        reason = message.text[3:].strip()[:100] if len(message.text) > 3 else " Reason Not Provided. "
     else:
-        reason = message.text.split(maxsplit=1)[1][:100] if len(message.text.split()) >= 2 else "✋ Reason Not Provided. "
+        reason = message.text.split(maxsplit=1)[1][:100] if len(message.text.split()) >= 2 else " Reason Not Provided. "
     await add_user_afk(
         user_id=user_id,
         first_name=first_name,

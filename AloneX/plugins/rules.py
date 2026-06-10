@@ -17,9 +17,9 @@ chat_name_cache = TTLCache(maxsize=10000, ttl=7200)
 DEFAULT_BUTTON = "Rules"
 DEFAULT_MESSAGE = "The group admin has not set any rules for this chat yet.\n\nIt doesn't mean you can do anything!"
 
-__module__ = "𝐑ᴜʟᴇs🚦"
+__module__ = "𝐑ᴜʟᴇs"
 __help__ = """
-*Rules🚦*
+*Rules*
 *Description:*  
 Every chat works with different rules; this module will help make those rules clearer!
 
@@ -132,10 +132,10 @@ async def setrules_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
     invalidate_rules_cache(chat_id)
     
     button_count = extract_button_count(text)
-    button_info = f"\n✨ With {button_count} button(s)" if button_count > 0 else ""
+    button_info = f"\n With {button_count} button(s)" if button_count > 0 else ""
     
     await update.effective_message.reply_text(
-        f"✅ *Rules have been set for this chat.*{button_info}",
+        f" *Rules have been set for this chat.*{button_info}",
         parse_mode="Markdown"
     )
 
@@ -145,7 +145,7 @@ async def resetrules_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
     chat_id = await get_effective_chat_id(update)
     await reset_rules(chat_id)
     invalidate_rules_cache(chat_id)
-    await update.effective_message.reply_text(font("♻️ Rules have been reset to default."))
+    await update.effective_message.reply_text(font(" Rules have been reset to default."))
 
 @Command("privaterules")
 @admin_check("can_change_info", protect_target=False)
@@ -158,11 +158,11 @@ async def privaterules_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if arg in AFFIRMATIVE:
         await set_private_rules(chat_id, True)
         invalidate_rules_cache(chat_id)
-        await update.effective_message.reply_text(font("🔒 Rules will now be sent in private."))
+        await update.effective_message.reply_text(font(" Rules will now be sent in private."))
     elif arg in NEGATIVE:
         await set_private_rules(chat_id, False)
         invalidate_rules_cache(chat_id)
-        await update.effective_message.reply_text(font("📢 Rules will now be shown in group."))
+        await update.effective_message.reply_text(font(" Rules will now be shown in group."))
     else:
         await update.effective_message.reply_text(font("Use yes/no or on/off."))
 
@@ -176,7 +176,7 @@ async def setrulesbutton_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE)
     
     await set_rules_button(chat_id, btn_name)
     invalidate_rules_cache(chat_id)
-    await update.effective_message.reply_text(f"✅ Rules button set to: {btn_name}")
+    await update.effective_message.reply_text(f" Rules button set to: {btn_name}")
 
 @Command("resetrulesbutton")
 @admin_check("can_change_info", protect_target=False)
@@ -184,7 +184,7 @@ async def resetrulesbutton_cmd(update: Update, context: ContextTypes.DEFAULT_TYP
     chat_id = await get_effective_chat_id(update)
     await reset_rules_button(chat_id)
     invalidate_rules_cache(chat_id)
-    await update.effective_message.reply_text(font("♻️ Rules button reset to default."))
+    await update.effective_message.reply_text(font(" Rules button reset to default."))
 
 async def send_rules_private_pyro(user_id: int, chat_id: int):
     from AloneX import pbot
@@ -214,7 +214,7 @@ async def send_rules_private_pyro(user_id: int, chat_id: int):
     
     await pbot.send_message(
         user_id,
-        f"📜 **Rules for {chat_name}:**\n\n{rules_text}",
+        f" **Rules for {chat_name}:**\n\n{rules_text}",
         reply_markup=buttons,
         effect_id=random.choice(SE)
     )

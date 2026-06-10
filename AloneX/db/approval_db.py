@@ -43,7 +43,7 @@ async def initialize_chats():
     except Exception as e:
         print(f"Error initializing approval chats: {e}")
 
-# ✅ Ye adb (aggregation DB query) ka code hai:
+#  Ye adb (aggregation DB query) ka code hai:
 async def approvals_summary() -> str:
     """Return summary like '7528 approved, across 1107 chats'"""
     try:

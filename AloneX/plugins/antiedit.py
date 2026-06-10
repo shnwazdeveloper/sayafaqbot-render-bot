@@ -32,30 +32,30 @@ async def is_user_admin(chat_id: int, user_id: int):
 async def get_antiedit_keyboard(chat_id: int):
     enabled = await get_antiedit(chat_id)
     if enabled:
-        text = "🟢 Anti-Edit: ON"
+        text = " Anti-Edit: ON"
     else:
-        text = "🔴 Anti-Edit: OFF"
+        text = " Anti-Edit: OFF"
 
     return IKM([[IKB(font(text), callback_data="antiedit_toggle", style=ButtonStyle.SUCCESS if enabled else ButtonStyle.DANGER)]])
 
 @pbot.on_message(filters.command("antiedit", prefixes=prefix_cmds) & filters.group)
 async def antiedit_cmd(_, message: Message):
     if not await is_user_admin(message.chat.id, message.from_user.id):
-        return await message.reply_text(font("❌ You must be an admin to use this command."))
+        return await message.reply_text(font(" You must be an admin to use this command."))
 
     if len(message.command) > 1:
         arg = message.command[1].lower()
         if arg == "on":
             await set_antiedit(message.chat.id, True)
-            return await message.reply_text(font("✅ Anti-Edit <b>Enabled</b>."), reply_markup=await get_antiedit_keyboard(message.chat.id), parse_mode=enums.ParseMode.HTML)
+            return await message.reply_text(font(" Anti-Edit <b>Enabled</b>."), reply_markup=await get_antiedit_keyboard(message.chat.id), parse_mode=enums.ParseMode.HTML)
         elif arg == "off":
             await set_antiedit(message.chat.id, False)
-            return await message.reply_text(font("❌ Anti-Edit <b>Disabled</b>."), reply_markup=await get_antiedit_keyboard(message.chat.id), parse_mode=enums.ParseMode.HTML)
+            return await message.reply_text(font(" Anti-Edit <b>Disabled</b>."), reply_markup=await get_antiedit_keyboard(message.chat.id), parse_mode=enums.ParseMode.HTML)
 
     enabled = await get_antiedit(message.chat.id)
     status = "Enabled" if enabled else "Disabled"
     await message.reply_text(
-        font(f"✒️ <b>Anti-Edit Status:</b> {status}\n\nClick the button below to toggle."),
+        font(f" <b>Anti-Edit Status:</b> {status}\n\nClick the button below to toggle."),
         reply_markup=await get_antiedit_keyboard(message.chat.id),
         parse_mode=enums.ParseMode.HTML
     )
@@ -66,7 +66,7 @@ async def antiedit_toggle_cb(_, query: CallbackQuery):
     chat_id = query.message.chat.id
 
     if not await is_user_admin(chat_id, user_id):
-        return await query.answer(font("❌ This button is for admins only!"), show_alert=True)
+        return await query.answer(font(" This button is for admins only!"), show_alert=True)
 
     enabled = await get_antiedit(chat_id)
     new_state = not enabled
@@ -74,7 +74,7 @@ async def antiedit_toggle_cb(_, query: CallbackQuery):
 
     status = "Enabled" if new_state else "Disabled"
     await query.message.edit_text(
-        font(f"✒️ <b>Anti-Edit Status:</b> {status}\n\nClick the button below to toggle."),
+        font(f" <b>Anti-Edit Status:</b> {status}\n\nClick the button below to toggle."),
         reply_markup=await get_antiedit_keyboard(chat_id),
         parse_mode=enums.ParseMode.HTML
     )
@@ -139,10 +139,10 @@ async def anti_edit_handler_pyro(client, message: Message):
 
     report = await client.send_message(
         chat_id,
-        f"🚫 <b>Edited Message Deleted</b>\n"
-        f"👤 <b>User:</b> {mention}\n"
-        f"📌 <b>Original:</b> {old_text}\n"
-        f"✏️ <b>Edited:</b> {new_text}",
+        f" <b>Edited Message Deleted</b>\n"
+        f" <b>User:</b> {mention}\n"
+        f" <b>Original:</b> {old_text}\n"
+        f" <b>Edited:</b> {new_text}",
         parse_mode=enums.ParseMode.HTML
     )
 
@@ -156,9 +156,9 @@ async def anti_edit_handler_pyro(client, message: Message):
     except:
         pass
 
-__module__ = "𝐀ɴᴛɪ-𝐄ᴅɪᴛ🖋"
+__module__ = "𝐀ɴᴛɪ-𝐄ᴅɪᴛ"
 __help__ = """
-*Anti-Edit🖋 — Protect your group from ghost edits*
+*Anti-Edit — Protect your group from ghost edits*
 
 Automatically deletes edited messages and shows the original content.
 

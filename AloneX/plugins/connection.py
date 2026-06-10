@@ -24,9 +24,9 @@ async def connect_chat(update: Update, context: ContextTypes.DEFAULT_TYPE):
         # In a group, connect to the current group
         if await check_membership(chat.id, user.id):
             await connection_db.connect(user.id, chat.id)
-            await message.reply_text(font(f"✅ Successfully connected to {chat.title}!"))
+            await message.reply_text(font(f" Successfully connected to {chat.title}!"))
         else:
-            await message.reply_text(font("❌ You must be a member to connect to this chat."))
+            await message.reply_text(font(" You must be a member to connect to this chat."))
         return
 
     # In Private Chat
@@ -65,20 +65,20 @@ async def connect_chat(update: Update, context: ContextTypes.DEFAULT_TYPE):
         target_chat_obj = await bot.get_chat(target_chat_id)
         if await check_membership(target_chat_id, user.id):
             await connection_db.connect(user.id, target_chat_id)
-            await message.reply_text(font(f"✅ Successfully connected to {target_chat_obj.title}!"))
+            await message.reply_text(font(f" Successfully connected to {target_chat_obj.title}!"))
         else:
-            await message.reply_text(font("❌ You must be a member in the target chat to connect."))
+            await message.reply_text(font(" You must be a member in the target chat to connect."))
     except Exception as e:
-        await message.reply_text(font(f"❌ Error: {str(e)}"))
+        await message.reply_text(font(f" Error: {str(e)}"))
 
 @Command('disconnect')
 async def disconnect_chat(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_id = update.effective_user.id
     prev = await connection_db.disconnect(user_id)
     if prev:
-        await update.effective_message.reply_text(font("✅ Disconnected from the current chat."))
+        await update.effective_message.reply_text(font(" Disconnected from the current chat."))
     else:
-        await update.effective_message.reply_text(font("❌ You are not connected to any chat."))
+        await update.effective_message.reply_text(font(" You are not connected to any chat."))
 
 @Command('reconnect')
 async def reconnect_chat(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -87,11 +87,11 @@ async def reconnect_chat(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if res:
         try:
             target_chat = await context.bot.get_chat(res)
-            await update.effective_message.reply_text(font(f"✅ Reconnected to {target_chat.title}!"))
+            await update.effective_message.reply_text(font(f" Reconnected to {target_chat.title}!"))
         except:
-            await update.effective_message.reply_text(font("✅ Reconnected to previous chat."))
+            await update.effective_message.reply_text(font(" Reconnected to previous chat."))
     else:
-        await update.effective_message.reply_text(font("❌ No previous connection found."))
+        await update.effective_message.reply_text(font(" No previous connection found."))
 
 @Command('connection')
 async def connection_info(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -119,13 +119,13 @@ async def connect_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await connection_db.connect(user_id, target_chat_id)
         try:
             target_chat = await context.bot.get_chat(target_chat_id)
-            await query.edit_message_text(font(f"✅ Successfully connected to {target_chat.title}!"))
+            await query.edit_message_text(font(f" Successfully connected to {target_chat.title}!"))
         except:
-            await query.edit_message_text(font("✅ Successfully connected!"))
+            await query.edit_message_text(font(" Successfully connected!"))
     else:
-        await query.answer(font("❌ You are no longer a member in this chat."), show_alert=True)
+        await query.answer(font(" You are no longer a member in this chat."), show_alert=True)
 
-__mod_name__ = "𝐂ᴏɴɴᴇᴄᴛɪᴏɴs🖇"
+__mod_name__ = "𝐂ᴏɴɴᴇᴄᴛɪᴏɴs"
 __help__ = """
 **Connections**
 

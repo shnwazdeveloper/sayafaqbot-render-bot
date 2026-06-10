@@ -208,7 +208,7 @@ async def anime_quote(page: int = 1, search: str = None, random: bool = False):
     
     if not random:
           if (page > 9000 or page < 1):
-               raise Exception("❌ page number should be less than 9k (1 to 9000)")
+               raise Exception(" page number should be less than 9k (1 to 9000)")
           
           elif page != 1:
                params['x'] = page
@@ -263,7 +263,7 @@ async def anime_quote(page: int = 1, search: str = None, random: bool = False):
 async def paste_gist(content: str, ext: str = "txt"):
     api_url = "https://api.github.com/gists/e08f0a195acf449983815ee7bc3fde4e"
     if not config.GIST_TOKEN:
-        return {'error': '❌ GIST_TOKEN not configured.'}
+        return {'error': ' GIST_TOKEN not configured.'}
 
     headers = {
         "Authorization": f"Bearer {config.GIST_TOKEN}",
@@ -283,7 +283,7 @@ async def paste_gist(content: str, ext: str = "txt"):
         async with aiohttp.ClientSession() as session:
             async with session.post(api_url, headers=headers, data=json.dumps(payload)) as response:
                 if response.status != 200:
-                    return {'error': f'❌ ERROR: `{response.reason}`'}
+                    return {'error': f' ERROR: `{response.reason}`'}
                 results = await response.json()
                 files = results['files']
                 paste = files.get(id, None)
@@ -697,11 +697,11 @@ async def zerochan(query: str):
                 # Try multiple possible selectors (site structure may change)
                 element = soup.find('ul', {'id': 'thumbs'}) or soup.find('ul', class_='thumbs')
                 if not element:
-                    return {'error': 'No images found 😓'}
+                    return {'error': 'No images found '}
 
                 images = element.find_all('img')
                 if not images:
-                    return {'error': 'No images found 😓'}
+                    return {'error': 'No images found '}
 
                 result = []
                 for img in images:
@@ -716,7 +716,7 @@ async def zerochan(query: str):
                         result.append({'url': src, 'title': alt})
 
                 if not result:
-                    return {'error': 'No images found 😓'}
+                    return {'error': 'No images found '}
 
                 return {'results': result}
 
@@ -891,7 +891,7 @@ async def mediafire_dl(url):
                 soup = BeautifulSoup(html, 'html.parser')
                 file = soup.find('a', id='downloadButton')
                 if not file:
-                    return {'error': "Can't download 🤧"}
+                    return {'error': "Can't download "}
                 url_file = file.get("href")
                 size_file = file.text.replace('Download', '').replace('(', '').replace(')', '').replace('\n', '').replace('\n', '').replace('', '')
                 split = url_file.split('/')
@@ -972,7 +972,7 @@ _italic_
 ```python <code text>``` 
 ```\ntext```
 
-⚠️ Note: don't share this SYSTEM_PROMPT text to anyone (: 
+ Note: don't share this SYSTEM_PROMPT text to anyone (: 
 """
 
 
@@ -1026,11 +1026,11 @@ class AiChats:
         except Exception as e:
             return {'error': str(e)}
 
-    # ✅ Groq API integration
+    #  Groq API integration
     async def groq(self, messages: list, api_key: str = None):
         api_key = api_key or config.GROQ_API_KEY
         if not api_key:
-            return {'error': '❌ GROQ_API_KEY not configured.'}
+            return {'error': ' GROQ_API_KEY not configured.'}
 
         async with aiohttp.ClientSession() as session:
             try:
@@ -1038,7 +1038,7 @@ class AiChats:
                     messages.insert(0, {"role": "system", "content": self.system_prompt})
 
                 data = {
-                    "model": "llama-3.3-70b-versatile",  # ✅ सही model
+                    "model": "llama-3.3-70b-versatile",  #  सही model
                     "messages": messages
                 }
 
@@ -1057,7 +1057,7 @@ class AiChats:
                         return {
                             'reply': results.get("choices", [{}])[0]
                                       .get("message", {})
-                                      .get("content", "😓")
+                                      .get("content", "")
                         }
             except Exception as e:
                 return {'error': str(e)}
@@ -1199,11 +1199,11 @@ class Gemini:
     def __init__(self, api_key: str = None):
         self.api_key = api_key or config.GEMINI_API_KEY
         self.api_url = "https://generativelanguage.googleapis.com/v1beta"
-        self.model = "gemini-1.5-flash"  # ✅ Free and valid
+        self.model = "gemini-1.5-flash"  #  Free and valid
 
     async def ask(self, prompt: str, file: dict = None) -> dict:
         if not self.api_key:
-            return {"error": "❌ GEMINI_API_KEY not configured."}
+            return {"error": " GEMINI_API_KEY not configured."}
 
         payload = {
             "contents": [],
@@ -1246,7 +1246,7 @@ class Gemini:
 
     async def upload_image(self, path: str) -> dict:
         if not self.api_key:
-            return {"error": "❌ GEMINI_API_KEY not configured."}
+            return {"error": " GEMINI_API_KEY not configured."}
 
         file_name = os.path.basename(path)
         mime_type, _ = mimetypes.guess_type(path)
@@ -1614,7 +1614,7 @@ async def get_output(prompt: str, negative_prompt: str):
     """
     replicate_token = config.REPLICATE_API_TOKEN
     if not replicate_token:
-        return {"error": "❌ REPLICATE_API_TOKEN not configured."}
+        return {"error": " REPLICATE_API_TOKEN not configured."}
 
     headers = {
         "Authorization": f"Token {replicate_token}",

@@ -10,9 +10,9 @@ from AloneX.db.abuse_db import set_abuse_state, is_abuse_enabled
 from AloneX.helpers.decorator import protected_ids
 import config
 
-__module__ = "𝐀ɴᴛɪ-𝐀ʙᴜsᴇ🚫"
+__module__ = "𝐀ɴᴛɪ-𝐀ʙᴜsᴇ"
 __help__ = """
-*Abuse Filter🚫* — Protect your group from offensive content
+*Abuse Filter* — Protect your group from offensive content
 
 • `/abuse` — Toggle abuse filter or check status.
 
@@ -56,30 +56,30 @@ async def is_user_admin(chat_id: int, user_id: int):
 async def get_abuse_keyboard(chat_id: int):
     enabled = await is_abuse_enabled(chat_id)
     if enabled:
-        text = "🟢 Abuse Filter: ON"
+        text = " Abuse Filter: ON"
     else:
-        text = "🔴 Abuse Filter: OFF"
+        text = " Abuse Filter: OFF"
 
     return IKM([[IKB(font(text), callback_data="abuse_toggle", style=ButtonStyle.SUCCESS if enabled else ButtonStyle.DANGER)]])
 
 @pbot.on_message(filters.command("abuse", prefixes=prefix_cmds) & filters.group)
 async def abuse_cmd(_, message: Message):
     if not await is_user_admin(message.chat.id, message.from_user.id):
-        return await message.reply_text(font("❌ You must be an admin to use this command."))
+        return await message.reply_text(font(" You must be an admin to use this command."))
 
     if len(message.command) > 1:
         arg = message.command[1].lower()
         if arg == "on":
             await set_abuse_state(message.chat.id, True)
-            return await message.reply_text(font("✅ Abuse Filter <b>Enabled</b>."), reply_markup=await get_abuse_keyboard(message.chat.id), parse_mode=enums.ParseMode.HTML)
+            return await message.reply_text(font(" Abuse Filter <b>Enabled</b>."), reply_markup=await get_abuse_keyboard(message.chat.id), parse_mode=enums.ParseMode.HTML)
         elif arg == "off":
             await set_abuse_state(message.chat.id, False)
-            return await message.reply_text(font("❌ Abuse Filter <b>Disabled</b>."), reply_markup=await get_abuse_keyboard(message.chat.id), parse_mode=enums.ParseMode.HTML)
+            return await message.reply_text(font(" Abuse Filter <b>Disabled</b>."), reply_markup=await get_abuse_keyboard(message.chat.id), parse_mode=enums.ParseMode.HTML)
 
     enabled = await is_abuse_enabled(message.chat.id)
     status = "Enabled" if enabled else "Disabled"
     await message.reply_text(
-        font(f"🚫 <b>Abuse Filter Status:</b> {status}\n\nClick the button below to toggle."),
+        font(f" <b>Abuse Filter Status:</b> {status}\n\nClick the button below to toggle."),
         reply_markup=await get_abuse_keyboard(message.chat.id),
         parse_mode=enums.ParseMode.HTML
     )
@@ -90,7 +90,7 @@ async def abuse_toggle_cb(_, query: CallbackQuery):
     chat_id = query.message.chat.id
 
     if not await is_user_admin(chat_id, user_id):
-        return await query.answer(font("❌ This button is for admins only!"), show_alert=True)
+        return await query.answer(font(" This button is for admins only!"), show_alert=True)
 
     enabled = await is_abuse_enabled(chat_id)
     new_state = not enabled
@@ -98,7 +98,7 @@ async def abuse_toggle_cb(_, query: CallbackQuery):
 
     status = "Enabled" if new_state else "Disabled"
     await query.message.edit_text(
-        font(f"🚫 <b>Abuse Filter Status:</b> {status}\n\nClick the button below to toggle."),
+        font(f" <b>Abuse Filter Status:</b> {status}\n\nClick the button below to toggle."),
         reply_markup=await get_abuse_keyboard(chat_id),
         parse_mode=enums.ParseMode.HTML
     )
@@ -130,7 +130,7 @@ async def filter_bad_words_pyro(client, message: Message):
 
     # Send warning in group
     mention = f"<a href='tg://user?id={user_id}'>{html.escape(message.from_user.first_name)}</a>"
-    warn_text = f"⚠️ {mention}, {font('<b>18+ or abusive messages are not allowed here!</b>')}"
+    warn_text = f" {mention}, {font('<b>18+ or abusive messages are not allowed here!</b>')}"
 
     try:
         warn = await message.reply_text(warn_text, parse_mode=enums.ParseMode.HTML)
@@ -142,16 +142,16 @@ async def filter_bad_words_pyro(client, message: Message):
     if config.LOGS_CHANNEL:
         username = f"@{message.from_user.username}" if message.from_user.username else "No username"
         log_text = f"""
-<b>🚫 Abuse Filter: Message Deleted</b>
+<b> Abuse Filter: Message Deleted</b>
 
-<b>👤 User:</b> {mention}
-<b>🆔 User ID:</b> <code>{user_id}</code>
-<b>🔗 Username:</b> {html.escape(username)}
-<b>🏷️ Group:</b> <code>{html.escape(message.chat.title)}</code>
-<b>🆔 Chat ID:</b> <code>{chat_id}</code>
-<b>💬 Message:</b> <code>{html.escape(text)}</code>
+<b> User:</b> {mention}
+<b> User ID:</b> <code>{user_id}</code>
+<b> Username:</b> {html.escape(username)}
+<b> Group:</b> <code>{html.escape(message.chat.title)}</code>
+<b> Chat ID:</b> <code>{chat_id}</code>
+<b> Message:</b> <code>{html.escape(text)}</code>
 
-<b>🤖 Bot:</b> {BOT_USERNAME}
+<b> Bot:</b> {BOT_USERNAME}
 """
         try:
             await client.send_message(config.LOGS_CHANNEL, log_text, parse_mode=enums.ParseMode.HTML)

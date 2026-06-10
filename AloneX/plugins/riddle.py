@@ -12,14 +12,14 @@ from telegram import constants, Update
 from telegram.ext import CallbackContext, filters
 
 
-__module__ = "𝐑ɪᴅᴅʟᴇ🧠"
+__module__ = "𝐑ɪᴅᴅʟᴇ"
 
 __help__ = """
 *Commands*:
 /riddle
 
 *Description:*  
-🧠 Solve GK questions and riddles with your friends competitively in your group chat!
+ Solve GK questions and riddles with your friends competitively in your group chat!
 
 *Usage:*  
 ❂ `/riddle on|off` — Enable or disable riddles in the chat  
@@ -40,23 +40,23 @@ MAX_COUNT = 10
 
 
 RIDDLE_TEXT = """
-<b>🆎 Type:</b> <code>{type}</code>
-<b>⚔️ Level:</b> <code>{level}</code>
-<b>📝 Category:</b> <code>{category}</code>
+<b> Type:</b> <code>{type}</code>
+<b> Level:</b> <code>{level}</code>
+<b> Category:</b> <code>{category}</code>
 
-<b>⁉️ Question:</b>
+<b> Question:</b>
 <code>{question}</code>
 
-<b>🧠 Options:</b>
+<b> Options:</b>
 <code>{options}</code>
 """
 
 CONGRATS_TEXT = """
-<b>✨ Congratulations, {mention}! 🎉</b>
-<b>⚡ You were the first to solve the riddle! 🧠💡</b>
+<b> Congratulations, {mention}! </b>
+<b> You were the first to solve the riddle! </b>
 """
 
-ERROR_TEXT = "<b>❌ API Error!</b> Unable to fetch riddle. Please try again later."
+ERROR_TEXT = "<b> API Error!</b> Unable to fetch riddle. Please try again later."
 
 async def get_riddle(amount=1, category=9):
     """Fetches a riddle from OpenTDB API."""
@@ -130,7 +130,7 @@ async def check_send_riddle(update: Update, context: CallbackContext):
                 ),
                 parse_mode=constants.ParseMode.HTML,
             )
-            await m.chat.send_message(font("<b>👀 Waiting for an answer...</b>"), parse_mode=constants.ParseMode.HTML)
+            await m.chat.send_message(font("<b> Waiting for an answer...</b>"), parse_mode=constants.ParseMode.HTML)
 
 
 
@@ -145,7 +145,7 @@ async def set_chat_riddle_count(update: Update, context: CallbackContext):
         return await m.reply_text(font("Usage: /setriddle <count> (minimum: 8)"))
 
     success = await update_chat_riddle_count(m.chat.id, int(args[1]))
-    msg = "✅ Successfully updated riddle count!" if success else "❌ Error! Try /riddle first or contact /support."
+    msg = " Successfully updated riddle count!" if success else " Error! Try /riddle first or contact /support."
     
     await m.reply_text(f"<b>{msg}</b>", parse_mode=constants.ParseMode.HTML)      
 
@@ -160,13 +160,13 @@ async def set_chat_riddle(update: Update, context: CallbackContext):
     args = m.text.split()
 
     if len(args) != 2:
-        return await m.reply_text(font("<b>❌ Incorrect usage!</b> Use <code>/riddle on|off</code>."), parse_mode=constants.ParseMode.HTML)
+        return await m.reply_text(font("<b> Incorrect usage!</b> Use <code>/riddle on|off</code>."), parse_mode=constants.ParseMode.HTML)
 
     toggle_options = {"on": True, "off": False}
     user_input = args[1].lower()
 
     if user_input not in toggle_options:
-        return await m.reply_text(font("<b>👀 Incorrect usage!</b> Try <code>/riddle on</code> or <code>/riddle off</code>."), parse_mode=constants.ParseMode.HTML)
+        return await m.reply_text(font("<b> Incorrect usage!</b> Try <code>/riddle on</code> or <code>/riddle off</code>."), parse_mode=constants.ParseMode.HTML)
 
     is_enabled = toggle_options[user_input]
     await update_chat_riddle(m.chat.id, is_enabled)
@@ -178,5 +178,5 @@ async def set_chat_riddle(update: Update, context: CallbackContext):
        if not m.chat.id in CHAT_IDS:
            CHAT_IDS.append(m.chat.id)
 
-    response_text = "<b>✅ Riddle Enabled!</b>" if is_enabled else "<b>✅ Riddle Disabled!</b>"
+    response_text = "<b> Riddle Enabled!</b>" if is_enabled else "<b> Riddle Disabled!</b>"
     await m.reply_text(response_text, parse_mode=constants.ParseMode.HTML)

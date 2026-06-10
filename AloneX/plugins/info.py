@@ -20,7 +20,7 @@ from AloneX.db.sudo import (
 
 logger = logging.getLogger(__name__)
 
-__module__ = '𝐈ɴғᴏℹ️'
+__module__ = '𝐈ɴғᴏ'
 
 __help__ = '''
 Commands:
@@ -49,31 +49,31 @@ whitelist_cache = TTLCache(maxsize=1, ttl=2)
 
 async def get_status_text(user_id: int) -> str:
     if user_id == config.OWNER_ID:
-        return "👑 Owner"
+        return " Owner"
     
     if hasattr(config, "DEV_LIST") and user_id in config.DEV_LIST:
-        return "👨‍💻 Developer ⭐"
+        return " Developer "
     
     if 'sudo' not in sudo_cache:
         db_sudo_users = await get_all_sudo_users()
         config_sudo_users = getattr(config, "SUDO_USERS", [])
         sudo_cache['sudo'] = set(db_sudo_users) | set(config_sudo_users)
     if user_id in sudo_cache['sudo']:
-        return "⚡ Sudo User"
+        return " Sudo User"
     
     if 'support' not in support_cache:
         db_support_users = await get_all_support_users()
         config_support_users = getattr(config, "SUPPORT_USERS", [])
         support_cache['support'] = set(db_support_users) | set(config_support_users)
     if user_id in support_cache['support']:
-        return "🆘 Support User"
+        return " Support User"
     
     if 'whitelist' not in whitelist_cache:
         db_whitelist_users = await get_all_whitelist_users()
         config_whitelist_users = getattr(config, "WHITELIST_USERS", [])
         whitelist_cache['whitelist'] = set(db_whitelist_users) | set(config_whitelist_users)
     if user_id in whitelist_cache['whitelist']:
-        return "✅ Whitelisted"
+        return " Whitelisted"
     
     return ""
 
@@ -163,7 +163,7 @@ def build_chat_info_text(chat: Chat) -> str:
     description = getattr(chat, 'description', None)
     
     text = (
-        f"<b>🔍 Showing {chat_type}'s Profile Info 📋</b>\n"
+        f"<b> Showing {chat_type}'s Profile Info </b>\n"
         "<b>━━━━━━━━━━━━━━━━</b>\n"
         f"<b>Chat Title:</b> <b>{safe_escape(title)}</b>\n"
     )
@@ -191,7 +191,7 @@ def build_chat_info_text(chat: Chat) -> str:
     
     text += (
         "<b>━━━━━━━━━━━━━━━━</b>\n"
-        "<b>👁 Thank You for Using Our Tool ✅</b>"
+        "<b> Thank You for Using Our Tool </b>"
     )
     return text
 
@@ -204,7 +204,7 @@ async def ChatInfo(update, context):
 
     if chat.type == constants.ChatType.PRIVATE and len(m.text.split()) < 2:
         await m.reply_text(
-            "🌚 <b>To check user info, kindly use /user command instead. "
+            " <b>To check user info, kindly use /user command instead. "
             "This command needs a chatId argument.</b>\n"
             "<b>Example:</b> /chat chat_id",
             parse_mode=constants.ParseMode.HTML
@@ -221,7 +221,7 @@ async def ChatInfo(update, context):
         
         if not (str(chat_id).startswith("@") or str(chat_id).startswith("-100")):
             msg = await msg_task
-            await msg.edit_text(font("🙋 <b>Give only a valid chat username or chat_id.</b>"),
+            await msg.edit_text(font(" <b>Give only a valid chat username or chat_id.</b>"),
                                parse_mode=constants.ParseMode.HTML)
             return
 
@@ -246,7 +246,7 @@ async def ChatInfo(update, context):
         await msg.edit_text(text=text, parse_mode=constants.ParseMode.HTML)
         
     except Exception as e:
-        await msg.edit_text(f"❌ <b>ERROR:</b> {html.escape(str(e))}", 
+        await msg.edit_text(f" <b>ERROR:</b> {html.escape(str(e))}", 
                            parse_mode=constants.ParseMode.HTML)
 
 @Command(['user', 'info'])
@@ -281,7 +281,7 @@ async def UserInfo(update, context):
             
     except Exception as e:
         msg = await msg_task
-        await msg.edit_text(f"❌ ERROR: {html.escape(str(e))}", 
+        await msg.edit_text(f" ERROR: {html.escape(str(e))}", 
                            parse_mode=constants.ParseMode.HTML)
         return
 
@@ -300,7 +300,7 @@ async def UserInfo(update, context):
     profile_type = "Bot's Profile Info" if is_bot else "User's Profile Info"
     
     text = (
-        f"<b>🔍 Showing {profile_type} 📋</b>\n"
+        f"<b> Showing {profile_type} </b>\n"
         "<b>━━━━━━━━━━━━━━━━</b>\n"
         f"<b>Full Name:</b> <b>{safe_escape(full_name)}</b>\n"
     )
@@ -332,9 +332,9 @@ async def UserInfo(update, context):
         try:
             member = await bot.get_chat_member(chat.id, user.id)
             if member.status == constants.ChatMemberStatus.OWNER:
-                status = f"{status} | 👑 Group Owner" if status else "👑 Group Owner"
+                status = f"{status} |  Group Owner" if status else " Group Owner"
             elif member.status == constants.ChatMemberStatus.ADMINISTRATOR:
-                status = f"{status} | 🛡️ Admin" if status else "🛡️ Admin"
+                status = f"{status} |  Admin" if status else " Admin"
         except:
             pass
 
@@ -364,12 +364,12 @@ async def UserInfo(update, context):
     text += (
         f"<b>Permanent Link:</b> <a href='tg://user?id={user.id}'>Click Here</a>\n"
         "<b>━━━━━━━━━━━━━━━━</b>\n"
-        "<b>👁 Thank You for Using Our Tool ✅</b>"
+        "<b> Thank You for Using Our Tool </b>"
     )
 
     keyboard = None
     try:
-        keyboard = InlineKeyboardMarkup([[InlineKeyboardButton(f"📋 {full_name}", url=f"tg://user?id={user.id}")]])
+        keyboard = InlineKeyboardMarkup([[InlineKeyboardButton(f" {full_name}", url=f"tg://user?id={user.id}")]])
     except:
         pass
 
@@ -414,12 +414,12 @@ async def _getTelegramID(update, context):
                 return
 
             user = await bot.get_chat(user_id)
-            text = (f"👤 User: `{user.first_name}`\n"
-                   f"🆔 User ID: `{user.id}`")
+            text = (f" User: `{user.first_name}`\n"
+                   f" User ID: `{user.id}`")
 
             try:
                 keyboard = InlineKeyboardMarkup(
-                    [[InlineKeyboardButton(font("📢 Mention"), url=f"tg://user?id={user.id}")]]
+                    [[InlineKeyboardButton(font(" Mention"), url=f"tg://user?id={user.id}")]]
                 )
                 await message.reply_text(text, parse_mode=constants.ParseMode.MARKDOWN, 
                                        reply_markup=keyboard)
@@ -429,27 +429,27 @@ async def _getTelegramID(update, context):
                 else:
                     raise
         except Exception as e:
-            await message.reply_text(f"❌ Error: `{str(e)}`", parse_mode=constants.ParseMode.MARKDOWN)
+            await message.reply_text(f" Error: `{str(e)}`", parse_mode=constants.ParseMode.MARKDOWN)
         return
 
     sender_id = message.sender_chat.id if message.sender_chat else message.from_user.id
-    text = (f"👤 Your Tg ID: `{sender_id}`\n"
-           f"💬 Chat ID: `{message.chat.id}`\n"
-           f"📝 Msg ID: `{message.message_id}`")
+    text = (f" Your Tg ID: `{sender_id}`\n"
+           f" Chat ID: `{message.chat.id}`\n"
+           f" Msg ID: `{message.message_id}`")
 
     if reply:
         reply_sender_id = reply.sender_chat.id if reply.sender_chat else reply.from_user.id
-        text += (f"\n👤 Replied Tg ID: `{reply_sender_id}`"
-                f"\n📝 Replied Msg ID: `{reply.message_id}`")
+        text += (f"\n Replied Tg ID: `{reply_sender_id}`"
+                f"\n Replied Msg ID: `{reply.message_id}`")
 
         if reply.forward_origin:
             if getattr(reply.forward_origin, 'sender_user', None):
-                text += f"\n👤 Forward Tg ID: `{reply.forward_origin.sender_user.id}`"
+                text += f"\n Forward Tg ID: `{reply.forward_origin.sender_user.id}`"
             elif getattr(reply.forward_origin, 'chat', None):
-                text += f"\n📢 Forward Chat ID: `{reply.forward_origin.chat.id}`"
+                text += f"\n Forward Chat ID: `{reply.forward_origin.chat.id}`"
 
         media_type, media_id = get_media_id(reply)
         if media_type and media_id:
-            text += f"\n📁 {media_type.capitalize()} ID: `{media_id}`"
+            text += f"\n {media_type.capitalize()} ID: `{media_id}`"
 
     await message.reply_text(text=text, parse_mode=constants.ParseMode.MARKDOWN)

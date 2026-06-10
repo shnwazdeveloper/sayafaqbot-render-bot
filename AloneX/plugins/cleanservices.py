@@ -1,5 +1,5 @@
 from AloneX import font
-__module__ = "𝐂ʟᴇᴀɴ-𝐒ᴇʀᴠɪᴄᴇ🈂️"
+__module__ = "𝐂ʟᴇᴀɴ-𝐒ᴇʀᴠɪᴄᴇ"
 __help__ = """
 ❂ *CleanService Module* — Auto-delete service messages in groups.
 
@@ -97,16 +97,16 @@ async def cleanservice(update: Update, context: ContextTypes.DEFAULT_TYPE):
         new_clean = {"all"} | keeps
         await save_clean_settings(chat_id, new_clean)
         cache_settings(chat_id, new_clean)
-        asyncio.create_task(msg.reply_text(font("✅ Enabled cleaning **all service messages**.")))
+        asyncio.create_task(msg.reply_text(font(" Enabled cleaning **all service messages**.")))
         return
     if arg in ("no", "off"):
         await save_clean_settings(chat_id, set())
         invalidate_settings_cache(chat_id)
-        asyncio.create_task(msg.reply_text(font("🚫 Disabled cleaning service messages.")))
+        asyncio.create_task(msg.reply_text(font(" Disabled cleaning service messages.")))
         return
     if arg not in SERVICE_TYPES:
         asyncio.create_task(msg.reply_text(
-            f"❌ Invalid type: `{arg}`\nUse /cleanservicetypes to see all available types.",
+            f" Invalid type: `{arg}`\nUse /cleanservicetypes to see all available types.",
             parse_mode="Markdown"
         ))
         return
@@ -115,7 +115,7 @@ async def cleanservice(update: Update, context: ContextTypes.DEFAULT_TYPE):
     clean_types.add(arg)
     await save_clean_settings(chat_id, clean_types)
     cache_settings(chat_id, clean_types)
-    asyncio.create_task(msg.reply_text(f"✅ Now cleaning **{arg}** messages."))
+    asyncio.create_task(msg.reply_text(f" Now cleaning **{arg}** messages."))
 
 @Command(["keepservice", "nocleanservice"])
 @only_groups
@@ -134,7 +134,7 @@ async def keepservice(update: Update, context: ContextTypes.DEFAULT_TYPE):
     clean_types = await get_clean_settings(chat_id) or set()
     if arg not in SERVICE_TYPES:
         asyncio.create_task(msg.reply_text(
-            f"❌ Invalid type: `{arg}`\nUse /cleanservicetypes to see all available types.",
+            f" Invalid type: `{arg}`\nUse /cleanservicetypes to see all available types.",
             parse_mode="Markdown"
         ))
         return
@@ -145,23 +145,23 @@ async def keepservice(update: Update, context: ContextTypes.DEFAULT_TYPE):
             await save_clean_settings(chat_id, clean_types)
             cache_settings(chat_id, clean_types)
             asyncio.create_task(msg.reply_text(
-                f"✅ No longer keeping **{arg}** messages (they will be deleted in 'all' mode)."
+                f" No longer keeping **{arg}** messages (they will be deleted in 'all' mode)."
             ))
         else:
             clean_types.add(keep_key)
             await save_clean_settings(chat_id, clean_types)
             cache_settings(chat_id, clean_types)
             asyncio.create_task(msg.reply_text(
-                f"✅ Keeping **{arg}** messages while 'all' cleaning is enabled."
+                f" Keeping **{arg}** messages while 'all' cleaning is enabled."
             ))
         return
     if arg in clean_types:
         clean_types.remove(arg)
         await save_clean_settings(chat_id, clean_types)
         cache_settings(chat_id, clean_types)
-        asyncio.create_task(msg.reply_text(f"✅ No longer cleaning **{arg}** messages."))
+        asyncio.create_task(msg.reply_text(f" No longer cleaning **{arg}** messages."))
     else:
-        asyncio.create_task(msg.reply_text(f"⚠️ `{arg}` was not being cleaned.", parse_mode="Markdown"))
+        asyncio.create_task(msg.reply_text(f" `{arg}` was not being cleaned.", parse_mode="Markdown"))
 
 @Command("cleanservicetypes")
 @only_groups

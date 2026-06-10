@@ -1,6 +1,6 @@
 from AloneX import font
 
-__module__ = "𝐂ʟᴇᴀɴ-𝐂ᴍᴅs🧹"
+__module__ = "𝐂ʟᴇᴀɴ-𝐂ᴍᴅs"
 
 __help__ = """
 ❂ *CleanCommand Module* — Auto-delete commands in groups.
@@ -83,9 +83,9 @@ async def status_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     clean_type = await get_clean_type(chat_id)
     
     if clean_type:
-        text = f"✅ **Cleaning enabled**\n**Type:** `{clean_type}`"
+        text = f" **Cleaning enabled**\n**Type:** `{clean_type}`"
     else:
-        text = "❌ **Cleaning disabled**"
+        text = " **Cleaning disabled**"
     
     await update.effective_message.reply_text(text, parse_mode="Markdown")
 
@@ -114,7 +114,7 @@ async def clean_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     
     if clean_type not in VALID_TYPES:
         await update.effective_message.reply_text(
-            f"❌ Invalid type: `{clean_type}`\n\n"
+            f" Invalid type: `{clean_type}`\n\n"
             f"Valid types: {', '.join(VALID_TYPES)}",
             parse_mode="Markdown"
         )
@@ -125,7 +125,7 @@ async def clean_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     cache_settings(chat_id, clean_type)
     
     await update.effective_message.reply_text(
-        f"✅ Cleaning enabled: **{clean_type}**",
+        f" Cleaning enabled: **{clean_type}**",
         parse_mode="Markdown"
     )
 
@@ -137,7 +137,7 @@ async def clean_off_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     chat_id = update.effective_chat.id
     await disable_cleaning(chat_id)
     clear_chat_cache(chat_id)
-    await update.effective_message.reply_text(font("✅ Cleaning **disabled**"), parse_mode="Markdown")
+    await update.effective_message.reply_text(font(" Cleaning **disabled**"), parse_mode="Markdown")
 
 
 @Messages(filters=filters.COMMAND, group=-76)

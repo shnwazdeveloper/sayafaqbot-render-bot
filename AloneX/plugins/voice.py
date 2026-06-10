@@ -10,7 +10,7 @@ user_txt = {}
 
 
 
-__module__ = "𝐕ᴏɪᴄᴇ🎤"
+__module__ = "𝐕ᴏɪᴄᴇ"
 
 __help__ = """
 *Voice*
@@ -94,7 +94,7 @@ def keyboard_buttons(user_id: int):
               row = []
      if row:
          buttons.append(row)
-     buttons.append([types.InlineKeyboardButton(font('❌ Close'), callback_data=f'pyrodel#{user_id}', style=enums.ButtonStyle.DANGER)])
+     buttons.append([types.InlineKeyboardButton(font(' Close'), callback_data=f'pyrodel#{user_id}', style=enums.ButtonStyle.DANGER)])
      return buttons
      
      
@@ -114,9 +114,9 @@ async def voice_cq(_, query: types.CallbackQuery):
                 await query.message.edit("Analysing Audio ...")
                 audio_bytes = await text_to_voice(text, voice_id)
                 if 'error' in audio_bytes:
-                     return await query.message.edit(f"❌ ERROR: {audio_bytes['error']}")
+                     return await query.message.edit(f" ERROR: {audio_bytes['error']}")
                 else:
-                     await query.message.edit("🗣️ **Audio preparing ...**")
+                     await query.message.edit(" **Audio preparing ...**")
                      path = f"voice_{query.id}.mp3"
                      with open(path, "wb") as file:
                            file.write(audio_bytes['audio_data'])

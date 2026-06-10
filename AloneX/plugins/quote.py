@@ -1,9 +1,9 @@
-__module__ = "𝐐ᴜᴏᴛʟʏ✨"
+__module__ = "𝐐ᴜᴏᴛʟʏ"
 __help__ = """
 *Commands*:
 /q
 *Description:*
-📌 Reply to a message to convert it into a stylish quote sticker.
+ Reply to a message to convert it into a stylish quote sticker.
 *Usage:*
 ❂ `/q [number] [color] [r/reply]` — Quote messages in your preferred style and color
 *Available Colors:*

@@ -7,9 +7,9 @@ from telethon.tl.types import ChannelParticipantAdmin, ChannelParticipantCreator
 from AloneX import tbot, prefix_cmds, LOGGER
 import logging
 
-__module__ = "𝐓ᴀɢ-𝐀ʟʟ📣"
+__module__ = "𝐓ᴀɢ-𝐀ʟʟ"
 __help__ = """
-❂ *Tag All📣*
+❂ *Tag All*
 
 ❂ *Description:*
 Mention all members in your group quickly and efficiently. Useful for important announcements.

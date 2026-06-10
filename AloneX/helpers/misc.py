@@ -75,13 +75,13 @@ async def get_help_button(message, user):
     nav_buttons = []
     
     if len(buttons) > 1:
-        nav_buttons.append(InlineKeyboardButton(_font_cached("❌ Close"), callback_data=f"delete#{user.id}", style=ButtonStyle.DANGER))
-        nav_buttons.append(InlineKeyboardButton(_font_cached("➡️ Next"), callback_data=f"helpcq_next#{user.id}#{page_number}", style=ButtonStyle.PRIMARY))
+        nav_buttons.append(InlineKeyboardButton(_font_cached(" Close"), callback_data=f"delete#{user.id}", style=ButtonStyle.DANGER))
+        nav_buttons.append(InlineKeyboardButton(_font_cached(" Next"), callback_data=f"helpcq_next#{user.id}#{page_number}", style=ButtonStyle.PRIMARY))
     else:
-        nav_buttons.append(InlineKeyboardButton(_font_cached("❌ Close"), callback_data=f"delete#{user.id}", style=ButtonStyle.DANGER))
+        nav_buttons.append(InlineKeyboardButton(_font_cached(" Close"), callback_data=f"delete#{user.id}", style=ButtonStyle.DANGER))
     
     current_page.append(nav_buttons)
-    current_page.append([InlineKeyboardButton(font("🔄 Back"), callback_data=f"back_{user.id}", style=ButtonStyle.PRIMARY)])
+    current_page.append([InlineKeyboardButton(font(" Back"), callback_data=f"back_{user.id}", style=ButtonStyle.PRIMARY)])
     
     result = InlineKeyboardMarkup(inline_keyboard=current_page)
     _MODULE_BUTTONS_CACHE[cache_key] = result

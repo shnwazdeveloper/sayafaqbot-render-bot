@@ -25,7 +25,7 @@ async def initialize_chats():
                 "clear": doc.get("clear", False),
             }
         _last_refresh = time.time()
-        print(f"✅ Initialized {len(_chat_ids_set)} flood chats")
+        print(f" Initialized {len(_chat_ids_set)} flood chats")
     except Exception as e:
         print(f"Error initializing flood chats: {e}")
 

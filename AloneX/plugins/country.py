@@ -8,10 +8,10 @@ from telegram import constants, InlineKeyboardMarkup, InlineKeyboardButton
 
 
 
-__module__ = "𝐂ᴏᴜɴᴛʀʏ🌍"
+__module__ = "𝐂ᴏᴜɴᴛʀʏ"
 
 __help__ = """
-*𝐂ᴏᴜɴᴛʀʏ🌍*
+*𝐂ᴏᴜɴᴛʀʏ*
 
 *Description:*  
 Get information about countries and regions around the world.
@@ -71,7 +71,7 @@ VALID_COUNTRIES = [
     "yemen", "south africa", "zambia", "zimbabwe"
 ]
 
-COUNTRIES_TXT = f""" \n🌐 *Country Names*:
+COUNTRIES_TXT = f""" \n *Country Names*:
 
 ```Aruba
 Afghanistan
@@ -324,13 +324,13 @@ South Africa
 Zambia
 Zimbabwe```
 
-❤️ *By {config.BOT_USERNAME}*
+ *By {config.BOT_USERNAME}*
 """
 
 
 REGIONS_TXT = f"""\n
-*🌎 Country Regions*:
-❤️ *By {config.BOT_USERNAME}*
+* Country Regions*:
+ *By {config.BOT_USERNAME}*
 """
 
 
@@ -374,7 +374,7 @@ async def country_info(name: str):
                 if response.status == 200:
                     data = await response.json()
                     if not data:
-                        return None, f"❌ No results found for *{name}*"
+                        return None, f" No results found for *{name}*"
                     info = data[0]
 
                     # Basic
@@ -389,8 +389,8 @@ async def country_info(name: str):
                     demonym = info.get("demonyms", {}).get("eng", {}).get("m", "N/A")
                     gini = info.get("gini", {})
                     gini_info = ", ".join([f"{year}: {value}" for year, value in gini.items()]) or "N/A"
-                    independent = "✅ Yes" if info.get("independent", False) else "❌ No"
-                    un_member = "✅ Yes" if info.get("unMember", False) else "❌ No"
+                    independent = " Yes" if info.get("independent", False) else " No"
+                    un_member = " Yes" if info.get("unMember", False) else " No"
 
                     # Currencies + Languages
                     currencies = [
@@ -410,39 +410,39 @@ async def country_info(name: str):
 
                     caption = (
                         f"{flag} *{common_name}* ({official_name})\n\n"
-                        f"🏙️ *Capital*: {', '.join(info.get('capital', ['N/A']))}\n"
-                        f"®️ *Region*: {info.get('region', 'N/A')} / {info.get('subregion', 'N/A')}\n"
-                        f"📍 *Coordinates*: {latlng}\n"
-                        f"🕰️ *Timezones*: {timezones}\n"
-                        f"👨‍👩‍👧‍👦 *Population*: {info.get('population', 0):,}\n"
-                        f"🌍 *Area*: {info.get('area', 0):,} sq. km\n"
-                        f"👑 *Demonym*: {demonym}\n"
-                        f"💰 *Currencies*: {', '.join(currencies) if currencies else 'N/A'}\n"
-                        f"🗣️ *Languages*: {', '.join(languages) if languages else 'N/A'}\n"
-                        f"📈 *Gini Index*: {gini_info}\n"
-                        f"⚔️ *Borders*: {borders}\n"
-                        f"🏳️ *Independent*: {independent}\n"
-                        f"🇺🇳 *UN Member*: {un_member}\n\n"
-                        f"✨ By {config.BOT_USERNAME}"
+                        f" *Capital*: {', '.join(info.get('capital', ['N/A']))}\n"
+                        f" *Region*: {info.get('region', 'N/A')} / {info.get('subregion', 'N/A')}\n"
+                        f" *Coordinates*: {latlng}\n"
+                        f" *Timezones*: {timezones}\n"
+                        f" *Population*: {info.get('population', 0):,}\n"
+                        f" *Area*: {info.get('area', 0):,} sq. km\n"
+                        f" *Demonym*: {demonym}\n"
+                        f" *Currencies*: {', '.join(currencies) if currencies else 'N/A'}\n"
+                        f" *Languages*: {', '.join(languages) if languages else 'N/A'}\n"
+                        f" *Gini Index*: {gini_info}\n"
+                        f" *Borders*: {borders}\n"
+                        f" *Independent*: {independent}\n"
+                        f" *UN Member*: {un_member}\n\n"
+                        f" By {config.BOT_USERNAME}"
                     )
 
                     # Inline buttons
                     buttons = [
                         [
-                            InlineKeyboardButton(font("🗺️ Maps"), url=map_google),
-                            InlineKeyboardButton(font("🗺️ Street"), url=map_osm),
+                            InlineKeyboardButton(font(" Maps"), url=map_google),
+                            InlineKeyboardButton(font(" Street"), url=map_osm),
                         ]
                     ]
                     if coat_url:
-                        buttons.append([InlineKeyboardButton(font("⚜️ Coat of Arms"), url=coat_url)])
+                        buttons.append([InlineKeyboardButton(font(" Coat of Arms"), url=coat_url)])
 
                     return (flag_url, caption, InlineKeyboardMarkup(buttons))
                 else:
-                    return None, f"❌ Error: Country '{name}' not found (Status code: {response.status})"
+                    return None, f" Error: Country '{name}' not found (Status code: {response.status})"
     except aiohttp.ClientError as e:
-        return None, f"❌ Error connecting to the API: {str(e)}"
+        return None, f" Error connecting to the API: {str(e)}"
     except Exception as e:
-        return None, f"❌ An unexpected error occurred: {str(e)}"
+        return None, f" An unexpected error occurred: {str(e)}"
 
 
 @Command('country')
@@ -451,7 +451,7 @@ async def countryInfo(update, context):
     
     if len(m.text.split()) <= 1:
         return await m.reply_text(
-            '❌ *Country name not provided!*\n\n'
+            ' *Country name not provided!*\n\n'
             'Usage: `/country <country_name>`\n'
             'Example: `/country india`\n\n'
             'Use `/countries` to see the list of available countries.',
@@ -467,14 +467,14 @@ async def countryInfo(update, context):
         if suggestions:
             suggestion_text = "\n".join([f"• {country}" for country in suggestions])
             error_message = (
-                f"❌ *'{country_name}' is not in our country list!*\n\n"
-                f"🤔 *Did you mean:*\n{suggestion_text}\n\n"
-                f"💡 Use `/countries` to see all available countries."
+                f" *'{country_name}' is not in our country list!*\n\n"
+                f" *Did you mean:*\n{suggestion_text}\n\n"
+                f" Use `/countries` to see all available countries."
             )
         else:
             error_message = (
-                f"❌ *'{country_name}' is not in our country list!*\n\n"
-                f"💡 Use `/countries` to see all available countries or try a different spelling."
+                f" *'{country_name}' is not in our country list!*\n\n"
+                f" Use `/countries` to see all available countries or try a different spelling."
             )
         
         return await m.reply_text(error_message, parse_mode=constants.ParseMode.MARKDOWN)
@@ -499,6 +499,6 @@ async def countryInfo(update, context):
             
     except Exception as e:
         await m.reply_text(
-            f"❌ *An error occurred while fetching country information:*\n`{str(e)}`",
+            f" *An error occurred while fetching country information:*\n`{str(e)}`",
             parse_mode=constants.ParseMode.MARKDOWN
         )

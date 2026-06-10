@@ -8,10 +8,10 @@ import os
 import config
 
 
-__module__ = "𝐒ᴇᴀʀᴄʜ-𝐓ᴏᴏʟs⚙️"
+__module__ = "𝐒ᴇᴀʀᴄʜ-𝐓ᴏᴏʟs"
 
 __help__ = """
-⚡ **Help for the module:** SEARCH TOOLS
+ **Help for the module:** SEARCH TOOLS
 
 **Commands:**  
 `/sof`, `/wiki`, `/ytsearch`, `/gfg`
@@ -34,14 +34,14 @@ def remove_html_tags(text):
 @bot.on_message(filters.command('gfg') & ~filters.forwarded)
 async def greekforgreeks_func(_, message):
        if len(message.text.split()) == 1:
-          return await message.reply(font('💭 **Example**: `/gfg writing files in python`'))
+          return await message.reply(font(' **Example**: `/gfg writing files in python`'))
        else:
           query = message.text.split(maxsplit=1)[1]
           data = await search_gfg(query, 10)
           if not data:
-             return await message.reply(font("❌ **No results found!**"))
+             return await message.reply(font(" **No results found!**"))
           
-          text = "<b>🔎 Greek For Greeks Search</b>:\n\n"
+          text = "<b> Greek For Greeks Search</b>:\n\n"
           for idx, d in enumerate(data, start=1):
               text += "<b>{index}, <a href='{link}'>{title}</a></b>\n".format(index=idx, link=d['url'], title=html.escape(d['title']))
           
@@ -53,14 +53,14 @@ async def greekforgreeks_func(_, message):
 @bot.on_message(filters.command('wiki') & ~filters.forwarded)
 async def Wikipedia_func(_, message):
        if len(message.text.split()) == 1:
-          return await message.reply(font('💭 **Example**: `/wiki Elon musk`'))
+          return await message.reply(font(' **Example**: `/wiki Elon musk`'))
        else:
           query = message.text.split(maxsplit=1)[1]
           data = await search_wikipedia(query, 10)
           if not data:
-             return await message.reply(font("❌ **No results found!**"))
+             return await message.reply(font(" **No results found!**"))
           
-          text = "<b>🔎 Wikipedia Search</b>:\n\n"
+          text = "<b> Wikipedia Search</b>:\n\n"
           for idx, d in enumerate(data, start=1):
               text += "<b>{index}, <a href='{link}'>{title}</a></b>\n".format(index=idx, link=d['url'], title=html.escape(d['title']))
           
@@ -75,14 +75,14 @@ async def Wikipedia_func(_, message):
 @bot.on_message(filters.command('ytsearch') & ~filters.forwarded)
 async def youtubeSearch_func(_, message):
        if len(message.text.split()) == 1:
-          return await message.reply(font('💭 **Example**: `/ytsearch nandhaxd`'))
+          return await message.reply(font(' **Example**: `/ytsearch nandhaxd`'))
        else:
           query = message.text.split(maxsplit=1)[1]
           data = await search_youtube(query, 10)
           if not data:
-             return await message.reply(font("❌ **No results found!**"))
+             return await message.reply(font(" **No results found!**"))
           
-          text = "<b>🔎 YouTube Search</b>:\n\n"
+          text = "<b> YouTube Search</b>:\n\n"
           for idx, d in enumerate(data, start=1):
               text += "<b>{index}, <a href='{link}'>{title}</a></b>\n".format(index=idx, link=d['url'], title=html.escape(d['title']))
          
@@ -118,7 +118,7 @@ async def stackflow(_, message):
             async with session.get(url, params=params) as response:
                 r = await response.json()
         
-        hasil = "<b>🔎 StackOverFlow Results</b>:\n\n"
+        hasil = "<b> StackOverFlow Results</b>:\n\n"
         for count, data in enumerate(r["items"], start=1):
             question = data["question_id"]
             title = data["title"]

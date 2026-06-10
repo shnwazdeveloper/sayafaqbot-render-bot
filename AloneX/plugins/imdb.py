@@ -14,7 +14,7 @@ __help__ = '''
 ✪ /imdb
 '''
 
-__module__ = '𝐈ᴍᴅʙ👤'
+__module__ = '𝐈ᴍᴅʙ'
 
 
 async def search_imdb(name: str):
@@ -45,18 +45,18 @@ async def imdb_search(_, message):
 
     data = await search_imdb(query)
     if not data:
-        return await message.reply_text(font('❌ **Movie not found.**'))
+        return await message.reply_text(font(' **Movie not found.**'))
 
     # Limit to top 5 results
     for d in data[:5]:
         caption = (
-            f"🎬 **Title:** `{d['title']}`\n"
-            f"📅 **Year:** `{d['year']}`\n"
-            f"⭐ **Rating:** `{d['rating']} / 10` ({d['votes']} votes)\n"
-            f"🆔 **IMDb ID:** `{d['id']}`"
+            f" **Title:** `{d['title']}`\n"
+            f" **Year:** `{d['year']}`\n"
+            f" **Rating:** `{d['rating']} / 10` ({d['votes']} votes)\n"
+            f" **IMDb ID:** `{d['id']}`"
         )
 
-        buttons = [[InlineKeyboardButton(font("🔗 IMDb Link"), url=d['url'], style=ButtonStyle.SUCCESS)]]
+        buttons = [[InlineKeyboardButton(font(" IMDb Link"), url=d['url'], style=ButtonStyle.SUCCESS)]]
 
         if d['media']:
             await message.reply_photo(

@@ -55,7 +55,7 @@ async def gitconfig(update: Update, context: ContextTypes.DEFAULT_TYPE):
     email = context.args[1]
     token = context.args[2]
     TEMP_CONFIG.update({"name": name, "email": email, "token": token, "timestamp": time.time()})
-    await m.reply_text(font("✅ ɢɪᴛʜᴜʙ ᴄᴏɴꜰɪɢ sᴇᴛ sᴜᴄᴄᴇssғᴜʟʟʏ! (ᴠᴀʟɪᴅ ꜰᴏʀ 5 ᴍɪɴᴜᴛᴇs)"))
+    await m.reply_text(font(" ɢɪᴛʜᴜʙ ᴄᴏɴꜰɪɢ sᴇᴛ sᴜᴄᴄᴇssғᴜʟʟʏ! (ᴠᴀʟɪᴅ ꜰᴏʀ 5 ᴍɪɴᴜᴛᴇs)"))
 
 
 @Command(["gitupload", "gt"])
@@ -72,7 +72,7 @@ async def gitupload(update: Update, context: ContextTypes.DEFAULT_TYPE):
         )
 
     if not config_valid():
-        return await m.reply_text(font("⚠️ ᴄᴏɴꜰɪɢ ᴇxᴘɪʀᴇᴅ ᴏʀ ɴᴏᴛ sᴇᴛ!\n\n» ᴘʟᴇᴀsᴇ ʀᴜɴ `/gitconfig` ғɪʀsᴛ."))
+        return await m.reply_text(font(" ᴄᴏɴꜰɪɢ ᴇxᴘɪʀᴇᴅ ᴏʀ ɴᴏᴛ sᴇᴛ!\n\n» ᴘʟᴇᴀsᴇ ʀᴜɴ `/gitconfig` ғɪʀsᴛ."))
 
     GITHUB_NAME = TEMP_CONFIG["name"]
     GITHUB_EMAIL = TEMP_CONFIG["email"]
@@ -86,7 +86,7 @@ async def gitupload(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     replied = m.reply_to_message
     if not (replied and replied.document and replied.document.file_name.endswith(".zip")):
-        return await m.reply_text(font("⚠️ ᴘʟᴇᴀsᴇ ʀᴇᴘʟʏ ᴛᴏ ᴀ ᴢɪᴘ ғɪʟᴇ!"))
+        return await m.reply_text(font(" ᴘʟᴇᴀsᴇ ʀᴇᴘʟʏ ᴛᴏ ᴀ ᴢɪᴘ ғɪʟᴇ!"))
 
     zip_path = os.path.join(TEMP_DIR, replied.document.file_name)
     extract_root = os.path.join(TEMP_DIR, f"{repo_name}_extract")
@@ -97,7 +97,7 @@ async def gitupload(update: Update, context: ContextTypes.DEFAULT_TYPE):
     safe_rm(final_path)
 
 
-    status = await m.reply_text(font("⏳ ᴘʀᴏᴄᴇssɪɴɢ ʏᴏᴜʀ ʀᴇqᴜᴇsᴛ..."))
+    status = await m.reply_text(font(" ᴘʀᴏᴄᴇssɪɴɢ ʏᴏᴜʀ ʀᴇqᴜᴇsᴛ..."))
 
     try:
         file = await bot.get_file(replied.document.file_id)
@@ -147,7 +147,7 @@ async def gitupload(update: Update, context: ContextTypes.DEFAULT_TYPE):
         safe_rm(final_path)
         if status:
             await status.delete()
-        return await m.reply_text(f"❌ ᴇʀʀᴏʀ :- `{str(e)}`", parse_mode=constants.ParseMode.MARKDOWN)
+        return await m.reply_text(f" ᴇʀʀᴏʀ :- `{str(e)}`", parse_mode=constants.ParseMode.MARKDOWN)
 
     # Cleanup
     safe_rm(zip_path)
@@ -155,9 +155,9 @@ async def gitupload(update: Update, context: ContextTypes.DEFAULT_TYPE):
     safe_rm(final_path)
     await status.delete()
     await m.reply_text(
-        f"✅ ʀᴇᴘᴏ `{repo_name}` ᴜᴘʟᴏᴀᴅᴇᴅ sᴜᴄᴄᴇssғᴜʟʟʏ!\n\n"
-        f"🔒 ᴠɪsɪʙɪʟɪᴛʏ :- `{'Private' if is_private else 'Public'}`\n"
-        f"🌿 ʙʀᴀɴᴄʜ :- `{branch_name}`\n\n"
-        f"🔗 ᴜʀʟ :- {repo.html_url}",
+        f" ʀᴇᴘᴏ `{repo_name}` ᴜᴘʟᴏᴀᴅᴇᴅ sᴜᴄᴄᴇssғᴜʟʟʏ!\n\n"
+        f" ᴠɪsɪʙɪʟɪᴛʏ :- `{'Private' if is_private else 'Public'}`\n"
+        f" ʙʀᴀɴᴄʜ :- `{branch_name}`\n\n"
+        f" ᴜʀʟ :- {repo.html_url}",
         parse_mode=constants.ParseMode.MARKDOWN
     )

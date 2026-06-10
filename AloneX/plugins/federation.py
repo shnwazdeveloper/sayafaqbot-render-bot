@@ -18,9 +18,9 @@ from AloneX.db.federation_db import (
     set_quiet_fed, is_quiet_fed, get_user_feds
 )
 
-__module__ = "𝐅ᴇᴅᴇʀᴀᴛɪᴏɴ⚖️"
+__module__ = "𝐅ᴇᴅᴇʀᴀᴛɪᴏɴ"
 __help__ = """
-*Federation⚖️*
+*Federation*
 
 *Owner Commands:*
 ❂ `/newfed <name>` – Create a new federation
@@ -72,45 +72,45 @@ async def newfed_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
     m = update.effective_message
     u = update.effective_user
     if m.chat.type != constants.ChatType.PRIVATE:
-        return await m.reply_text(font("❌ This command only works in PM."))
+        return await m.reply_text(font(" This command only works in PM."))
 
     if not context.args:
-        return await m.reply_text(font("🙋‍♂️ Please provide a name for your federation."))
+        return await m.reply_text(font(" Please provide a name for your federation."))
 
     existing = await get_fed_by_owner(u.id)
     if existing:
-        return await m.reply_text(f"❌ You already own a federation: `{existing['fed_name']}` (ID: `{existing['fed_id']}`)")
+        return await m.reply_text(f" You already own a federation: `{existing['fed_name']}` (ID: `{existing['fed_id']}`)")
 
     fed_name = " ".join(context.args)
     fed_id = await create_fed(u.id, fed_name)
-    await m.reply_text(f"✅ **Federation Created!**\n**Name:** `{fed_name}`\n**ID:** `{fed_id}`\n\nUse `/joinfed {fed_id}` in your groups to link them.")
+    await m.reply_text(f" **Federation Created!**\n**Name:** `{fed_name}`\n**ID:** `{fed_id}`\n\nUse `/joinfed {fed_id}` in your groups to link them.")
 
 @Command("renamefed")
 async def renamefed_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
     u = update.effective_user
     fed = await get_fed_by_owner(u.id)
     if not fed:
-        return await update.effective_message.reply_text("❌ You don't own a federation.")
+        return await update.effective_message.reply_text(" You don't own a federation.")
 
     if not context.args:
-        return await update.effective_message.reply_text(font("🙋‍♂️ Please provide a new name."))
+        return await update.effective_message.reply_text(font(" Please provide a new name."))
 
     new_name = " ".join(context.args)
     await rename_fed(fed['fed_id'], new_name)
-    await update.effective_message.reply_text(f"✅ Federation renamed to `{new_name}`.")
+    await update.effective_message.reply_text(f" Federation renamed to `{new_name}`.")
 
 @Command("delfed")
 async def delfed_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
     u = update.effective_user
     fed = await get_fed_by_owner(u.id)
     if not fed:
-        return await update.effective_message.reply_text("❌ You don't own a federation.")
+        return await update.effective_message.reply_text(" You don't own a federation.")
 
     kb = InlineKeyboardMarkup([[
         InlineKeyboardButton(font("Yes, Delete"), callback_data=f"fed_del:{fed['fed_id']}"),
         InlineKeyboardButton(font("Cancel"), callback_data="close_admin")
     ]])
-    await update.effective_message.reply_text(f"⚠️ **Are you sure?**\nDeleting `{fed['fed_name']}` will unlink all chats. This cannot be undone.", reply_markup=kb)
+    await update.effective_message.reply_text(f" **Are you sure?**\nDeleting `{fed['fed_name']}` will unlink all chats. This cannot be undone.", reply_markup=kb)
 
 @Command("fedpromote")
 async def fedpromote_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -118,22 +118,22 @@ async def fedpromote_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
     u = update.effective_user
     fed = await get_fed_by_owner(u.id)
     if not fed:
-        return await m.reply_text("❌ You don't own a federation.")
+        return await m.reply_text(" You don't own a federation.")
 
     user_id = await extract_user(m)
     if not user_id:
-        return await m.reply_text(font("🙋‍♂️ Mention or reply to a user to promote."))
+        return await m.reply_text(font(" Mention or reply to a user to promote."))
 
     if user_id == u.id:
-        return await m.reply_text(font("❌ You are already the owner."))
+        return await m.reply_text(font(" You are already the owner."))
 
     if user_id in fed.get('admins', []):
-        return await m.reply_text(font("❌ This user is already a fed admin."))
+        return await m.reply_text(font(" This user is already a fed admin."))
 
     kb = InlineKeyboardMarkup([[
         InlineKeyboardButton(font("Accept Promotion"), callback_data=f"fed_accept:{fed['fed_id']}:{user_id}")
     ]])
-    await m.reply_text(f"❓ Promotion request sent to the user. They must click below to confirm.", reply_markup=kb)
+    await m.reply_text(f" Promotion request sent to the user. They must click below to confirm.", reply_markup=kb)
 
 @Command("feddemote")
 async def feddemote_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -141,17 +141,17 @@ async def feddemote_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
     u = update.effective_user
     fed = await get_fed_by_owner(u.id)
     if not fed:
-        return await m.reply_text("❌ You don't own a federation.")
+        return await m.reply_text(" You don't own a federation.")
 
     user_id = await extract_user(m)
     if not user_id:
-        return await m.reply_text(font("🙋‍♂️ Mention or reply to a user to demote."))
+        return await m.reply_text(font(" Mention or reply to a user to demote."))
 
     if user_id not in fed.get('admins', []):
-        return await m.reply_text(font("❌ This user is not a fed admin."))
+        return await m.reply_text(font(" This user is not a fed admin."))
 
     await remove_fed_admin(fed['fed_id'], user_id)
-    await m.reply_text(font("✅ User demoted from federation."))
+    await m.reply_text(font(" User demoted from federation."))
 
 @Command("setfedlog")
 @only_groups
@@ -161,10 +161,10 @@ async def setfedlog_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
     u = update.effective_user
     fed = await get_fed_by_owner(u.id)
     if not fed:
-        return await m.reply_text("❌ You don't own a federation.")
+        return await m.reply_text(" You don't own a federation.")
 
     await set_fed_log(fed['fed_id'], m.chat.id)
-    await m.reply_text(f"✅ **Fed Logs Set!**\nAll actions for `{fed['fed_name']}` will be logged here.")
+    await m.reply_text(f" **Fed Logs Set!**\nAll actions for `{fed['fed_name']}` will be logged here.")
 
 @Command("unsetfedlog")
 @only_groups
@@ -174,10 +174,10 @@ async def unsetfedlog_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
     u = update.effective_user
     fed = await get_fed_by_owner(u.id)
     if not fed:
-        return await m.reply_text("❌ You don't own a federation.")
+        return await m.reply_text(" You don't own a federation.")
 
     await unset_fed_log(fed['fed_id'])
-    await m.reply_text(font("✅ Federation log unset."))
+    await m.reply_text(font(" Federation log unset."))
 
 @Command("fedtransfer")
 async def fedtransfer_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -185,85 +185,85 @@ async def fedtransfer_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
     u = update.effective_user
     fed = await get_fed_by_owner(u.id)
     if not fed:
-        return await m.reply_text("❌ You don't own a federation.")
+        return await m.reply_text(" You don't own a federation.")
 
     user_id = await extract_user(m)
     if not user_id:
-        return await m.reply_text(font("🙋‍♂️ Mention or reply to the new owner."))
+        return await m.reply_text(font(" Mention or reply to the new owner."))
 
     if user_id == u.id:
-        return await m.reply_text(font("❌ You are already the owner."))
+        return await m.reply_text(font(" You are already the owner."))
 
     kb = InlineKeyboardMarkup([[
         InlineKeyboardButton(font("Transfer Fed"), callback_data=f"fed_transfer:{fed['fed_id']}:{user_id}")
     ]])
-    await m.reply_text(f"❓ Are you sure you want to transfer `{fed['fed_name']}` to this user?", reply_markup=kb)
+    await m.reply_text(f" Are you sure you want to transfer `{fed['fed_name']}` to this user?", reply_markup=kb)
 
 @Command("fednotif")
 async def fednotif_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
     u = update.effective_user
     fed = await get_fed_by_owner(u.id)
-    if not fed: return await update.effective_message.reply_text(font("❌ Unauthorized."))
+    if not fed: return await update.effective_message.reply_text(font(" Unauthorized."))
 
     if not context.args:
         return await update.effective_message.reply_text(font("Usage: `/fednotif <on/off>`"))
 
     state = context.args[0].lower() in ['on', 'yes']
     await set_fed_notif(fed['fed_id'], state)
-    await update.effective_message.reply_text(f"✅ Federation notifications set to: `{state}`")
+    await update.effective_message.reply_text(f" Federation notifications set to: `{state}`")
 
 @Command("fedreason")
 async def fedreason_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
     u = update.effective_user
     fed = await get_fed_by_owner(u.id)
-    if not fed: return await update.effective_message.reply_text(font("❌ Unauthorized."))
+    if not fed: return await update.effective_message.reply_text(font(" Unauthorized."))
 
     if not context.args:
         return await update.effective_message.reply_text(font("Usage: `/fedreason <on/off>`"))
 
     state = context.args[0].lower() in ['on', 'yes']
     await set_fed_reason(fed['fed_id'], state)
-    await update.effective_message.reply_text(f"✅ Mandatory ban reasons set to: `{state}`")
+    await update.effective_message.reply_text(f" Mandatory ban reasons set to: `{state}`")
 
 @Command("subfed")
 async def subfed_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
     u = update.effective_user
     fed = await get_fed_by_owner(u.id)
-    if not fed: return await update.effective_message.reply_text(font("❌ Unauthorized."))
+    if not fed: return await update.effective_message.reply_text(font(" Unauthorized."))
 
     if not context.args:
-        return await update.effective_message.reply_text(font("🙋‍♂️ Provide a Fed ID to subscribe to."))
+        return await update.effective_message.reply_text(font(" Provide a Fed ID to subscribe to."))
 
     sub_id = context.args[0]
     target_fed = await get_fed_info(sub_id)
     if not target_fed:
-        return await update.effective_message.reply_text(font("❌ Federation not found."))
+        return await update.effective_message.reply_text(font(" Federation not found."))
 
     await subscribe_fed(fed['fed_id'], sub_id)
-    await update.effective_message.reply_text(f"✅ Subscribed to `{target_fed['fed_name']}`.")
+    await update.effective_message.reply_text(f" Subscribed to `{target_fed['fed_name']}`.")
 
 @Command("unsubfed")
 async def unsubfed_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
     u = update.effective_user
     fed = await get_fed_by_owner(u.id)
-    if not fed: return await update.effective_message.reply_text(font("❌ Unauthorized."))
+    if not fed: return await update.effective_message.reply_text(font(" Unauthorized."))
 
     if not context.args:
-        return await update.effective_message.reply_text(font("🙋‍♂️ Provide a Fed ID to unsubscribe from."))
+        return await update.effective_message.reply_text(font(" Provide a Fed ID to unsubscribe from."))
 
     sub_id = context.args[0]
     await unsubscribe_fed(fed['fed_id'], sub_id)
-    await update.effective_message.reply_text(f"✅ Unsubscribed from `{sub_id}`.")
+    await update.effective_message.reply_text(f" Unsubscribed from `{sub_id}`.")
 
 @Command("fedexport")
 async def fedexport_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
     u = update.effective_user
     fed = await get_fed_by_owner(u.id)
-    if not fed: return await update.effective_message.reply_text(font("❌ Unauthorized."))
+    if not fed: return await update.effective_message.reply_text(font(" Unauthorized."))
 
     bans = fed.get('banned_users', {})
     if not bans:
-        return await update.effective_message.reply_text(font("❌ No banned users to export."))
+        return await update.effective_message.reply_text(font(" No banned users to export."))
 
     output = io.StringIO()
     writer = csv.writer(output)
@@ -281,14 +281,14 @@ async def fedimport_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
     m = update.effective_message
     u = update.effective_user
     fed = await get_fed_by_owner(u.id)
-    if not fed: return await m.reply_text(font("❌ Unauthorized."))
+    if not fed: return await m.reply_text(font(" Unauthorized."))
 
     if not m.reply_to_message or not m.reply_to_message.document:
-        return await m.reply_text(font("❌ Reply to a CSV file to import bans."))
+        return await m.reply_text(font(" Reply to a CSV file to import bans."))
 
     doc = m.reply_to_message.document
     if not doc.file_name.endswith('.csv'):
-        return await m.reply_text(font("❌ Only CSV files are supported."))
+        return await m.reply_text(font(" Only CSV files are supported."))
 
     file = await context.bot.get_file(doc.file_id)
     content = io.BytesIO()
@@ -305,23 +305,23 @@ async def fedimport_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 await fban_user(fed['fed_id'], int(uid), reason)
                 imported += 1
     except Exception as e:
-        return await m.reply_text(f"❌ Error during import: {e}")
+        return await m.reply_text(f" Error during import: {e}")
 
-    await m.reply_text(f"✅ Successfully imported `{imported}` bans to `{fed['fed_name']}`.")
+    await m.reply_text(f" Successfully imported `{imported}` bans to `{fed['fed_name']}`.")
 
 @Command("setfedlang")
 async def setfedlang_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
     u = update.effective_user
     fed = await get_fed_by_owner(u.id)
-    if not fed: return await update.effective_message.reply_text(font("❌ Unauthorized."))
+    if not fed: return await update.effective_message.reply_text(font(" Unauthorized."))
 
     if not context.args:
-        return await update.effective_message.reply_text(font("🙋‍♂️ Provide a language code (e.g., `en`, `hi`)."))
+        return await update.effective_message.reply_text(font(" Provide a language code (e.g., `en`, `hi`)."))
 
     lang = context.args[0].lower()
     from AloneX.db.federation_db import set_fed_lang
     await set_fed_lang(fed['fed_id'], lang)
-    await update.effective_message.reply_text(f"✅ Federation log language set to: `{lang}`")
+    await update.effective_message.reply_text(f" Federation log language set to: `{lang}`")
 
 @Command("quietfed")
 @only_groups
@@ -333,7 +333,7 @@ async def quietfed_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     state = context.args[0].lower() in ['on', 'yes']
     await set_quiet_fed(m.chat.id, state)
-    await m.reply_text(f"✅ Quiet mode set to: `{state}`")
+    await m.reply_text(f" Quiet mode set to: `{state}`")
 
 # --- Admin Commands ---
 
@@ -349,20 +349,20 @@ async def fban_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
         if owned: fed_id = owned['fed_id']
 
     if not fed_id:
-        return await m.reply_text("❌ This chat is not in a federation, and you don't own one.")
+        return await m.reply_text(" This chat is not in a federation, and you don't own one.")
 
     if not await is_user_fed_admin(fed_id, u.id):
-        return await m.reply_text(font("❌ You are not an admin of this federation."))
+        return await m.reply_text(font(" You are not an admin of this federation."))
 
     user_id = await extract_user(m)
     if not user_id:
-        return await m.reply_text(font("🙋‍♂️ Mention/reply to a user to fban."))
+        return await m.reply_text(font(" Mention/reply to a user to fban."))
 
     if user_id == u.id:
-        return await m.reply_text(font("❌ You cannot fban yourself."))
+        return await m.reply_text(font(" You cannot fban yourself."))
 
     if await is_user_fed_admin(fed_id, user_id):
-        return await m.reply_text(font("❌ You cannot fban another fed admin."))
+        return await m.reply_text(font(" You cannot fban another fed admin."))
 
     fed = await get_fed_info(fed_id)
     reason = "No reason provided."
@@ -375,14 +375,14 @@ async def fban_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
             reason = " ".join(args)
 
     if fed.get('reason_required') and reason == "No reason provided.":
-        return await m.reply_text(font("❌ A reason is required for fedbans."))
+        return await m.reply_text(font(" A reason is required for fedbans."))
 
     await fban_user(fed_id, user_id, reason)
-    await m.reply_text(f"✅ **User Banned from Federation!**\n**Fed:** `{fed['fed_name']}`\n**ID:** `{user_id}`\n**Reason:** `{reason}`")
+    await m.reply_text(f" **User Banned from Federation!**\n**Fed:** `{fed['fed_name']}`\n**ID:** `{user_id}`\n**Reason:** `{reason}`")
 
     # Log to group log channel
     if m.chat.type != constants.ChatType.PRIVATE:
-        log_text = f"🚫 <b>Federation Ban</b>\n" \
+        log_text = f" <b>Federation Ban</b>\n" \
                    f"<b>Fed:</b> {fed['fed_name']}\n" \
                    f"<b>User:</b> <code>{user_id}</code>\n" \
                    f"<b>By:</b> {u.mention_html()}\n" \
@@ -397,7 +397,7 @@ async def fban_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
     # Log action
     if fed.get('log_channel'):
         try:
-            await context.bot.send_message(fed['log_channel'], f"🚫 **Fed Ban**\n**User:** `{user_id}`\n**By:** {u.mention_html()}\n**Reason:** `{reason}`", parse_mode='HTML')
+            await context.bot.send_message(fed['log_channel'], f" **Fed Ban**\n**User:** `{user_id}`\n**By:** {u.mention_html()}\n**Reason:** `{reason}`", parse_mode='HTML')
         except: pass
 
 @Command("unfban")
@@ -410,18 +410,18 @@ async def unfban_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
         if owned: fed_id = owned['fed_id']
 
     if not fed_id or not await is_user_fed_admin(fed_id, u.id):
-        return await m.reply_text(font("❌ Unauthorized."))
+        return await m.reply_text(font(" Unauthorized."))
 
     user_id = await extract_user(m)
     if not user_id:
-        return await m.reply_text(font("🙋‍♂️ Provide a user to unfban."))
+        return await m.reply_text(font(" Provide a user to unfban."))
 
     await unfban_user(fed_id, user_id)
-    await m.reply_text(font("✅ User unfbanned from federation."))
+    await m.reply_text(font(" User unfbanned from federation."))
 
     # Log to group log channel
     if m.chat.type != constants.ChatType.PRIVATE:
-        log_text = f"🔓 <b>Federation Unban</b>\n" \
+        log_text = f" <b>Federation Unban</b>\n" \
                    f"<b>Fed:</b> {fed_id}\n" \
                    f"<b>User:</b> <code>{user_id}</code>\n" \
                    f"<b>By:</b> {u.mention_html()}"
@@ -437,17 +437,17 @@ async def feddemoteme_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
     m = update.effective_message
     u = update.effective_user
     if not context.args:
-        return await m.reply_text(font("🙋‍♂️ Provide the Federation ID."))
+        return await m.reply_text(font(" Provide the Federation ID."))
 
     fed_id = context.args[0]
     fed = await get_fed_info(fed_id)
-    if not fed: return await m.reply_text(font("❌ Invalid Fed ID."))
+    if not fed: return await m.reply_text(font(" Invalid Fed ID."))
 
     if u.id not in fed.get('admins', []):
-        return await m.reply_text(font("❌ You are not an admin of this federation."))
+        return await m.reply_text(font(" You are not an admin of this federation."))
 
     await remove_fed_admin(fed_id, u.id)
-    await m.reply_text(font("✅ You have been demoted from the federation."))
+    await m.reply_text(font(" You have been demoted from the federation."))
 
 # --- User Commands ---
 
@@ -457,15 +457,15 @@ async def feddemoteme_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
 async def joinfed_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
     m = update.effective_message
     if not context.args:
-        return await m.reply_text(font("🙋‍♂️ Provide a Federation ID."))
+        return await m.reply_text(font(" Provide a Federation ID."))
 
     fed_id = context.args[0]
     fed = await get_fed_info(fed_id)
     if not fed:
-        return await m.reply_text(font("❌ Invalid Federation ID."))
+        return await m.reply_text(font(" Invalid Federation ID."))
 
     await join_fed(m.chat.id, fed_id)
-    await m.reply_text(f"✅ Chat joined to federation: **{fed['fed_name']}**")
+    await m.reply_text(f" Chat joined to federation: **{fed['fed_name']}**")
 
 @Command("leavefed")
 @only_groups
@@ -474,10 +474,10 @@ async def leavefed_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
     m = update.effective_message
     fed_id = await get_chat_fed(m.chat.id)
     if not fed_id:
-        return await m.reply_text(font("❌ This chat is not in a federation."))
+        return await m.reply_text(font(" This chat is not in a federation."))
 
     await leave_fed(m.chat.id)
-    await m.reply_text(font("✅ Chat left the federation."))
+    await m.reply_text(font(" Chat left the federation."))
 
 @Command("chatfed")
 @only_groups
@@ -485,10 +485,10 @@ async def chatfed_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
     m = update.effective_message
     fed_id = await get_chat_fed(m.chat.id)
     if not fed_id:
-        return await m.reply_text(font("❌ This chat is not in any federation."))
+        return await m.reply_text(font(" This chat is not in any federation."))
 
     fed = await get_fed_info(fed_id)
-    await m.reply_text(f"⚖️ **Chat Federation Information:**\n**Name:** `{fed['fed_name']}`\n**ID:** `{fed_id}`")
+    await m.reply_text(f" **Chat Federation Information:**\n**Name:** `{fed['fed_name']}`\n**ID:** `{fed_id}`")
 
 @Command("fedstat")
 async def fedstat_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -506,13 +506,13 @@ async def fedstat_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
         fed_id = await get_chat_fed(m.chat.id) if m.chat.type != constants.ChatType.PRIVATE else None
 
     if not fed_id:
-        return await m.reply_text(font("❌ No federation specified or found for this chat."))
+        return await m.reply_text(font(" No federation specified or found for this chat."))
 
     is_banned, reason = await is_user_fban(fed_id, user_id)
     if is_banned:
-        await m.reply_text(f"🚫 **User Banned!**\n**User ID:** `{user_id}`\n**Fed ID:** `{fed_id}`\n**Reason:** `{reason}`")
+        await m.reply_text(f" **User Banned!**\n**User ID:** `{user_id}`\n**Fed ID:** `{fed_id}`\n**Reason:** `{reason}`")
     else:
-        await m.reply_text(f"✅ User is not banned in this federation.")
+        await m.reply_text(f" User is not banned in this federation.")
 
 # --- Callbacks ---
 
@@ -521,10 +521,10 @@ async def fed_del_cb(update: Update, context: ContextTypes.DEFAULT_TYPE):
     q = update.callback_query
     fed_id = q.data.split(":")[1]
     if not await is_user_fed_owner(fed_id, q.from_user.id):
-        return await q.answer(font("❌ Only the owner can do this."), show_alert=True)
+        return await q.answer(font(" Only the owner can do this."), show_alert=True)
 
     await delete_fed(fed_id)
-    await q.edit_message_text(font("✅ Federation deleted."))
+    await q.edit_message_text(font(" Federation deleted."))
 
 @Callbacks(r"^fed_accept:")
 async def fed_accept_cb(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -533,10 +533,10 @@ async def fed_accept_cb(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_id = int(user_id)
 
     if q.from_user.id != user_id:
-        return await q.answer(font("❌ This button is not for you."), show_alert=True)
+        return await q.answer(font(" This button is not for you."), show_alert=True)
 
     await add_fed_admin(fed_id, user_id)
-    await q.edit_message_text(font("✅ You are now a federation admin!"))
+    await q.edit_message_text(font(" You are now a federation admin!"))
 
 @Callbacks(r"^fed_transfer:")
 async def fed_transfer_cb(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -545,24 +545,24 @@ async def fed_transfer_cb(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_id = int(user_id)
 
     if not await is_user_fed_owner(fed_id, q.from_user.id):
-        return await q.answer(font("❌ Only the owner can do this."), show_alert=True)
+        return await q.answer(font(" Only the owner can do this."), show_alert=True)
 
     await transfer_fed(fed_id, user_id)
-    await q.edit_message_text(f"✅ Federation transferred to `{user_id}`.")
+    await q.edit_message_text(f" Federation transferred to `{user_id}`.")
 
 # --- Extra Logic ---
 
 @Command("fedinfo")
 async def fedinfo_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if not context.args:
-        return await update.effective_message.reply_text(font("🙋‍♂️ Provide a Fed ID."))
+        return await update.effective_message.reply_text(font(" Provide a Fed ID."))
 
     fed = await get_fed_info(context.args[0])
     if not fed:
-        return await update.effective_message.reply_text(font("❌ Federation not found."))
+        return await update.effective_message.reply_text(font(" Federation not found."))
 
     bans = len(fed.get('banned_users', {}))
-    await update.effective_message.reply_text(f"⚖️ **Fed Info:**\n**Name:** `{fed['fed_name']}`\n**ID:** `{fed['fed_id']}`\n**Owner:** `{fed['owner_id']}`\n**Bans:** `{bans}`")
+    await update.effective_message.reply_text(f" **Fed Info:**\n**Name:** `{fed['fed_name']}`\n**ID:** `{fed['fed_id']}`\n**Owner:** `{fed['owner_id']}`\n**Bans:** `{bans}`")
 
 @Command("fedadmins")
 async def fedadmins_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -572,13 +572,13 @@ async def fedadmins_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
         fed_id = context.args[0]
 
     if not fed_id:
-        return await update.effective_message.reply_text(font("❌ No Fed ID specified."))
+        return await update.effective_message.reply_text(font(" No Fed ID specified."))
 
     fed = await get_fed_info(fed_id)
-    if not fed: return await update.effective_message.reply_text(font("❌ Fed not found."))
+    if not fed: return await update.effective_message.reply_text(font(" Fed not found."))
 
     admins = [str(fed['owner_id']) + " (Owner)"] + [str(a) for a in fed.get('admins', [])]
-    await update.effective_message.reply_text(f"👥 **Admins of {fed['fed_name']}:**\n" + "\n".join(admins))
+    await update.effective_message.reply_text(f" **Admins of {fed['fed_name']}:**\n" + "\n".join(admins))
 
 @Command("fedsubs")
 async def fedsubs_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -588,25 +588,25 @@ async def fedsubs_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
         fed_id = context.args[0]
 
     if not fed_id:
-        return await update.effective_message.reply_text(font("❌ No Fed ID specified."))
+        return await update.effective_message.reply_text(font(" No Fed ID specified."))
 
     fed = await get_fed_info(fed_id)
-    if not fed: return await update.effective_message.reply_text(font("❌ Fed not found."))
+    if not fed: return await update.effective_message.reply_text(font(" Fed not found."))
 
     subs = fed.get('subs', [])
     if not subs:
-        return await update.effective_message.reply_text(f"❌ `{fed['fed_name']}` is not subscribed to any federations.")
+        return await update.effective_message.reply_text(f" `{fed['fed_name']}` is not subscribed to any federations.")
 
-    await update.effective_message.reply_text(f"🔗 **Subscriptions for {fed['fed_name']}:**\n" + "\n".join(subs))
+    await update.effective_message.reply_text(f" **Subscriptions for {fed['fed_name']}:**\n" + "\n".join(subs))
 
 @Command("myfeds")
 async def myfeds_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
     u = update.effective_user
     feds = await get_user_feds(u.id)
     if not feds:
-        return await update.effective_message.reply_text("❌ You don't have any federations.")
+        return await update.effective_message.reply_text(" You don't have any federations.")
 
-    res = "⚖️ **Your Federations:**\n"
+    res = " **Your Federations:**\n"
     for f in feds:
         role = "Owner" if f['owner_id'] == u.id else "Admin"
         res += f"• `{f['fed_name']}` (ID: `{f['fed_id']}`) - *{role}*\n"

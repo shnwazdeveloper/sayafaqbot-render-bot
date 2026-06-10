@@ -5,7 +5,7 @@ from AloneX import pbot, prefix_cmds, font
 from AloneX.helpers.decorator import protected_ids
 from AloneX.db.ghost_db import is_ghost_enabled, set_ghost, CHAT_IDS as GHOST_CACHE
 
-__module__ = "𝐆ʜᴏsᴛ-𝐌ᴏᴅᴇ👻"
+__module__ = "𝐆ʜᴏsᴛ-𝐌ᴏᴅᴇ"
 __help__ = """
 ❂ *Ghost Mode Module* — Automatically delete service messages like join/leave.
 
@@ -38,10 +38,10 @@ async def is_user_admin(chat_id: int, user_id: int):
 async def get_ghost_keyboard(chat_id: int):
     enabled = await is_ghost_enabled(chat_id)
     if enabled:
-        text = "🟢 Ghost Mode: ON"
+        text = " Ghost Mode: ON"
         style = ButtonStyle.SUCCESS
     else:
-        text = "🔴 Ghost Mode: OFF"
+        text = " Ghost Mode: OFF"
         style = ButtonStyle.DANGER
 
     return IKM([[IKB(font(text), callback_data="ghost_toggle", style=style)]])
@@ -51,25 +51,25 @@ async def ghostmode_cmd(_, message: Message):
     if not message.from_user:
         return
     if not await is_user_admin(message.chat.id, message.from_user.id):
-        return await message.reply_text(font("❌ You must be an admin to use this command."))
+        return await message.reply_text(font(" You must be an admin to use this command."))
 
     if len(message.command) > 1:
         arg = message.command[1].lower()
         if arg == "on":
             await set_ghost(message.chat.id, True)
-            await message.reply_text(font("✅ Ghost Mode has been enabled."))
+            await message.reply_text(font(" Ghost Mode has been enabled."))
         elif arg == "off":
             await set_ghost(message.chat.id, False)
-            await message.reply_text(font("🚫 Ghost Mode has been disabled."))
+            await message.reply_text(font(" Ghost Mode has been disabled."))
         else:
-            await message.reply_text(font("❌ Invalid argument! Use on or off."))
+            await message.reply_text(font(" Invalid argument! Use on or off."))
         return
 
     enabled = await is_ghost_enabled(message.chat.id)
     status = "Enabled" if enabled else "Disabled"
 
     await message.reply_text(
-        font(f"👻 Ghost Mode Status: {status}\n\nWhen enabled, I will automatically delete service messages like join/leave."),
+        font(f" Ghost Mode Status: {status}\n\nWhen enabled, I will automatically delete service messages like join/leave."),
         reply_markup=await get_ghost_keyboard(message.chat.id)
     )
 
@@ -79,7 +79,7 @@ async def ghost_toggle_callback(_, query: CallbackQuery):
     chat_id = query.message.chat.id
 
     if not await is_user_admin(chat_id, user_id):
-        return await query.answer(font("❌ This button is for admins only!"), show_alert=True)
+        return await query.answer(font(" This button is for admins only!"), show_alert=True)
 
     enabled = await is_ghost_enabled(chat_id)
     new_state = not enabled
@@ -87,7 +87,7 @@ async def ghost_toggle_callback(_, query: CallbackQuery):
 
     status_text = "Enabled" if new_state else "Disabled"
     await query.message.edit_text(
-        font(f"👻 Ghost Mode Status: {status_text}\n\nWhen enabled, I will automatically delete service messages like join/leave."),
+        font(f" Ghost Mode Status: {status_text}\n\nWhen enabled, I will automatically delete service messages like join/leave."),
         reply_markup=await get_ghost_keyboard(chat_id)
     )
     await query.answer(font(f"Ghost Mode {'Enabled' if new_state else 'Disabled'}"))

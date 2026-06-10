@@ -7,7 +7,7 @@ from AloneX.helpers.decorator import only_premium
 
 
 
-__module__ = "𝐅ɪʟᴇ-𝐒ᴛᴏʀᴇ🫙"
+__module__ = "𝐅ɪʟᴇ-𝐒ᴛᴏʀᴇ"
 
 __help__ = '''
 *Commands*:
@@ -31,7 +31,7 @@ async def getFileLink(_, message):
         #if chat.type != enums.ChatType.PRIVATE:
         #     return await m.reply_text(font("This command currently work only in PRIVATE!"))
         if not m.reply_to_message or (r and getattr(r, 'media') is None):
-             return await m.reply_text(font("Reply to the media for store 🧐"))
+             return await m.reply_text(font("Reply to the media for store "))
           
         media = [
          enums.MessageMediaType.ANIMATION,
@@ -58,11 +58,11 @@ async def getFileLink(_, message):
       
                encoded_data_url = base64.b64encode(f"{msg_id}&{unique_id}".encode()).decode()
                file_link = f"https://t.me/{bot.me.username}?start=getfile-{encoded_data_url}"
-               button = types.InlineKeyboardMarkup([[types.InlineKeyboardButton(font("⚡ Share link"), url=file_link, style=enums.ButtonStyle.SUCCESS)]])
+               button = types.InlineKeyboardMarkup([[types.InlineKeyboardButton(font(" Share link"), url=file_link, style=enums.ButtonStyle.SUCCESS)]])
                return await m.reply_text(f"**Copy the sharable link**: `{file_link}`", reply_markup=button, quote=True)
               
             except Exception as e:
-                return await m.reply(f"❌ ERROR: {e}")
+                return await m.reply(f" ERROR: {e}")
             
 
 

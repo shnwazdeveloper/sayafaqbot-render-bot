@@ -9,7 +9,7 @@ from AloneX.db.game import (
 )
 from datetime import datetime, timedelta, date
 
-__module__ = "𝐆ᴀᴍᴇs🎮"
+__module__ = "𝐆ᴀᴍᴇs"
 
 __help__ = """
 ❂ *Game Module* — Have fun and compete with your friends using mini-games in your Telegram chat.
@@ -55,18 +55,18 @@ async def _setUserCash(_, m: types.Message):
         user_id = int(m.text.split()[1])
         cash = int(m.text.split()[2])
         if await update_cash(user_id, cash):
-            await m.reply(font("✅ Cash added to account!"))
+            await m.reply(font(" Cash added to account!"))
     except Exception as e:
-        await m.reply(f"❌ ERROR: {e}")
+        await m.reply(f" ERROR: {e}")
 
 # Richlist
 @bot.on_message(filters.command("richlist"))
 async def _richList(_, m: types.Message):
     users_list = await get_top_users()
     if not users_list:
-        return await m.reply(font("**Yo, fam!** No top users in sight. 😅"))
+        return await m.reply(font("**Yo, fam!** No top users in sight. "))
 
-    text = "💸💸 **Rich Players flexin' in the groups... 💸💸**\n\n"
+    text = " **Rich Players flexin' in the groups... **\n\n"
 
     for roll, user in enumerate(users_list, start=1):
         if user.get("cash", 0) == 0:
@@ -83,9 +83,9 @@ async def _richList(_, m: types.Message):
                 user_name = "Unknown"
 
         mention = f"[{user_name}](tg://user?id={user_id})"
-        text += f"{roll}. {mention} — {user['cash']} 💸\n"
+        text += f"{roll}. {mention} — {user['cash']} \n"
 
-    text += "\n**Think you can outshine me? Bring it on! 😼**"
+    text += "\n**Think you can outshine me? Bring it on! **"
     await m.reply_photo("https://files.catbox.moe/562cjr.jpg", caption=text, parse_mode=enums.ParseMode.MARKDOWN)
 
 # Balance check
@@ -94,9 +94,9 @@ async def _checkBalance(_, m: types.Message):
     user = m.from_user
     cash = await get_cash(user.id)
     if cash == 0:
-        return await m.reply("*Bro* You are too poor, try making some money otherwise you can't live in the world! 🥴")
+        return await m.reply("*Bro* You are too poor, try making some money otherwise you can't live in the world! ")
     await update_name(user.id, user.full_name)
-    await m.reply_photo(TRY_LATER_IMG, caption=f"**Yo, {user.full_name}! Your balance is a whopping {cash} cash!** 💸💸")
+    await m.reply_photo(TRY_LATER_IMG, caption=f"**Yo, {user.full_name}! Your balance is a whopping {cash} cash!** ")
 
 # Steal command
 @bot.on_message(filters.command(["domain", "steal"]))
@@ -104,7 +104,7 @@ async def _stealCash(_, m: types.Message):
     user = m.from_user
     reply = m.reply_to_message
     if not reply:
-        return await m.reply(font("You need to reply to a fellow sorcerer, **bro** 😖"))
+        return await m.reply(font("You need to reply to a fellow sorcerer, **bro** "))
     if reply.from_user.is_bot or reply.from_user.id == user.id:
         return
 
@@ -114,14 +114,14 @@ async def _stealCash(_, m: types.Message):
 
     prev_steal = await get_steal_date(user.id, reply_user.id)
     if prev_steal and today == prev_steal:
-        return await m.reply("You've already pulled a heist today! Try again tomorrow 😈")
+        return await m.reply("You've already pulled a heist today! Try again tomorrow ")
 
     if user_cash < 1000:
-        return await m.reply(font("To pull off a heist, you need at least 1000 cash 💸."))
+        return await m.reply(font("To pull off a heist, you need at least 1000 cash ."))
 
     reply_cash = await get_cash(reply_user.id)
     if reply_cash < 1000:
-        return await m.reply(font("Lol! Not enough cursed energy to steal from someone! They need at least 1000 cash 💸"))
+        return await m.reply(font("Lol! Not enough cursed energy to steal from someone! They need at least 1000 cash "))
 
     msg = await m.reply(font("AloneX cloths open! ..."))
     await update_steal_date(user.id, reply_user.id, today)
@@ -131,12 +131,12 @@ async def _stealCash(_, m: types.Message):
     success = random.choice([True, False])
 
     if not success:
-        await msg.edit("😱 Oh no! You don't stand a chance against them today.")
+        await msg.edit(" Oh no! You don't stand a chance against them today.")
     else:
         amount = int((steal_percentage / 100) * reply_cash)
         await update_cash(user.id, amount)
         await update_cash(reply_user.id, -amount)
-        await msg.edit(f"🤑 You just snagged {amount} cash 💸💸 ({steal_percentage}%) from {reply_user.full_name}! 😼")
+        await msg.edit(f" You just snagged {amount} cash  ({steal_percentage}%) from {reply_user.full_name}! ")
 
 # Gamble command
 @bot.on_message(filters.command(["gamble"]) & ~filters.forwarded)
@@ -144,14 +144,14 @@ async def _gamble(_, m: types.Message):
     user = m.from_user
     cash = await get_cash(user.id)
     if cash == 0:
-        return await m.reply("😂 You're broke, *sorcerer*. Go earn something.")
+        return await m.reply(" You're broke, *sorcerer*. Go earn something.")
 
     if len(m.command) < 2 or not m.command[1].isdigit():
-        return await m.reply(font("🙄 Enter a valid amount.\nExample: /gamble 1000"))
+        return await m.reply(font(" Enter a valid amount.\nExample: /gamble 1000"))
 
     gamble = int(m.command[1])
     if gamble > cash:
-        return await m.reply("😂 You don't have enough cash to gamble.")
+        return await m.reply(" You don't have enough cash to gamble.")
 
     results = [2, -1.2, 0, 1.2, 0, -1.5, 1.5, 0, 0, 2.1, 1.3, 1.4, -1.2]
     multiplier = random.choice(results)
@@ -159,14 +159,14 @@ async def _gamble(_, m: types.Message):
     if multiplier < 0:
         loss = int(gamble * abs(multiplier))
         await update_cash(user.id, -loss)
-        return await m.reply_photo(SERIOUS_IMG, caption=f"🤧 You lost {loss} 💸 to a curse!")
+        return await m.reply_photo(SERIOUS_IMG, caption=f" You lost {loss}  to a curse!")
     elif multiplier > 0:
         win = int(gamble * multiplier)
         await update_cash(user.id, win)
-        return await m.reply_photo(GOOD_LUCK_IMG, caption=f"🔥 You earned {win} Cash! 💸")
+        return await m.reply_photo(GOOD_LUCK_IMG, caption=f" You earned {win} Cash! ")
     else:
         await update_cash(user.id, -gamble)
-        return await m.reply_photo(BAD_LUCK_IMG, caption=f"😭 You lost {gamble} Cash. Try again!")
+        return await m.reply_photo(BAD_LUCK_IMG, caption=f" You lost {gamble} Cash. Try again!")
 
 # Score + reward game handler
 async def handle_dice_game(user, m, emoji, user_dict, rewards):
@@ -174,7 +174,7 @@ async def handle_dice_game(user, m, emoji, user_dict, rewards):
         remaining = (user_dict[user.id] - datetime.now()).total_seconds() / 60
         return await m.reply_photo(
             TRY_LATER_IMG,
-            caption=f"🥲 Don't spam. Try again after {remaining:.2f} minutes ⏳"
+            caption=f" Don't spam. Try again after {remaining:.2f} minutes "
         )
 
     user_dict[user.id] = datetime.now() + timedelta(minutes=FLOOD_MAX)
@@ -187,13 +187,13 @@ async def handle_dice_game(user, m, emoji, user_dict, rewards):
     value = msg_dice.dice.value
     reward = rewards.get(value, 0)
 
-    caption = f"🎲 **{user.full_name} scored** `{value}`!\n"
+    caption = f" **{user.full_name} scored** `{value}`!\n"
     if reward > 0:
         await update_cash(user.id, reward)
-        caption += f"💰 Earned: `{reward}` Cash 💸"
+        caption += f" Earned: `{reward}` Cash "
         image = GOOD_LUCK_IMG
     else:
-        caption += "😢 No reward this time. Keep trying!"
+        caption += " No reward this time. Keep trying!"
         image = SERIOUS_IMG
 
     await msg_dice.reply_photo(image, caption=caption)
@@ -207,14 +207,14 @@ BOWL_REWARDS = {1: 700, 2: 1200, 3: 2200, 4: 3200, 5: 5500, 6: 9000}
 # Dice command
 @bot.on_message(filters.command("dice") & ~filters.forwarded)
 async def _roll_dice(_, m: types.Message):
-    await handle_dice_game(m.from_user, m, "🎲", dice_users, DICE_REWARDS)
+    await handle_dice_game(m.from_user, m, "", dice_users, DICE_REWARDS)
 
 # Dart command
 @bot.on_message(filters.command("dart") & ~filters.forwarded)
 async def _roll_dart(_, m: types.Message):
-    await handle_dice_game(m.from_user, m, "🎯", dart_users, DART_REWARDS)
+    await handle_dice_game(m.from_user, m, "", dart_users, DART_REWARDS)
 
 # Bowl command
 @bot.on_message(filters.command("bowl") & ~filters.forwarded)
 async def _roll_bowl(_, m: types.Message):
-    await handle_dice_game(m.from_user, m, "🎳", bowl_users, BOWL_REWARDS)
+    await handle_dice_game(m.from_user, m, "", bowl_users, BOWL_REWARDS)

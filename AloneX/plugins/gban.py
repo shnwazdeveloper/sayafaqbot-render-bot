@@ -65,11 +65,11 @@ async def botBan(update: Update, context: ContextTypes.DEFAULT_TYPE):
     m = update.effective_message
     actor = update.effective_user
     if global_action_lock.locked():
-        return await m.reply_text(font("⏳ Another action in progress..."))
+        return await m.reply_text(font(" Another action in progress..."))
     user_id = await extract_user(m, self=False)
     if not user_id:
         return await m.reply_text(
-            "⚠️ <b>Please reply to a user or provide their ID/username!</b>\n\n"
+            " <b>Please reply to a user or provide their ID/username!</b>\n\n"
             "<b>Usage:</b> <code>/gban [user] [reason]</code>\n\n"
             "<b>Examples:</b>\n"
             "• <code>/gban @username spam</code>\n"
@@ -78,12 +78,12 @@ async def botBan(update: Update, context: ContextTypes.DEFAULT_TYPE):
             parse_mode="HTML"
         )
     if user_id < 0:
-        return await m.reply_text(font("⚠️ Cannot gban groups/channels!"))
+        return await m.reply_text(font(" Cannot gban groups/channels!"))
     parts = m.text.strip().split(maxsplit=2)
     reason = parts[2] if len(parts) > 2 else "No reason provided"
     async with global_action_lock:
         if user_id == context.bot.id:
-            return await m.reply_text("😂 I can't ban myself!")
+            return await m.reply_text(" I can't ban myself!")
         if await is_user_gbanned(user_id):
             try:
                 user = await context.bot.get_chat(user_id)
@@ -96,11 +96,11 @@ async def botBan(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 user_mention = f"<code>{user_id}</code>"
             reason = await get_gban_reason(user_id)
             return await m.reply_text(
-                f"<b>⚠️ ᴜꜱᴇʀ ᴀʟʀᴇᴀᴅʏ ɢʙᴀɴɴᴇᴅ</b>\n\n"
-                f"👤 {user_mention}\n"
-                f"🆔 <code>{user_id}</code>\n"
-                f"📛 {username}\n"
-                f"📄 ʀᴇᴀꜱᴏɴ: {reason}",
+                f"<b> ᴜꜱᴇʀ ᴀʟʀᴇᴀᴅʏ ɢʙᴀɴɴᴇᴅ</b>\n\n"
+                f" {user_mention}\n"
+                f" <code>{user_id}</code>\n"
+                f" {username}\n"
+                f" ʀᴇᴀꜱᴏɴ: {reason}",
                 parse_mode="HTML"
             )
         role = await get_user_role(actor.id)
@@ -114,12 +114,12 @@ async def botBan(update: Update, context: ContextTypes.DEFAULT_TYPE):
             user_name = "Unknown User"
             user_mention = f"<code>{user_id}</code>"
         start = (
-            f"<b>🔨 Global Ban Started</b>\n\n"
-            f"👤 {user_mention}\n"
-            f"🆔 <code>{user_id}</code>\n"
-            f"📛 {username}\n"
-            f"📄 Reason: {reason}\n\n"
-            f"⏳ Banning in progress..."
+            f"<b> Global Ban Started</b>\n\n"
+            f" {user_mention}\n"
+            f" <code>{user_id}</code>\n"
+            f" {username}\n"
+            f" Reason: {reason}\n\n"
+            f" Banning in progress..."
         )
         msg = await m.reply_text(start, parse_mode="HTML")
         count = 0
@@ -134,29 +134,29 @@ async def botBan(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 pass
         await add_gban_user(user_id, reason, user_name, username)
         done = (
-            f"<b>✅ GBAN Complete</b>\n\n"
-            f"👤 {user_mention}\n"
-            f"🆔 <code>{user_id}</code>\n"
-            f"📛 {username}\n"
-            f"🔨 Banned in: <b>149{count} chats</b>\n"
-            f"📄 Reason: {reason}"
+            f"<b> GBAN Complete</b>\n\n"
+            f" {user_mention}\n"
+            f" <code>{user_id}</code>\n"
+            f" {username}\n"
+            f" Banned in: <b>149{count} chats</b>\n"
+            f" Reason: {reason}"
         )
         await msg.edit_text(done, parse_mode="HTML")
 
-        log_text = f"🚫 <b>#GBAN</b>\n" \
-                   f"👮 <b>{role}:</b> {html.escape(actor.full_name)} (<code>{actor.id}</code>)\n" \
-                   f"👤 <b>User:</b> {html.escape(user_name)} (<code>{user_id}</code>)\n" \
-                   f"📛 <b>Username:</b> {html.escape(username)}\n" \
-                   f"🔨 <b>Chats:</b> {count}\n" \
-                   f"📄 <b>Reason:</b> {html.escape(reason)}"
+        log_text = f" <b>#GBAN</b>\n" \
+                   f" <b>{role}:</b> {html.escape(actor.full_name)} (<code>{actor.id}</code>)\n" \
+                   f" <b>User:</b> {html.escape(user_name)} (<code>{user_id}</code>)\n" \
+                   f" <b>Username:</b> {html.escape(username)}\n" \
+                   f" <b>Chats:</b> {count}\n" \
+                   f" <b>Reason:</b> {html.escape(reason)}"
         asyncio.create_task(log_action(context.bot, m.chat.id, "bans", log_text))
         notification = (
-            f"**🔨 Global Ban Alert**\n\n"
-            f"👮 {role}: {actor.full_name} (`{actor.id}`)\n"
-            f"👤 {user_name} (`{user_id}`)\n"
-            f"📛 {username}\n"
-            f"🔨 149{count} chats\n"
-            f"📄 {reason}"
+            f"** Global Ban Alert**\n\n"
+            f" {role}: {actor.full_name} (`{actor.id}`)\n"
+            f" {user_name} (`{user_id}`)\n"
+            f" {username}\n"
+            f" 149{count} chats\n"
+            f" {reason}"
         )
         await notify_sudos(notification, exclude_id=actor.id)
 
@@ -167,21 +167,21 @@ async def botUnban(update: Update, context: ContextTypes.DEFAULT_TYPE):
     m = update.effective_message
     actor = update.effective_user
     if global_action_lock.locked():
-        return await m.reply_text(font("⏳ Another action in progress..."))
+        return await m.reply_text(font(" Another action in progress..."))
     user_id = await extract_user(m, self=False)
     if not user_id:
         return await m.reply_text(
-            "⚠️ <b>Please reply to a user or provide their ID/username!</b>\n\n"
+            " <b>Please reply to a user or provide their ID/username!</b>\n\n"
             "<b>Usage:</b> <code>/ungban [user] [reason]</code>",
             parse_mode="HTML"
         )
     if user_id < 0:
-        return await m.reply_text(font("⚠️ Cannot ungban groups/channels!"))
+        return await m.reply_text(font(" Cannot ungban groups/channels!"))
     parts = m.text.strip().split(maxsplit=2)
     reason = parts[2] if len(parts) > 2 else "No reason provided"
     async with global_action_lock:
         if user_id == context.bot.id:
-            return await m.reply_text("😂 I'm not gbanned!")
+            return await m.reply_text(" I'm not gbanned!")
         if not await is_user_gbanned(user_id):
             try:
                 user = await context.bot.get_chat(user_id)
@@ -193,10 +193,10 @@ async def botUnban(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 user_name = "Unknown User"
                 user_mention = f"<code>{user_id}</code>"
             return await m.reply_text(
-                f"<b>⚠️ ᴜꜱᴇʀ ɪꜱ ɴᴏᴛ ɢʙᴀɴɴᴇᴅ</b>\n\n"
-                f"👤 {user_mention}\n"
-                f"🆔 <code>{user_id}</code>\n"
-                f"📛 {username}\n\n"
+                f"<b> ᴜꜱᴇʀ ɪꜱ ɴᴏᴛ ɢʙᴀɴɴᴇᴅ</b>\n\n"
+                f" {user_mention}\n"
+                f" <code>{user_id}</code>\n"
+                f" {username}\n\n"
                 f"ᴛʜɪꜱ ᴜꜱᴇʀ ɪꜱ ɴᴏᴛ ɪɴ ᴛʜᴇ ɢʙᴀɴ ʟɪꜱᴛ.",
                 parse_mode="HTML"
             )
@@ -211,12 +211,12 @@ async def botUnban(update: Update, context: ContextTypes.DEFAULT_TYPE):
             user_name = "Unknown User"
             user_mention = f"<code>{user_id}</code>"
         start = (
-            f"<b>🔓 Global Unban Started</b>\n\n"
-            f"👤 {user_mention}\n"
-            f"🆔 <code>{user_id}</code>\n"
-            f"📛 {username}\n"
-            f"📄 Reason: {reason}\n\n"
-            f"⏳ Unbanning..."
+            f"<b> Global Unban Started</b>\n\n"
+            f" {user_mention}\n"
+            f" <code>{user_id}</code>\n"
+            f" {username}\n"
+            f" Reason: {reason}\n\n"
+            f" Unbanning..."
         )
         msg = await m.reply_text(start, parse_mode="HTML")
         count = 0
@@ -231,21 +231,21 @@ async def botUnban(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 pass
         await remove_gban_user(user_id)
         done = (
-            f"<b>✅ UNGBAN Complete</b>\n\n"
-            f"👤 {user_mention}\n"
-            f"🆔 <code>{user_id}</code>\n"
-            f"📛 {username}\n"
-            f"🔓 Unbanned in: <b>149{count} chats</b>\n"
-            f"📄 Reason: {reason}"
+            f"<b> UNGBAN Complete</b>\n\n"
+            f" {user_mention}\n"
+            f" <code>{user_id}</code>\n"
+            f" {username}\n"
+            f" Unbanned in: <b>149{count} chats</b>\n"
+            f" Reason: {reason}"
         )
         await msg.edit_text(done, parse_mode="HTML")
         notification = (
-            f"**🔓 Global Unban Alert**\n\n"
-            f"👮 {role}: {actor.full_name} (`{actor.id}`)\n"
-            f"👤 {user_name} (`{user_id}`)\n"
-            f"📛 {username}\n"
-            f"🔓 149{count} chats\n"
-            f"📄 {reason}"
+            f"** Global Unban Alert**\n\n"
+            f" {role}: {actor.full_name} (`{actor.id}`)\n"
+            f" {user_name} (`{user_id}`)\n"
+            f" {username}\n"
+            f" 149{count} chats\n"
+            f" {reason}"
         )
         await notify_sudos(notification, exclude_id=actor.id)
 
@@ -255,8 +255,8 @@ async def gban_list(update: Update, context: ContextTypes.DEFAULT_TYPE):
     m = update.effective_message
     bans = await get_all_gbans()
     if not bans:
-        return await m.reply_text(font("✅ No gbanned users."))
-    text = f"<b>🔨 Global Ban List ({len(bans)} users)</b>\n\n"
+        return await m.reply_text(font(" No gbanned users."))
+    text = f"<b> Global Ban List ({len(bans)} users)</b>\n\n"
     valid_count = 0
     for ban in bans:
         uid = ban["user_id"]
@@ -268,7 +268,7 @@ async def gban_list(update: Update, context: ContextTypes.DEFAULT_TYPE):
         username = ban.get("username", "No username")
         text += f"{valid_count}. <a href='tg://user?id={uid}'>{name}</a>\n   └ <code>{uid}</code> | {reason}\n\n"
     if valid_count == 0:
-        return await m.reply_text(font("✅ No valid gbanned users."))
+        return await m.reply_text(font(" No valid gbanned users."))
     if len(text) > 4000:
         from io import BytesIO
         file = BytesIO(text.encode())
@@ -282,11 +282,11 @@ async def gban_stat(update: Update, context: ContextTypes.DEFAULT_TYPE):
     m = update.effective_message
     chat = update.effective_chat
     if chat.type == "private":
-        return await m.reply_text(font("⚠️ This command only works in groups!"))
+        return await m.reply_text(font(" This command only works in groups!"))
     args = context.args
     if not args:
         status = await get_gban_status(chat.id)
-        status_text = "ᴇɴᴀʙʟᴇᴅ ✅" if status else "ᴅɪꜱᴀʙʟᴇᴅ ❌"
+        status_text = "ᴇɴᴀʙʟᴇᴅ " if status else "ᴅɪꜱᴀʙʟᴇᴅ "
         return await m.reply_text(
             f"<b>ɢʟᴏʙᴀʟ ʙᴀɴ ꜱᴛᴀᴛᴜꜱ:</b> {status_text}\n\n"
             f"<b>ᴜꜱᴀɢᴇ:</b> <code>/gbanstat [on/off/yes/no]</code>",
@@ -296,20 +296,20 @@ async def gban_stat(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if arg in ['on', 'yes', 'enable', 'true']:
         await set_gban_status(chat.id, True)
         return await m.reply_text(
-            "✅ <b>ɢʟᴏʙᴀʟ ʙᴀɴ ᴇɴғᴏʀᴄᴇᴍᴇɴᴛ ᴇɴᴀʙʟᴇᴅ!</b>\n\n"
+            " <b>ɢʟᴏʙᴀʟ ʙᴀɴ ᴇɴғᴏʀᴄᴇᴍᴇɴᴛ ᴇɴᴀʙʟᴇᴅ!</b>\n\n"
             "ɢʙᴀɴɴᴇᴅ ᴜꜱᴇʀꜱ ᴡɪʟʟ ʙᴇ ᴀᴜᴛᴏᴍᴀᴛɪᴄᴀʟʟʏ ʙᴀɴɴᴇᴅ ɪɴ ᴛʜɪꜱ ɢʀᴏᴜᴘ.",
             parse_mode="HTML"
         )
     elif arg in ['off', 'no', 'disable', 'false']:
         await set_gban_status(chat.id, False)
         return await m.reply_text(
-            "❌ <b>ɢʟᴏʙᴀʟ ʙᴀɴ ᴇɴғᴏʀᴄᴇᴍᴇɴᴛ ᴅɪꜱᴀʙʟᴇᴅ!</b>\n\n"
+            " <b>ɢʟᴏʙᴀʟ ʙᴀɴ ᴇɴғᴏʀᴄᴇᴍᴇɴᴛ ᴅɪꜱᴀʙʟᴇᴅ!</b>\n\n"
             "ɢʙᴀɴɴᴇᴅ ᴜꜱᴇʀꜱ ᴡɪʟʟ <b>ɴᴏᴛ</b> ʙᴇ ᴀᴜᴛᴏᴍᴀᴛɪᴄᴀʟʟʏ ʙᴀɴɴᴇᴅ ɪɴ ᴛʜɪꜱ ɢʀᴏᴜᴘ.",
             parse_mode="HTML"
         )
     else:
         return await m.reply_text(
-            "⚠️ <b>ɪɴᴠᴀʟɪᴅ ᴀʀɢᴜᴍᴇɴᴛ!</b>\n\n"
+            " <b>ɪɴᴠᴀʟɪᴅ ᴀʀɢᴜᴍᴇɴᴛ!</b>\n\n"
             "<b>ᴜꜱᴀɢᴇ:</b> <code>/gbanstat [on/off/yes/no]</code>",
             parse_mode="HTML"
         )
@@ -321,7 +321,7 @@ async def check_gban(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_id = await extract_user(m, self=True)
     if not user_id:
         return await m.reply_text(
-            "⚠️ <b>Please reply to a user or provide their ID/username!</b>\n\n"
+            " <b>Please reply to a user or provide their ID/username!</b>\n\n"
             "<b>Usage:</b> <code>/gbancheck [user]</code>\n"
             "Or reply to a message with <code>/gbancheck</code>",
             parse_mode="HTML"
@@ -339,19 +339,19 @@ async def check_gban(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if is_gbanned:
         reason = await get_gban_reason(user_id)
         return await m.reply_text(
-            f"<b>🔨 ɢʙᴀɴ ꜱᴛᴀᴛᴜꜱ: ʙᴀɴɴᴇᴅ ❌</b>\n\n"
-            f"👤 {user_mention}\n"
-            f"🆔 <code>{user_id}</code>\n"
-            f"📛 {username}\n"
-            f"📄 ʀᴇᴀꜱᴏɴ: {reason}",
+            f"<b> ɢʙᴀɴ ꜱᴛᴀᴛᴜꜱ: ʙᴀɴɴᴇᴅ </b>\n\n"
+            f" {user_mention}\n"
+            f" <code>{user_id}</code>\n"
+            f" {username}\n"
+            f" ʀᴇᴀꜱᴏɴ: {reason}",
             parse_mode="HTML"
         )
     else:
         return await m.reply_text(
-            f"<b>✅ ɴᴏᴛ ɪɴ ɢʙᴀɴ ʟɪꜱᴛ</b>\n\n"
-            f"👤 {user_mention}\n"
-            f"🆔 <code>{user_id}</code>\n"
-            f"📛 {username}\n\n"
+            f"<b> ɴᴏᴛ ɪɴ ɢʙᴀɴ ʟɪꜱᴛ</b>\n\n"
+            f" {user_mention}\n"
+            f" <code>{user_id}</code>\n"
+            f" {username}\n\n"
             f"ᴛʜɪꜱ ᴜꜱᴇʀ ɪꜱ ɴᴏᴛ ɢʟᴏʙᴀʟʟʏ ʙᴀɴɴᴇᴅ.",
             parse_mode="HTML"
         )

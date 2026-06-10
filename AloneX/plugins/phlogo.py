@@ -6,7 +6,7 @@ import os
 from PIL import Image, ImageFont
 from pyrogram.enums import ChatAction
 
-__module__ = "𝐏ʜ-𝐋ᴏɢᴏ🎨"
+__module__ = "𝐏ʜ-𝐋ᴏɢᴏ"
 __help__ = """
 *PhLogo Commands*:
 
