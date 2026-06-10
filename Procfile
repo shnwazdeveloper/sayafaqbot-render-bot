@@ -1,1 +1,1 @@
-web: python -m AloneX
+web: python render_start.py

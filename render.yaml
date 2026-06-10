@@ -6,7 +6,7 @@ services:
     branch: main
     autoDeploy: true
     buildCommand: pip install --upgrade pip setuptools wheel && pip install -r requirements.txt
-    startCommand: python -m AloneX
+    startCommand: python render_start.py
     healthCheckPath: /
     envVars:
       - key: IS_WEB_SUP
