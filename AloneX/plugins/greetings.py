@@ -8,7 +8,7 @@ from telegram.ext import ChatMemberHandler
 from telegram.error import BadRequest
 from AloneX.helpers.message_helper import MessageHelper
 from AloneX.helpers.utils import get_method_by_type, auto_delete 
-from AloneX import OWNER_ID, font
+from AloneX import OWNER_ID, LOGS_CHANNEL, font
 from AloneX.helpers.decorator import ChatMembers
 from AloneX.db.chats import add_chat, remove_chat, get_chat
 from AloneX.db.users import add_user, update_users_status
