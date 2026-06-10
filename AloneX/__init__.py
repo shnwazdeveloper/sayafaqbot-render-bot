@@ -16,6 +16,7 @@ import asyncio
 import random
 import importlib
 import os
+import re
 
 LOGGER = logging.getLogger(__name__)
 START_TIME = time.time()
@@ -95,9 +96,38 @@ work_loads = {}
 multi_clients[0] = pbot
 work_loads[0] = 0
 
+def _flood_wait_seconds(error):
+    for attr in ("value", "seconds"):
+        value = getattr(error, attr, None)
+        if isinstance(value, int) and value > 0:
+            return value
+
+    match = re.search(r"(?:wait(?: of)?|Please wait)\s+(\d+)\s+seconds", str(error), re.IGNORECASE)
+    if match:
+        return int(match.group(1))
+    return None
+
+async def _start_required_client(client, label):
+    while True:
+        try:
+            await client.start()
+            LOGGER.info(f"{label} Started!")
+            return
+        except Exception as e:
+            wait_seconds = _flood_wait_seconds(e)
+            if wait_seconds:
+                wait_seconds += 5
+                LOGGER.warning(f"{label} hit Telegram flood wait; sleeping {wait_seconds}s before retry.")
+                try:
+                    await client.disconnect()
+                except Exception:
+                    pass
+                await asyncio.sleep(wait_seconds)
+                continue
+            raise
+
 async def start_all_clients():
-    await pbot.start()
-    LOGGER.info("Pyrogram Bot Started!")
+    await _start_required_client(pbot, "Pyrogram Bot")
     
     try:
         await user.start()
