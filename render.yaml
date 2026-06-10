@@ -43,5 +43,9 @@ services:
         value: Nixie
       - key: LOGS_CHANNEL
         sync: false
+      - key: LOGGER_ID
+        sync: false
+      - key: LOG_GROUP_ID
+        sync: false
       - key: WEB_URL
         sync: false
