@@ -105,8 +105,11 @@ async def start_all_clients():
     except Exception as e:
         LOGGER.warning(f"Pyrogram User not started: {e}")
     
-    await tbot.start(bot_token=TOKEN)
-    LOGGER.info("Telethon Bot Started!")
+    try:
+        await tbot.start(bot_token=TOKEN)
+        LOGGER.info("Telethon Bot Started!")
+    except Exception as e:
+        LOGGER.warning(f"Telethon Bot not started: {e}")
     
     #try:
     #    await pytgcalls.start()
